@@ -542,6 +542,7 @@ export default function HomePage() {
           border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 20px;
           overflow: hidden;
+          text-align: left !important;
           box-shadow:
             0 24px 64px -16px rgba(0, 0, 0, 0.8),
             0 0 0 1px rgba(255, 255, 255, 0.05);
@@ -692,6 +693,7 @@ export default function HomePage() {
         .studio-code-view {
           padding: 0;
           background: #0d0d10;
+          text-align: left !important;
         }
 
         /* Studio Footer */

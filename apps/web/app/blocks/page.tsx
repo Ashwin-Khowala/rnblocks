@@ -81,7 +81,7 @@ export default function BlocksGalleryPage() {
             </div>
             <div className="blocks-count-pill">
               <span className="count-num">{filteredBlocks.length}</span>
-              <span className="count-label">blocks</span>
+              <span className="count-label">{filteredBlocks.length === 1 ? "block" : "blocks"}</span>
             </div>
           </div>
 
@@ -154,7 +154,7 @@ export default function BlocksGalleryPage() {
 
         {/* Blocks Grid or Empty State */}
         {filteredBlocks.length > 0 ? (
-          <div className="gallery-grid">
+          <div className={`gallery-grid ${filteredBlocks.length === 1 ? "gallery-grid-single" : ""}`}>
             {filteredBlocks.map((block) => (
               <BlockCard key={block.slug} block={block} />
             ))}
@@ -358,6 +358,10 @@ export default function BlocksGalleryPage() {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 24px;
+        }
+
+        .gallery-grid.gallery-grid-single {
+          grid-template-columns: minmax(320px, 540px);
         }
 
         .empty-state {

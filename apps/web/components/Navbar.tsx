@@ -160,23 +160,30 @@ export function Navbar() {
         .desktop-nav {
           display: flex;
           align-items: center;
-          gap: 4px;
+          gap: 6px;
         }
 
+        .desktop-nav :global(.nav-link),
         .nav-link {
-          font-size: 14px;
+          display: inline-flex;
+          align-items: center;
+          font-size: 13.5px;
           font-weight: 500;
           color: var(--text-secondary);
-          padding: 6px 14px;
+          padding: 6px 13px;
           border-radius: var(--radius-sm);
+          text-decoration: none;
+          white-space: nowrap;
           transition: color var(--transition-fast), background var(--transition-fast);
         }
 
+        .desktop-nav :global(.nav-link:hover),
         .nav-link:hover {
           color: var(--text-primary);
           background: var(--bg-card);
         }
 
+        .desktop-nav :global(.nav-link.nav-link-active),
         .nav-link-active {
           color: var(--text-primary);
           background: var(--bg-card-hover);

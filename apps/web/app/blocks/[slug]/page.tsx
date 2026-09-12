@@ -126,7 +126,7 @@ export default function BlockDetailPage() {
                 <ul className="notes-list">
                   <li>Drop-in ready for Expo Router, React Navigation, and Bare React Native.</li>
                   <li>Formatted with strict TypeScript types and zero third-party lock-in.</li>
-                  <li>Styled with standard {block.styling} patterns for straightforward customization.</li>
+                  <li>Styled with standard {Array.isArray(block.styling) ? block.styling.join(", ") : block.styling} patterns for straightforward customization.</li>
                 </ul>
               </div>
             </div>
@@ -280,12 +280,18 @@ export default function BlockDetailPage() {
         }
 
         .category-tag {
+          display: inline-flex;
+          align-items: center;
           font-size: 11px;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-          color: var(--text-muted);
-          margin-bottom: 6px;
+          color: #a1a1aa;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 3px 10px;
+          border-radius: 9999px;
+          margin-bottom: 10px;
         }
 
         .block-title {
@@ -376,6 +382,7 @@ export default function BlockDetailPage() {
 
         .tab-body {
           margin-bottom: 40px;
+          text-align: left !important;
         }
 
         .about-section {

@@ -153,19 +153,41 @@ export function BlockCard({ block }: BlockCardProps) {
           align-items: center;
           justify-content: space-between;
           margin-bottom: 12px;
+          gap: 8px;
         }
 
         .category-pill {
-          font-size: 11px;
-          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          font-size: 10.5px;
+          font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 0.04em;
-          color: var(--text-secondary);
+          letter-spacing: 0.05em;
+          color: #a1a1aa;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 2px 8px;
+          border-radius: 9999px;
         }
 
         .tech-tags {
           display: flex;
+          align-items: center;
           gap: 6px;
+        }
+
+        .badge-tech {
+          display: inline-flex;
+          align-items: center;
+          font-family: var(--font-mono);
+          font-size: 11px;
+          font-weight: 500;
+          padding: 2px 7px;
+          border-radius: 5px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #d1d5db;
+          white-space: nowrap;
         }
 
         .title-link {
