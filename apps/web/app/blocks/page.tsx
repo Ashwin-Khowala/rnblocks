@@ -13,16 +13,21 @@ export default function BlocksGalleryPage() {
 
   const categories = [
     { id: "all", label: "All Blocks" },
+    { id: "navigation", label: "Navigation & Docks" },
     { id: "payments", label: "Payments" },
     { id: "auth", label: "Authentication" },
     { id: "profile", label: "Profile" },
-    { id: "commerce", label: "Commerce" },
     { id: "chat", label: "Communication" },
   ];
 
   // Filtering logic
   const filteredBlocks = useMemo(() => {
     return BLOCKS_DATA.filter((block) => {
+      // Only include blocks in the blocks gallery
+      if (block.type !== "block") {
+        return false;
+      }
+
       // Category match
       if (selectedCategory !== "all" && block.category !== selectedCategory) {
         return false;
