@@ -16,7 +16,7 @@ export async function listCommand() {
   const screens = items.filter((i) => i.type === "screen");
 
   if (blocks.length > 0) {
-    console.log(pc.bold(pc.white("🧱 Blocks:")));
+    console.log(pc.bold(pc.white("Blocks:")));
     for (const b of blocks) {
       console.log(
         `  ${pc.cyan(b.name.padEnd(24))} ${pc.dim(b.title.padEnd(36))} ${pc.gray(`by ${b.author}`)}`
@@ -26,7 +26,7 @@ export async function listCommand() {
   }
 
   if (screens.length > 0) {
-    console.log(pc.bold(pc.white("📱 Screens:")));
+    console.log(pc.bold(pc.white("Screens:")));
     for (const s of screens) {
       console.log(
         `  ${pc.cyan(s.name.padEnd(24))} ${pc.dim(s.title.padEnd(36))} ${pc.gray(`by ${s.author}`)}`

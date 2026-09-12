@@ -27,7 +27,7 @@ Crafted mobile blocks, screens, and components ready to drop into your Expo or R
 
 ---
 
-## ⚡ Why RNBlocks?
+## Why RNBlocks?
 
 Web developers have had game-changing registry tools like **shadcn/ui** that revolutionized frontend engineering by advocating for **code ownership over monolithic npm packages**.
 
@@ -42,7 +42,7 @@ RNBlocks is an open-source registry designed specifically for React Native and E
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Initialize your project
 Configure your project directory and preferences:
@@ -69,7 +69,7 @@ Visit [rnblocks.vercel.app](https://rnblocks.vercel.app) to inspect the componen
 
 ---
 
-## 🧱 Repository Architecture
+## Repository Architecture
 
 RNBlocks is organized as a high-performance **Turborepo** monorepo using **pnpm workspaces**:
 
@@ -93,7 +93,7 @@ rnblocks/
 
 ---
 
-## 🛠️ Local Development
+## Local Development
 
 Clone and run RNBlocks locally in under two minutes:
 
@@ -123,7 +123,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the web registry.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions of all kinds! Whether you're designing new React Native blocks, adding full-screen templates, improving documentation, or enhancing the CLI:
 
@@ -133,7 +133,7 @@ We welcome contributions of all kinds! Whether you're designing new React Native
 
 ---
 
-## 💖 Open Source Sponsorship & Acknowledgements
+## Open Source Sponsorship & Acknowledgements
 
 RNBlocks is proud to be built for the global React Native and Expo developer community.
 
@@ -142,7 +142,7 @@ RNBlocks is proud to be built for the global React Native and Expo developer com
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
 Feel free to use the blocks in personal, commercial, and client applications.

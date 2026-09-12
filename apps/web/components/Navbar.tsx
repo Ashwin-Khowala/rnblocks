@@ -12,7 +12,6 @@ export function Navbar() {
 
   const navLinks = [
     { label: "Blocks", href: "/blocks" },
-    { label: "Screens", href: "/screens" },
     { label: "Dashboard", href: "/dashboard" },
     { label: "Submit", href: "/submit" },
     { label: "Contribute", href: "/contribute" },

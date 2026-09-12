@@ -155,27 +155,27 @@ export default function BlockDetailPage() {
               </h4>
               <div className="compat-checklist">
                 <div className="check-item">
-                  <span className="check-icon">✓</span>
+                  <CheckCircle2 size={13} className="check-icon-svg" />
                   <span className="check-name">Expo SDK</span>
                   <span className="check-val">Supported</span>
                 </div>
                 <div className="check-item">
-                  <span className="check-icon">✓</span>
+                  <CheckCircle2 size={13} className="check-icon-svg" />
                   <span className="check-name">React Native</span>
                   <span className="check-val">Bare & Managed</span>
                 </div>
                 <div className="check-item">
-                  <span className="check-icon">✓</span>
+                  <CheckCircle2 size={13} className="check-icon-svg" />
                   <span className="check-name">iOS & Android</span>
                   <span className="check-val">Native Tested</span>
                 </div>
                 <div className="check-item">
-                  <span className="check-icon">✓</span>
+                  <CheckCircle2 size={13} className="check-icon-svg" />
                   <span className="check-name">React Native Web</span>
                   <span className="check-val">Live In-Browser</span>
                 </div>
                 <div className="check-item">
-                  <span className="check-icon">✓</span>
+                  <CheckCircle2 size={13} className="check-icon-svg" />
                   <span className="check-name">Styling</span>
                   <span className="check-val">{Array.isArray(block.styling) ? block.styling.join(", ") : block.styling}</span>
                 </div>

@@ -8,7 +8,7 @@ const OUTPUT_REGISTRY_JSON = path.join(REGISTRY_DIR, "registry.json");
 const OUTPUT_WEB_DATA = path.join(ROOT, "apps", "web", "data", "blocks.tsx");
 
 function generateRegistry() {
-  console.log("🔨 Generating Registry from:", REGISTRY_DIR);
+  console.log("Generating Registry from:", REGISTRY_DIR);
 
   const allItems: any[] = [];
   const imports: string[] = [];
@@ -83,7 +83,7 @@ function generateRegistry() {
     JSON.stringify(manifest, null, 2),
     "utf-8"
   );
-  console.log(`✓ Generated ${OUTPUT_REGISTRY_JSON} with ${allItems.length} items.`);
+  console.log(`[OK] Generated ${OUTPUT_REGISTRY_JSON} with ${allItems.length} items.`);
 
   // 2. Ensure apps/web/data exists
   const webDataDir = path.dirname(OUTPUT_WEB_DATA);
@@ -124,7 +124,7 @@ export const BLOCKS_DATA: BlockItem[] = REGISTRY_ITEMS;
 `;
 
   fs.writeFileSync(OUTPUT_WEB_DATA, tsContent, "utf-8");
-  console.log(`✓ Generated ${OUTPUT_WEB_DATA}`);
+  console.log(`[OK] Generated ${OUTPUT_WEB_DATA}`);
 }
 
 generateRegistry();

@@ -130,28 +130,28 @@ export default function SubmitPage() {
           </div>
           <div className="guidelines-grid">
             <div className="guide-box">
-              <span className="guide-dot">✓</span>
+              <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
               <div>
                 <strong>Self-Contained</strong>
                 <p>Blocks should not require complex global state or hidden providers unless explicitly documented.</p>
               </div>
             </div>
             <div className="guide-box">
-              <span className="guide-dot">✓</span>
+              <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
               <div>
                 <strong>TypeScript First</strong>
                 <p>All component props and exported interfaces must be strictly typed.</p>
               </div>
             </div>
             <div className="guide-box">
-              <span className="guide-dot">✓</span>
+              <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
               <div>
                 <strong>Native & Expo Tested</strong>
                 <p>Verify that components render without layout errors on both iOS and Android devices.</p>
               </div>
             </div>
             <div className="guide-box">
-              <span className="guide-dot">✓</span>
+              <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
               <div>
                 <strong>Clean Styling</strong>
                 <p>Support light and dark mode colors or provide sensible defaults.</p>

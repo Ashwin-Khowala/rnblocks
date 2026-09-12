@@ -53,13 +53,13 @@ export async function addCommand(name: string, options: AddOptions) {
 
   // Dependencies notification
   if (item.dependencies && item.dependencies.length > 0) {
-    console.log(pc.yellow(`\n📦 Required dependencies:`));
+    console.log(pc.yellow(`\nRequired dependencies:`));
     console.log(pc.dim(`Run one of the following in your project:\n`));
     console.log(`  ${pc.cyan(`npx expo install ${item.dependencies.join(" ")}`)}   ${pc.dim("(Expo)")}`);
     console.log(`  ${pc.cyan(`npm install ${item.dependencies.join(" ")}`)}         ${pc.dim("(React Native)")}`);
   }
 
-  console.log(`\n${pc.green("✔ Done!")} Import your component:`);
+  console.log(`\n${pc.green("Success:")} Import your component:`);
   const componentImport = item.files[0]
     ? path.basename(item.files[0].path, path.extname(item.files[0].path))
     : name;

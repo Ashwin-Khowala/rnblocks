@@ -1,0 +1,26 @@
+{
+  "name": "social-auth-buttons",
+  "title": "Social OAuth Authentication Buttons",
+  "description": "Brand-compliant Apple, Google, and GitHub social sign-in buttons with official vector logos, loading spinners, divider rule, and light/dark theme variants.",
+  "type": "block",
+  "author": "Ashwin Khowala",
+  "version": "1.0.0",
+  "category": "authentication",
+  "files": [
+    {
+      "path": "files/social-auth-buttons.tsx",
+      "type": "registry:component"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [],
+  "platforms": [
+    "ios",
+    "android",
+    "web"
+  ],
+  "framework": "react-native",
+  "styling": [
+    "StyleSheet"
+  ]
+}

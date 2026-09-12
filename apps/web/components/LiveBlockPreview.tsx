@@ -71,12 +71,12 @@ export function LiveBlockPreview({
         {mode === "device" ? (
           <DeviceFrame theme={theme} width={360} maxHeight={580}>
             <div className="device-component-wrap">
-              <Component />
+              <Component {...({ theme } as any)} />
             </div>
           </DeviceFrame>
         ) : (
           <div className="expanded-card-wrap">
-            <Component />
+            <Component {...({ theme } as any)} />
           </div>
         )}
       </div>

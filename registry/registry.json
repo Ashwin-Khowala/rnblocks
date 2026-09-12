@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-09-12T19:48:47.992Z",
+  "generatedAt": "2026-09-12T21:41:17.346Z",
   "items": [
     {
       "name": "floating-docker",
@@ -13,6 +13,58 @@
       "files": [
         {
           "path": "files/floating-docker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "framework": "react-native",
+      "styling": [
+        "StyleSheet"
+      ]
+    },
+    {
+      "name": "social-auth-buttons",
+      "title": "Social OAuth Authentication Buttons",
+      "description": "Brand-compliant Apple, Google, and GitHub social sign-in buttons with official vector logos, loading spinners, divider rule, and light/dark theme variants.",
+      "type": "block",
+      "author": "Ashwin Khowala",
+      "version": "1.0.0",
+      "category": "authentication",
+      "files": [
+        {
+          "path": "files/social-auth-buttons.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "framework": "react-native",
+      "styling": [
+        "StyleSheet"
+      ]
+    },
+    {
+      "name": "trend-chart",
+      "title": "SVG Gradient Area Trend Line Chart",
+      "description": "A lightweight, zero-dependency SVG line chart with smooth gradient area fill, dual-axis labels, reference gridlines, and responsive layout.",
+      "type": "block",
+      "author": "Ashwin Khowala",
+      "version": "1.0.0",
+      "category": "analytics",
+      "files": [
+        {
+          "path": "files/trend-chart.tsx",
           "type": "registry:component"
         }
       ],

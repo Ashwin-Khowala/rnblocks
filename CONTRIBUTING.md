@@ -175,4 +175,4 @@ node dist/index.js add floating-docker
 - **Issues**: If you discover a bug or have a feature request, please open a [GitHub Issue](https://github.com/Ashwin-Khowala/rnblocks/issues).
 - **Discussions**: Share ideas, component suggestions, or show off apps built with RNBlocks on [GitHub Discussions](https://github.com/Ashwin-Khowala/rnblocks/discussions).
 
-Thank you for helping build the future of React Native UI! 🚀
+Thank you for helping build the future of React Native UI!

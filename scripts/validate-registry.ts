@@ -5,7 +5,7 @@ import { RegistryItemSchema } from "../packages/registry/src/schema";
 const REGISTRY_DIR = path.join(process.cwd(), "registry");
 
 function validateRegistry() {
-  console.log("🔍 Validating RNBlocks Registry at:", REGISTRY_DIR);
+  console.log("Validating RNBlocks Registry at:", REGISTRY_DIR);
 
   let errorCount = 0;
   let totalChecked = 0;
@@ -25,7 +25,7 @@ function validateRegistry() {
       const metaPath = path.join(itemDir, "registry.json");
 
       if (!fs.existsSync(metaPath)) {
-        console.error(`❌ [${type}/${slug}] Missing registry.json`);
+        console.error(`[ERROR] [${type}/${slug}] Missing registry.json`);
         errorCount++;
         continue;
       }
@@ -35,7 +35,7 @@ function validateRegistry() {
         const parsed = RegistryItemSchema.safeParse(raw);
 
         if (!parsed.success) {
-          console.error(`❌ [${type}/${slug}] Schema validation failed:`);
+          console.error(`[ERROR] [${type}/${slug}] Schema validation failed:`);
           for (const issue of parsed.error.issues) {
             console.error(`   - ${issue.path.join(".")}: ${issue.message}`);
           }
@@ -46,7 +46,7 @@ function validateRegistry() {
         // Verify that slug matches name
         if (parsed.data.name !== slug) {
           console.error(
-            `❌ [${type}/${slug}] Directory name "${slug}" does not match item name "${parsed.data.name}"`
+            `[ERROR] [${type}/${slug}] Directory name "${slug}" does not match item name "${parsed.data.name}"`
           );
           errorCount++;
         }
@@ -56,23 +56,23 @@ function validateRegistry() {
           const filePath = path.join(itemDir, file.path);
           if (!fs.existsSync(filePath)) {
             console.error(
-              `❌ [${type}/${slug}] Referenced file not found: ${file.path}`
+              `[ERROR] [${type}/${slug}] Referenced file not found: ${file.path}`
             );
             errorCount++;
           } else {
             const stat = fs.statSync(filePath);
             if (stat.size === 0) {
               console.error(
-                `❌ [${type}/${slug}] Referenced file is empty: ${file.path}`
+                `[ERROR] [${type}/${slug}] Referenced file is empty: ${file.path}`
               );
               errorCount++;
             }
           }
         }
 
-        console.log(`✓ [${type}/${slug}] Validated successfully`);
+        console.log(`[OK] [${type}/${slug}] Validated successfully`);
       } catch (err) {
-        console.error(`❌ [${type}/${slug}] JSON syntax error:`, err);
+        console.error(`[ERROR] [${type}/${slug}] JSON syntax error:`, err);
         errorCount++;
       }
     }
@@ -80,10 +80,10 @@ function validateRegistry() {
 
   console.log(`\nRegistry validation summary: ${totalChecked} items checked.`);
   if (errorCount > 0) {
-    console.error(`❌ Validation failed with ${errorCount} errors.`);
+    console.error(`[FAIL] Validation failed with ${errorCount} errors.`);
     process.exit(1);
   } else {
-    console.log(`✨ All registry items passed validation!`);
+    console.log(`[SUCCESS] All registry items passed validation.`);
   }
 }
 
