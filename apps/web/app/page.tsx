@@ -143,8 +143,8 @@ export default function HomePage() {
                 Run the CLI command in your project root. The component source is copied straight into your code with dependencies resolved.
               </p>
               <div className="step-cli-box">
-                <code>npx rnblocks add pricing-card</code>
-                <CopyButton text="npx rnblocks add pricing-card" />
+                <code>npx rnblocks add floating-docker</code>
+                <CopyButton text="npx rnblocks add floating-docker" />
               </div>
             </div>
 
@@ -325,7 +325,12 @@ export default function HomePage() {
         }
 
         .title-highlight {
+          font-family: var(--font-brand);
+          font-style: italic;
+          font-weight: 400;
           color: #ffffff;
+          letter-spacing: -0.01em;
+          padding-left: 2px;
         }
 
         .hero-description {
