@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "type": "module",
   "description": "CLI to add React Native components and screens directly to your project",
+  "license": "MIT",
+  "author": "Ashwin Khowala",
+  "homepage": "https://rnblocks.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ashwin-Khowala/rnblocks.git",
+    "directory": "packages/cli"
+  },
   "bin": {
     "rnblocks": "./dist/index.js"
   },

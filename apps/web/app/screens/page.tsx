@@ -2,23 +2,21 @@
 
 import React from "react";
 import Link from "next/link";
-import { DeviceFrame } from "@/components/DeviceFrame";
-import { CopyButton } from "@/components/CopyButton";
 import { BLOCKS_DATA } from "@/data/blocks";
 import {
   Smartphone,
   Layers,
   ArrowRight,
   Sparkles,
-  Clock,
   CheckCircle2,
   Terminal,
   Code2,
+  Compass,
+  FolderPlus,
 } from "lucide-react";
 
 export default function ScreensPage() {
-  const screenItem = BLOCKS_DATA.find((b) => b.slug === "teams-and-network");
-  const ScreenComponent = screenItem?.Component || (() => null);
+  const screens = BLOCKS_DATA.filter((b) => b.type === "screen");
 
   return (
     <div className="screens-page">
@@ -29,75 +27,135 @@ export default function ScreensPage() {
             <Sparkles size={13} className="sparkle-icon" />
             <span>Full-Flow Mobile Screens</span>
           </div>
-          <h1 className="page-title">Production Screens</h1>
+          <h1 className="page-title">Screens Directory</h1>
           <p className="page-subtitle">
             Complete, interconnected mobile screen experiences ready to drop into your
             Expo Router app. Fully functional with state, interactions, and native styling.
           </p>
         </div>
 
-        {/* ─── Flagship Featured Screen: Teams & Network ───────────────────── */}
-        <div className="featured-screen-card">
-          <div className="featured-screen-left">
-            <div className="screen-badge-row">
-              <span className="live-status-badge">
-                <span className="live-dot" />
-                Live Screen
-              </span>
-              <span className="badge-tech">React Native</span>
-              <span className="badge-tech">StyleSheet</span>
-            </div>
+        {screens.length > 0 ? (
+          <div className="screens-grid">
+            {screens.map((screen) => {
+              const ScreenComp = screen.Component;
+              return (
+                <div key={screen.slug} className="featured-screen-card">
+                  <div className="featured-screen-left">
+                    <div className="screen-badge-row">
+                      <span className="live-status-badge">
+                        <span className="live-dot" />
+                        Live Screen
+                      </span>
+                      <span className="badge-tech">{screen.framework}</span>
+                      {screen.styling.map((s) => (
+                        <span key={s} className="badge-tech">{s}</span>
+                      ))}
+                    </div>
 
-            <h2 className="featured-screen-title">Teams & Network Screen</h2>
-            <p className="featured-screen-desc">
-              Production screen extracted from Fyndr. Features startup opportunity
-              cards, match badges, compensation tags, search filter input, and the
-              signature floating bottom dock with sliding capsule indicator.
-            </p>
+                    <h2 className="featured-screen-title">{screen.title}</h2>
+                    <p className="featured-screen-desc">{screen.description}</p>
 
-            <div className="screen-features-list">
-              <div className="feature-row">
-                <CheckCircle2 size={16} className="feature-check" />
-                <span>Floating bottom docker with 5 vector SVG tabs</span>
-              </div>
-              <div className="feature-row">
-                <CheckCircle2 size={16} className="feature-check" />
-                <span>Zarwa & Curezy startup opportunity cards</span>
-              </div>
-              <div className="feature-row">
-                <CheckCircle2 size={16} className="feature-check" />
-                <span>Interactive filter tabs (Latest / For You / Network)</span>
-              </div>
-              <div className="feature-row">
-                <CheckCircle2 size={16} className="feature-check" />
-                <span>Continuous curved glassmorphic pill navigation</span>
-              </div>
-            </div>
+                    <div className="screen-install-cli">
+                      <div className="cli-badge-group">
+                        <Terminal size={14} className="term-icon" />
+                        <code>npx rnblocks add {screen.name}</code>
+                      </div>
+                    </div>
 
-            <div className="screen-install-cli">
-              <div className="cli-badge-group">
-                <Terminal size={14} className="term-icon" />
-                <code>npx rnblocks add teams-and-network</code>
-              </div>
-              <CopyButton text="npx rnblocks add teams-and-network" label="Copy" />
-            </div>
+                    <div className="screen-action-links">
+                      <Link href={`/blocks/${screen.slug}`} className="btn-primary">
+                        <span>View Source Code</span>
+                        <Code2 size={15} />
+                      </Link>
+                    </div>
+                  </div>
 
-            <div className="screen-action-links">
-              <Link href="/blocks/teams-and-network" className="btn-primary">
-                <span>View Full Source Code</span>
-                <Code2 size={15} />
-              </Link>
+                  <div className="featured-screen-right">
+                    {ScreenComp && <ScreenComp />}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          /* ─── Curation & Roadmap State ───────────────────────────────────── */
+          <div className="curation-card">
+            <div className="curation-content">
+              <div className="curation-badge">
+                <Compass size={14} className="curation-badge-icon" />
+                <span>Active Curation</span>
+              </div>
+              <h2 className="curation-title">Screen Flows Under Curation</h2>
+              <p className="curation-desc">
+                We are curating complete, production-grade mobile screen experiences
+                designed specifically for React Native and Expo Router. In the meantime,
+                explore modular UI blocks like the Floating Docker, or contribute a screen.
+              </p>
+
+              <div className="curation-roadmap-grid">
+                <div className="roadmap-item">
+                  <div className="roadmap-icon-box">
+                    <Smartphone size={18} />
+                  </div>
+                  <div>
+                    <h4 className="roadmap-item-title">Onboarding & Walkthrough</h4>
+                    <p className="roadmap-item-desc">
+                      Multi-step swipeable carousel with pagination dots, haptic feedback, and permission triggers.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="roadmap-item">
+                  <div className="roadmap-icon-box">
+                    <Layers size={18} />
+                  </div>
+                  <div>
+                    <h4 className="roadmap-item-title">Auth & Social Login</h4>
+                    <p className="roadmap-item-desc">
+                      Clean input forms, phone OTP verification states, and OAuth action buttons.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="roadmap-item">
+                  <div className="roadmap-icon-box">
+                    <Sparkles size={18} />
+                  </div>
+                  <div>
+                    <h4 className="roadmap-item-title">Subscription Paywall</h4>
+                    <p className="roadmap-item-desc">
+                      Annual/monthly billing toggle, feature comparison list, and terms disclaimer.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="roadmap-item">
+                  <div className="roadmap-icon-box">
+                    <FolderPlus size={18} />
+                  </div>
+                  <div>
+                    <h4 className="roadmap-item-title">Profile & Preferences</h4>
+                    <p className="roadmap-item-desc">
+                      Avatar photo selector, account management settings, and switch toggles.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="curation-actions">
+                <Link href="/blocks" className="btn-primary">
+                  <span>Explore UI Blocks</span>
+                  <ArrowRight size={14} />
+                </Link>
+                <Link href="/submit" className="btn-secondary">
+                  <span>Propose a Screen</span>
+                </Link>
+              </div>
             </div>
           </div>
+        )}
 
-          <div className="featured-screen-right">
-            <DeviceFrame width={330} maxHeight={600} theme="dark">
-              <ScreenComponent />
-            </DeviceFrame>
-          </div>
-        </div>
-
-        {/* Genuine Contribution & Ecosystem Banner */}
+        {/* ─── Contribution Banner ─────────────────────────────────────────── */}
         <div className="screens-banner">
           <div>
             <h3 className="banner-title">Contribute Screen Flows</h3>
@@ -161,7 +219,100 @@ export default function ScreensPage() {
           color: #9ca3af;
         }
 
-        /* ─── Flagship Featured Screen ─────────────────────────────────────── */
+        /* ─── Curation Card ────────────────────────────────────────────────── */
+        .curation-card {
+          background: #0d0d11;
+          border: 1px solid #1a1a22;
+          border-radius: 24px;
+          padding: 48px;
+          margin-bottom: 48px;
+        }
+
+        .curation-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 3px 10px;
+          border-radius: 6px;
+          background: rgba(50, 199, 152, 0.08);
+          border: 1px solid rgba(50, 199, 152, 0.25);
+          color: #32c798;
+          font-family: var(--font-mono);
+          font-size: 12px;
+          font-weight: 600;
+          margin-bottom: 16px;
+        }
+
+        .curation-badge-icon {
+          color: #32c798;
+        }
+
+        .curation-title {
+          font-size: 26px;
+          font-weight: 800;
+          color: #ffffff;
+          letter-spacing: -0.02em;
+          margin-bottom: 12px;
+        }
+
+        .curation-desc {
+          font-size: 15px;
+          line-height: 24px;
+          color: #9ca3af;
+          max-width: 680px;
+          margin-bottom: 36px;
+        }
+
+        .curation-roadmap-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+          margin-bottom: 36px;
+        }
+
+        .roadmap-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          background: #111116;
+          border: 1px solid #1c1c24;
+          border-radius: 14px;
+          padding: 20px;
+        }
+
+        .roadmap-icon-box {
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
+          background: #181820;
+          border: 1px solid #282834;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #ffffff;
+          flex-shrink: 0;
+        }
+
+        .roadmap-item-title {
+          font-size: 15px;
+          font-weight: 700;
+          color: #ffffff;
+          margin-bottom: 4px;
+        }
+
+        .roadmap-item-desc {
+          font-size: 13px;
+          line-height: 19px;
+          color: #8e8e98;
+        }
+
+        .curation-actions {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+
+        /* ─── Featured Screen ─────────────────────────────────────────────── */
         .featured-screen-card {
           background: #0f0f13;
           border: 1px solid #1f1f26;
@@ -171,7 +322,7 @@ export default function ScreensPage() {
           grid-template-columns: 1.1fr 0.9fr;
           gap: 48px;
           align-items: center;
-          margin-bottom: 64px;
+          margin-bottom: 48px;
         }
 
         .featured-screen-left {
@@ -231,26 +382,6 @@ export default function ScreensPage() {
           margin-bottom: 24px;
         }
 
-        .screen-features-list {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          margin-bottom: 28px;
-        }
-
-        .feature-row {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-size: 13.5px;
-          color: #d4d4d8;
-        }
-
-        .feature-check {
-          color: #32c798;
-          flex-shrink: 0;
-        }
-
         .screen-install-cli {
           display: flex;
           align-items: center;
@@ -288,133 +419,7 @@ export default function ScreensPage() {
           align-items: center;
         }
 
-        /* ─── Upcoming Section ─────────────────────────────────────────────── */
-        .upcoming-section-header {
-          margin-bottom: 24px;
-        }
-
-        .upcoming-title {
-          font-size: 22px;
-          font-weight: 700;
-          color: #ffffff;
-          margin-bottom: 6px;
-        }
-
-        .upcoming-sub {
-          font-size: 14px;
-          color: #71717a;
-        }
-
-        .screens-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 24px;
-          margin-bottom: 48px;
-        }
-
-        .screen-card {
-          background: #0f0f13;
-          border: 1px solid #1f1f26;
-          border-radius: 16px;
-          padding: 28px;
-          display: flex;
-          flex-direction: column;
-          transition: all 0.15s ease;
-        }
-
-        .screen-card:hover {
-          background: #14141a;
-          border-color: #2b2b36;
-        }
-
-        .screen-card-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 18px;
-        }
-
-        .device-icon-box {
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-          background: #18181f;
-          border: 1px solid #282832;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #ffffff;
-        }
-
-        .screen-tags {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .screen-count-tag {
-          font-family: var(--font-mono);
-          font-size: 11px;
-          padding: 2px 8px;
-          border-radius: 4px;
-          background: #141418;
-          border: 1px solid #22222a;
-          color: #71717a;
-        }
-
-        .screen-card-title {
-          font-size: 18px;
-          font-weight: 700;
-          color: #ffffff;
-          margin-bottom: 8px;
-        }
-
-        .screen-card-desc {
-          font-size: 13.5px;
-          color: #9ca3af;
-          line-height: 20px;
-          margin-bottom: 24px;
-          flex: 1;
-        }
-
-        .screen-card-footer {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding-top: 16px;
-          border-top: 1px solid #1c1c24;
-        }
-
-        .status-label {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 12px;
-          font-family: var(--font-mono);
-          color: #71717a;
-        }
-
-        .status-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #f59e0b;
-        }
-
-        .propose-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 13px;
-          font-weight: 500;
-          color: #ffffff;
-          transition: all 0.15s ease;
-        }
-
-        .propose-link:hover {
-          color: #32c798;
-        }
-
+        /* ─── Contribution Banner ─────────────────────────────────────────── */
         .screens-banner {
           display: flex;
           align-items: center;
@@ -443,18 +448,17 @@ export default function ScreensPage() {
           gap: 12px;
         }
 
-        @media (max-width: 1024px) {
-          .featured-screen-card {
+        @media (max-width: 900px) {
+          .curation-roadmap-grid {
             grid-template-columns: 1fr;
-            padding: 32px;
+          }
+
+          .curation-card {
+            padding: 32px 24px;
           }
         }
 
         @media (max-width: 768px) {
-          .screens-grid {
-            grid-template-columns: 1fr;
-          }
-
           .screens-banner {
             flex-direction: column;
             align-items: flex-start;

@@ -186,8 +186,7 @@ export default function DocsPage() {
 │   ├── (tabs)/
 │   └── index.tsx
 ├── components/           # Installed UI Blocks live here
-│   ├── floating-docker.tsx
-│   └── teams-and-network.tsx
+│   └── floating-docker.tsx
 ├── package.json
 └── tailwind.config.js    # (if using NativeWind)`}</pre>
               </div>

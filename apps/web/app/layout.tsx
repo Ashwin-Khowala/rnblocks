@@ -27,9 +27,41 @@ const timesItalic = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "RNBlocks — The React Native UI Registry",
+  metadataBase: new URL("https://rnblocks.vercel.app"),
+  title: {
+    default: "RNBlocks — The Open-Source React Native & Expo UI Registry",
+    template: "%s | RNBlocks",
+  },
   description:
-    "Production-ready React Native blocks and screens. Discover, inspect live previews, and install source code directly into your Expo or React Native app.",
+    "Production-ready React Native blocks and screens for Expo and React Native apps. Discover, inspect source code, and copy components directly into your codebase.",
+  keywords: [
+    "react native",
+    "expo",
+    "react native components",
+    "mobile ui registry",
+    "mobile ui",
+    "nativewind",
+    "shadcn react native",
+    "open source",
+    "vercel oss",
+  ],
+  authors: [{ name: "Ashwin Khowala", url: "https://github.com/Ashwin-Khowala" }],
+  creator: "Ashwin Khowala",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://rnblocks.vercel.app",
+    title: "RNBlocks — The Open-Source React Native & Expo UI Registry",
+    description:
+      "Production-ready React Native blocks and screens. Discover, inspect live previews, and copy code directly into your Expo or React Native app.",
+    siteName: "RNBlocks",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RNBlocks — The Open-Source React Native & Expo UI Registry",
+    description:
+      "Production-ready React Native blocks and screens. Discover, inspect live previews, and copy code directly into your Expo or React Native app.",
+  },
 };
 
 export default function RootLayout({

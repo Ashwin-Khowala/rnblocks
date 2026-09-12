@@ -15,6 +15,7 @@ export function Navbar() {
     { label: "Screens", href: "/screens" },
     { label: "Dashboard", href: "/dashboard" },
     { label: "Submit", href: "/submit" },
+    { label: "Contribute", href: "/contribute" },
     { label: "Docs", href: "/docs" },
   ];
 

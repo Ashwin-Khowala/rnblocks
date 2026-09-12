@@ -46,19 +46,34 @@ export function Footer() {
           </div>
 
           <div className="links-col">
-            <h4 className="col-title">Categories</h4>
-            <Link href="/blocks?category=payments" className="footer-link">
-              Payments
+            <h4 className="col-title">Community</h4>
+            <Link href="/contribute" className="footer-link">
+              Contribute
             </Link>
-            <Link href="/blocks?category=auth" className="footer-link">
-              Authentication
-            </Link>
-            <Link href="/blocks?category=profile" className="footer-link">
-              Profile
-            </Link>
-            <Link href="/blocks?category=commerce" className="footer-link">
-              Commerce
-            </Link>
+            <a
+              href="https://github.com/Ashwin-Khowala/rnblocks/blob/master/CODE_OF_CONDUCT.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-link"
+            >
+              Code of Conduct
+            </a>
+            <a
+              href="https://github.com/Ashwin-Khowala/rnblocks/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-link"
+            >
+              GitHub Issues
+            </a>
+            <a
+              href="https://github.com/Ashwin-Khowala/rnblocks/blob/master/LICENSE"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-link"
+            >
+              MIT License
+            </a>
           </div>
 
           <div className="links-col">
@@ -93,7 +108,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="footer-link"
             >
-              GitHub Repo
+              GitHub Repository
             </a>
           </div>
         </div>
@@ -104,6 +119,18 @@ export function Footer() {
           <p className="copyright-text">
             © {new Date().getFullYear()} RNBlocks. Built for React Native builders.
           </p>
+
+          <a
+            href="https://vercel.com?utm_source=rnblocks&utm_campaign=oss"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="vercel-badge-link"
+            title="Powered by Vercel"
+          >
+            <span className="vercel-logo">▲</span>
+            <span>Powered by <span className="font-semibold text-white">Vercel</span></span>
+          </a>
+
           <div className="bottom-socials">
             <a
               href="https://github.com/Ashwin-Khowala/rnblocks"
@@ -190,18 +217,24 @@ export function Footer() {
           letter-spacing: 0.05em;
           color: var(--text-primary);
           font-weight: 600;
-          margin-bottom: 16px;
+          margin-bottom: 6px;
         }
 
-        .footer-link {
+        .links-col {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .links-col :global(.footer-link) {
           display: block;
           font-size: 13px;
           color: var(--text-secondary);
-          margin-bottom: 10px;
+          text-decoration: none;
           transition: color var(--transition-fast);
         }
 
-        .footer-link:hover {
+        .links-col :global(.footer-link:hover) {
           color: var(--text-primary);
         }
 
@@ -219,6 +252,31 @@ export function Footer() {
         .copyright-text {
           font-size: 12px;
           color: var(--text-muted);
+        }
+
+        .vercel-badge-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          padding: 5px 12px;
+          border-radius: var(--radius-sm);
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid var(--border);
+          font-size: 12px;
+          color: var(--text-secondary);
+          text-decoration: none;
+          transition: border-color var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+        }
+
+        .vercel-badge-link:hover {
+          border-color: var(--border-hover);
+          color: var(--text-primary);
+          background: rgba(255, 255, 255, 0.06);
+        }
+
+        .vercel-logo {
+          font-size: 10px;
+          color: #ffffff;
         }
 
         .social-icon-btn {
@@ -242,6 +300,13 @@ export function Footer() {
           .footer-links-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 28px;
+          }
+
+          .bottom-inner {
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+            text-align: center;
           }
         }
       `}</style>
