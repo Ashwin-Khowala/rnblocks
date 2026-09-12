@@ -406,12 +406,13 @@ export default function BlocksGalleryPage() {
 
         .gallery-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 24px;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 330px));
+          gap: 20px;
         }
 
         .gallery-grid.gallery-grid-single {
-          grid-template-columns: minmax(320px, 540px);
+          grid-template-columns: minmax(280px, 330px);
+          max-width: 330px;
         }
 
         .empty-state {
@@ -502,6 +503,11 @@ export default function BlocksGalleryPage() {
 
           .gallery-grid {
             grid-template-columns: 1fr !important;
+            max-width: 100% !important;
+          }
+
+          .gallery-grid.gallery-grid-single {
+            max-width: 100% !important;
           }
         }
       `}</style>

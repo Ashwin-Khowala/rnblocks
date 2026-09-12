@@ -94,7 +94,7 @@ export function BlockCard({ block }: BlockCardProps) {
         }
 
         .preview-canvas-box {
-          height: 250px;
+          height: 190px;
           background: #09090b;
           background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
           background-size: 14px 14px;
@@ -104,13 +104,13 @@ export function BlockCard({ block }: BlockCardProps) {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 12px;
+          padding: 10px;
         }
 
         .scaled-content {
-          width: 320px;
+          width: 300px;
           pointer-events: none;
-          transform: scale(0.85);
+          transform: scale(0.72);
           transform-origin: center center;
         }
 
@@ -132,17 +132,17 @@ export function BlockCard({ block }: BlockCardProps) {
         .view-details-tag {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
+          gap: 5px;
           background: var(--accent);
           color: var(--accent-foreground);
           font-weight: 600;
-          font-size: 12px;
-          padding: 6px 14px;
+          font-size: 11.5px;
+          padding: 5px 12px;
           border-radius: var(--radius-full);
         }
 
         .card-info {
-          padding: 18px 20px;
+          padding: 14px 16px;
           display: flex;
           flex-direction: column;
           flex: 1;
@@ -152,37 +152,37 @@ export function BlockCard({ block }: BlockCardProps) {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: 12px;
-          gap: 8px;
+          margin-bottom: 10px;
+          gap: 6px;
         }
 
         .category-pill {
           display: inline-flex;
           align-items: center;
-          font-size: 10.5px;
+          font-size: 10px;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.05em;
           color: #a1a1aa;
           background: rgba(255, 255, 255, 0.04);
           border: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 2px 8px;
+          padding: 2px 7px;
           border-radius: 9999px;
         }
 
         .tech-tags {
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 5px;
         }
 
         .badge-tech {
           display: inline-flex;
           align-items: center;
           font-family: var(--font-mono);
-          font-size: 11px;
+          font-size: 10.5px;
           font-weight: 500;
-          padding: 2px 7px;
+          padding: 2px 6px;
           border-radius: 5px;
           background: rgba(255, 255, 255, 0.03);
           border: 1px solid rgba(255, 255, 255, 0.08);
@@ -192,11 +192,11 @@ export function BlockCard({ block }: BlockCardProps) {
 
         .title-link {
           display: inline-block;
-          margin-bottom: 6px;
+          margin-bottom: 4px;
         }
 
         .card-title {
-          font-size: 16px;
+          font-size: 15px;
           font-weight: 700;
           color: var(--text-primary);
           transition: color var(--transition-fast);
@@ -207,10 +207,10 @@ export function BlockCard({ block }: BlockCardProps) {
         }
 
         .card-desc {
-          font-size: 13px;
+          font-size: 12.5px;
           color: var(--text-muted);
-          line-height: 18px;
-          margin-bottom: 18px;
+          line-height: 17px;
+          margin-bottom: 14px;
           flex: 1;
           display: -webkit-box;
           -webkit-line-clamp: 2;
@@ -222,19 +222,19 @@ export function BlockCard({ block }: BlockCardProps) {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding-top: 14px;
+          padding-top: 10px;
           border-top: 1px solid var(--border);
         }
 
         .author-wrap {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 7px;
         }
 
         .author-avatar {
-          width: 26px;
-          height: 26px;
+          width: 24px;
+          height: 24px;
           border-radius: 50%;
           background: var(--bg-elevated);
           border: 1px solid var(--border);
@@ -242,7 +242,7 @@ export function BlockCard({ block }: BlockCardProps) {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 10px;
+          font-size: 9.5px;
           font-weight: 700;
         }
 
@@ -252,13 +252,13 @@ export function BlockCard({ block }: BlockCardProps) {
         }
 
         .author-name {
-          font-size: 12px;
+          font-size: 11.5px;
           font-weight: 600;
           color: var(--text-primary);
         }
 
         .author-handle {
-          font-size: 11px;
+          font-size: 10px;
           color: var(--text-muted);
         }
 
