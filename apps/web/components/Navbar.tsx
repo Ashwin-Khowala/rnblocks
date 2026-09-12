@@ -107,10 +107,10 @@ export function Navbar() {
         .navbar-root {
           position: sticky;
           top: 0;
-          z-index: 100;
-          background: rgba(10, 10, 10, 0.85);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
+          z-index: 1000;
+          background: rgba(9, 9, 11, 0.96);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
           border-bottom: 1px solid var(--border);
         }
 
