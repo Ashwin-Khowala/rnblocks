@@ -20,37 +20,6 @@ export default function ScreensPage() {
   const screenItem = BLOCKS_DATA.find((b) => b.slug === "teams-and-network");
   const ScreenComponent = screenItem?.Component || (() => null);
 
-  const upcomingScreens = [
-    {
-      title: "Full Authentication Flow",
-      subtitle: "Login, Signup, Forgot Password, and 2FA OTP verification screens wired with navigation.",
-      screensCount: "4 Screens",
-      framework: "Expo Router",
-      tag: "Planned",
-    },
-    {
-      title: "In-App Subscription & Paywall Flow",
-      subtitle: "Feature highlights, customer review carousel, annual vs monthly pricing, and restore purchases.",
-      screensCount: "2 Screens",
-      framework: "NativeWind",
-      tag: "In Review",
-    },
-    {
-      title: "Interactive Onboarding Carousel",
-      subtitle: "Swipeable feature introduction cards, permission request screen, and completion celebration.",
-      screensCount: "3 Screens",
-      framework: "Reanimated",
-      tag: "Planned",
-    },
-    {
-      title: "Checkout & Payment Flow",
-      subtitle: "Shipping address form, order review item list, payment selector (Apple Pay / Credit Card), and success screen.",
-      screensCount: "3 Screens",
-      framework: "Expo Router",
-      tag: "Planned",
-    },
-  ];
-
   return (
     <div className="screens-page">
       <div className="container-main">
@@ -128,57 +97,23 @@ export default function ScreensPage() {
           </div>
         </div>
 
-        {/* Section Heading for Community / Upcoming Flows */}
-        <div className="upcoming-section-header">
-          <h2 className="upcoming-title">Upcoming Screen Flows</h2>
-          <p className="upcoming-sub">
-            Community-driven screen templates currently in active development.
-          </p>
-        </div>
-
-        {/* Screens Grid */}
-        <div className="screens-grid">
-          {upcomingScreens.map((screen, idx) => (
-            <div key={idx} className="screen-card">
-              <div className="screen-card-header">
-                <div className="device-icon-box">
-                  <Smartphone size={20} />
-                </div>
-                <div className="screen-tags">
-                  <span className="badge-tech">{screen.framework}</span>
-                  <span className="screen-count-tag">{screen.screensCount}</span>
-                </div>
-              </div>
-
-              <h3 className="screen-card-title">{screen.title}</h3>
-              <p className="screen-card-desc">{screen.subtitle}</p>
-
-              <div className="screen-card-footer">
-                <span className="status-label">
-                  <span className="status-dot" />
-                  {screen.tag}
-                </span>
-                <Link href="/submit" className="propose-link">
-                  <span>Propose Code</span>
-                  <ArrowRight size={13} />
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Banner CTA */}
+        {/* Genuine Contribution & Ecosystem Banner */}
         <div className="screens-banner">
           <div>
-            <h3 className="banner-title">Need individual components instead?</h3>
+            <h3 className="banner-title">Contribute Screen Flows</h3>
             <p className="banner-sub">
-              Browse standalone buttons, docks, cards, and navigation components.
+              Have a production React Native screen or flow to share with the community? Submit your component via Pull Request.
             </p>
           </div>
-          <Link href="/blocks" className="btn-primary">
-            <span>Browse Blocks Registry</span>
-            <ArrowRight size={14} />
-          </Link>
+          <div className="banner-actions">
+            <Link href="/submit" className="btn-primary">
+              <span>Contribution Guide</span>
+              <ArrowRight size={14} />
+            </Link>
+            <Link href="/blocks" className="btn-secondary">
+              <span>Browse Blocks</span>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -500,6 +435,12 @@ export default function ScreensPage() {
         .banner-sub {
           font-size: 14px;
           color: #9ca3af;
+        }
+
+        .banner-actions {
+          display: flex;
+          align-items: center;
+          gap: 12px;
         }
 
         @media (max-width: 1024px) {

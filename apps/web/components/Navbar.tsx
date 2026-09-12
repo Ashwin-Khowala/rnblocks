@@ -53,11 +53,10 @@ export function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             className="github-btn"
-            title="Star on GitHub"
+            title="GitHub Repository"
           >
             <GitHubIcon size={15} />
-            <span className="github-text">Star</span>
-            <span className="github-count">1.8k</span>
+            <span className="github-text">GitHub</span>
           </a>
 
           <Link href="/blocks" className="btn-primary desktop-only-btn">
@@ -207,14 +206,6 @@ export function Navbar() {
           border-color: var(--border-hover);
         }
 
-        .github-count {
-          font-family: var(--font-mono);
-          font-size: 11px;
-          color: var(--text-muted);
-          background: var(--bg-elevated);
-          padding: 1px 5px;
-          border-radius: 4px;
-        }
 
         .desktop-only-btn {
           padding: 7px 14px;

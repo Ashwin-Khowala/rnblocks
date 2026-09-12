@@ -88,7 +88,7 @@ export function Footer() {
               NativeWind
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/Ashwin-Khowala/rnblocks"
               target="_blank"
               rel="noopener noreferrer"
               className="footer-link"
@@ -106,7 +106,7 @@ export function Footer() {
           </p>
           <div className="bottom-socials">
             <a
-              href="https://github.com"
+              href="https://github.com/Ashwin-Khowala/rnblocks"
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-btn"

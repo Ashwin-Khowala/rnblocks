@@ -59,8 +59,8 @@ export default function SubmitPage() {
                   Fork the official RNBlocks repo to your GitHub account and clone it locally.
                 </p>
                 <div className="code-box">
-                  <code>git clone https://github.com/rnblocks/rnblocks.git</code>
-                  <CopyButton text="git clone https://github.com/rnblocks/rnblocks.git" />
+                  <code>git clone https://github.com/Ashwin-Khowala/rnblocks.git</code>
+                  <CopyButton text="git clone https://github.com/Ashwin-Khowala/rnblocks.git" />
                 </div>
               </div>
             </div>
@@ -168,7 +168,7 @@ export default function SubmitPage() {
           </div>
           <div className="cta-bar-actions">
             <a
-              href="https://github.com"
+              href="https://github.com/Ashwin-Khowala/rnblocks"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"

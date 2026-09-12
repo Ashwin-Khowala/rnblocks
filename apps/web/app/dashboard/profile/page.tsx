@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { User, Shield, Terminal, BookOpen, Layers } from "lucide-react";
 import { GitHubIcon } from "@/components/icons/GitHubIcon";
+import { BLOCKS_DATA } from "@/data/blocks";
 
 export default function ProfilePage() {
   return (
@@ -60,7 +61,7 @@ export default function ProfilePage() {
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-md bg-[#181818] border border-white/10">
                 <div className="text-xs text-[#A3A3A3]">Published Blocks</div>
-                <div className="text-2xl font-mono font-bold text-white mt-1">1</div>
+                <div className="text-2xl font-mono font-bold text-white mt-1">{BLOCKS_DATA.length}</div>
               </div>
               <div className="p-4 rounded-md bg-[#181818] border border-white/10">
                 <div className="text-xs text-[#A3A3A3]">Registry License</div>

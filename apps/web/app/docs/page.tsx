@@ -50,7 +50,7 @@ export default function DocsPage() {
               Have questions or request a block? Open an issue on GitHub.
             </p>
             <a
-              href="https://github.com"
+              href="https://github.com/Ashwin-Khowala/rnblocks/issues"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary"
@@ -86,11 +86,11 @@ export default function DocsPage() {
                 Run the CLI in your React Native or Expo project root:
               </p>
               <div className="doc-code-block">
-                <code>npx rnblocks add pricing-card</code>
-                <CopyButton text="npx rnblocks add pricing-card" />
+                <code>npx rnblocks add floating-docker</code>
+                <CopyButton text="npx rnblocks add floating-docker" />
               </div>
               <p className="doc-caption">
-                This copies the component files into <code>components/pricing-card.tsx</code> and installs any required dependencies.
+                This copies the component files into <code>components/floating-docker.tsx</code> and installs any required dependencies.
               </p>
             </div>
           )}
@@ -186,9 +186,8 @@ export default function DocsPage() {
 │   ├── (tabs)/
 │   └── index.tsx
 ├── components/           # Installed UI Blocks live here
-│   ├── pricing-card.tsx
-│   ├── login-form.tsx
-│   └── paywall.tsx
+│   ├── floating-docker.tsx
+│   └── teams-and-network.tsx
 ├── package.json
 └── tailwind.config.js    # (if using NativeWind)`}</pre>
               </div>
