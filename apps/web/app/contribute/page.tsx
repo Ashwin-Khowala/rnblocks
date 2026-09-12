@@ -94,26 +94,6 @@ export default function ContributePage() {
             RNBlocks is 100% free and open source. We empower mobile developers to own their code instead of wrestling with bloated npm dependencies. Join us in curating the finest blocks, screens, and CLI utilities for Expo and React Native.
           </p>
 
-          {/* Vercel OSS Sponsorship Callout */}
-          <div className="vercel-oss-banner">
-            <div className="vercel-pill">
-              <span className="triangle-icon">▲</span>
-              <span>Vercel OSS Program</span>
-            </div>
-            <p className="vercel-banner-text">
-              RNBlocks is built for the global open-source community and hosted on high-performance Vercel Edge infrastructure.
-            </p>
-            <a
-              href="https://vercel.com?utm_source=rnblocks&utm_campaign=oss"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="vercel-link-btn"
-            >
-              <span>Powered by Vercel</span>
-              <ExternalLink size={13} />
-            </a>
-          </div>
-
           <div className="hero-cta-row">
             <a
               href="https://github.com/Ashwin-Khowala/rnblocks"
@@ -403,62 +383,6 @@ export default function ContributePage() {
           color: var(--text-secondary);
           max-width: 720px;
           margin-bottom: 32px;
-        }
-
-        .vercel-oss-banner {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-md);
-          padding: 12px 20px;
-          margin-bottom: 32px;
-          width: 100%;
-          max-width: 680px;
-        }
-
-        .vercel-pill {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 12px;
-          font-weight: 600;
-          color: var(--text-primary);
-          background: rgba(255, 255, 255, 0.06);
-          padding: 4px 10px;
-          border-radius: 4px;
-          white-space: nowrap;
-        }
-
-        .triangle-icon {
-          font-size: 10px;
-        }
-
-        .vercel-banner-text {
-          font-size: 12.5px;
-          color: var(--text-muted);
-          text-align: left;
-          flex: 1;
-          margin: 0;
-        }
-
-        .vercel-link-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          font-size: 12px;
-          font-weight: 600;
-          color: var(--text-primary);
-          border-bottom: 1px solid var(--border-hover);
-          padding-bottom: 2px;
-          transition: border-color var(--transition-fast);
-          white-space: nowrap;
-        }
-
-        .vercel-link-btn:hover {
-          border-color: var(--text-primary);
         }
 
         .hero-cta-row {
@@ -825,10 +749,6 @@ export default function ContributePage() {
           .pillars-grid,
           .wishlist-grid {
             grid-template-columns: 1fr;
-          }
-          .vercel-oss-banner {
-            flex-direction: column;
-            align-items: flex-start;
           }
           .standards-inner {
             flex-direction: column;

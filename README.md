@@ -8,10 +8,6 @@ Crafted mobile blocks, screens, and components ready to drop into your Expo or R
 
 <br />
 
-[![Powered by Vercel](https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg)](https://vercel.com?utm_source=rnblocks&utm_campaign=oss)
-
-<br />
-
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![Turborepo](https://img.shields.io/badge/Turborepo-Monorepo-000000?logo=turborepo)](https://turbo.build/)
@@ -130,15 +126,6 @@ We welcome contributions of all kinds! Whether you're designing new React Native
 1. Read our [Contributing Guide](CONTRIBUTING.md).
 2. Check out our [Code of Conduct](CODE_OF_CONDUCT.md).
 3. Visit our interactive [Contribution Portal](https://rnblocks.vercel.app/contribute) or submit a block directly via the [Web Submission Form](https://rnblocks.vercel.app/submit).
-
----
-
-## Open Source Sponsorship & Acknowledgements
-
-RNBlocks is proud to be built for the global React Native and Expo developer community.
-
-- **Hosted and Powered by [Vercel](https://vercel.com?utm_source=rnblocks&utm_campaign=oss)** — Thank you to Vercel for empowering open source creators with ultra-fast edge infrastructure and analytics.
-- Inspired by the architectural brilliance of [shadcn/ui](https://ui.shadcn.com).
 
 ---
 
