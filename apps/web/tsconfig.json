@@ -32,6 +32,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "../../registry/**/*.ts",
+    "../../registry/**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],

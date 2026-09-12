@@ -5,7 +5,7 @@ import {
   RegistryItem,
   RegistryManifest,
   RegistryManifestSchema,
-} from "./schema";
+} from "./schema.js";
 
 export function findRegistryDir(startDir?: string): string {
   let current = startDir || process.cwd();

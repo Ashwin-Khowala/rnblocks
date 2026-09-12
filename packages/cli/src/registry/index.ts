@@ -77,7 +77,7 @@ export async function fetchAvailableItems(): Promise<RegistryItem[]> {
   try {
     const res = await fetch(`${GITHUB_RAW_BASE}/registry.json`);
     if (res.ok) {
-      const data = await res.json();
+      const data = (await res.json()) as { items?: RegistryItem[] };
       return data.items || [];
     }
   } catch {
