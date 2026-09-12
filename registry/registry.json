@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-09-12T17:39:28.972Z",
+  "generatedAt": "2026-09-12T18:31:57.703Z",
   "items": [
     {
       "name": "floating-docker",
@@ -18,6 +18,34 @@
       ],
       "dependencies": [],
       "registryDependencies": [],
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "framework": "react-native",
+      "styling": [
+        "StyleSheet"
+      ]
+    },
+    {
+      "name": "teams-and-network",
+      "title": "Teams & Network Screen",
+      "description": "Production screen from Fyndr featuring startup opening cards, compensation tags, match badges, filter chips, search input, and the floating bottom docker.",
+      "type": "screen",
+      "author": "Ashwin Khowala",
+      "version": "1.0.0",
+      "category": "social",
+      "files": [
+        {
+          "path": "files/teams-and-network.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "floating-docker"
+      ],
       "platforms": [
         "ios",
         "android",

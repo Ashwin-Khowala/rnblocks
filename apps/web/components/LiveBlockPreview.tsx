@@ -7,16 +7,19 @@ import { Moon, Sun, Smartphone, Monitor } from "lucide-react";
 interface LiveBlockPreviewProps {
   Component: React.ComponentType;
   title?: string;
+  type?: "block" | "screen";
   defaultMode?: "device" | "expanded";
 }
 
 export function LiveBlockPreview({
   Component,
   title,
-  defaultMode = "device",
+  type = "block",
+  defaultMode,
 }: LiveBlockPreviewProps) {
+  const initialMode = defaultMode || (type === "screen" ? "device" : "expanded");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [mode, setMode] = useState<"device" | "expanded">(defaultMode);
+  const [mode, setMode] = useState<"device" | "expanded">(initialMode);
 
   return (
     <div className="preview-container">
@@ -191,8 +194,11 @@ export function LiveBlockPreview({
         }
 
         .expanded-card-wrap {
-          max-width: 440px;
+          max-width: 460px;
           width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
       `}</style>
     </div>

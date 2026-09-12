@@ -106,7 +106,7 @@ export default function BlockDetailPage() {
             {/* Tab Contents */}
             <div className="tab-body">
               {activeTab === "preview" ? (
-                <LiveBlockPreview Component={block.Component} title={block.title} />
+                <LiveBlockPreview Component={block.Component} title={block.title} type={block.type} />
               ) : (
                 <CodeViewer
                   code={block.code}
