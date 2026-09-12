@@ -1,0 +1,18 @@
+{
+  "name": "@rnblocks/registry",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Registry schema, validation, and loader for RNBlocks",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "rnblocks",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "CLI to add React Native components and screens directly to your project",
+  "bin": {
+    "rnblocks": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rnblocks/registry": "workspace:*",
+    "commander": "^13.1.0",
+    "picocolors": "^1.1.1",
+    "prompts": "^2.4.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/prompts": "^2.4.9",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2"
+  }
+}

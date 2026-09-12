@@ -1,0 +1,33 @@
+name: Registry Validation
+
+on:
+  pull_request:
+    paths:
+      - "registry/**"
+      - "packages/registry/**"
+      - "scripts/validate-registry.ts"
+
+jobs:
+  validate:
+    name: Validate Registry Items
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate Registry Schema & Files
+        run: pnpm run validate:registry

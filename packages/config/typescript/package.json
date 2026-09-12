@@ -1,0 +1,5 @@
+{
+  "name": "@rnblocks/typescript-config",
+  "version": "0.1.0",
+  "files": ["base.json", "nextjs.json"]
+}
