@@ -3,6 +3,7 @@ import { Nunito_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { Layers, ArrowUpRight, BookOpen, Terminal, Sparkles, FolderTree } from "lucide-react";
+import { Analytics } from "@vercel/analytics/next";
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
@@ -55,7 +56,7 @@ export default function DocsLayout({
 
             <div className="flex items-center gap-3">
               <a
-                href="http://localhost:3000"
+                href={process.env.NEXT_PUBLIC_SITE_URL || "https://rnblocks.vercel.app"}
                 className="text-xs text-[#A3A3A3] hover:text-white flex items-center gap-1 transition-colors px-3 py-1.5 rounded-md border border-white/10 bg-[#111111]"
               >
                 Website & Registry <ArrowUpRight size={13} />
@@ -75,6 +76,7 @@ export default function DocsLayout({
         <div className="max-w-7xl mx-auto px-6 py-8">
           {children}
         </div>
+        <Analytics />
       </body>
     </html>
   );

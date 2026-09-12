@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["@rnblocks/registry", "@rnblocks/ui"],
   webpack: (config) => {
     config.resolve = config.resolve || {};
     config.resolve.alias = {
