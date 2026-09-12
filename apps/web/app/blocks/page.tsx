@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { BLOCKS_DATA, BlockItem } from "@/data/blocks";
 import { BlockCard } from "@/components/BlockCard";
-import { Search, Filter, Layers, X } from "lucide-react";
+import { Search, Filter, Layers, X, ChevronDown } from "lucide-react";
 
 export default function BlocksGalleryPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -109,25 +109,33 @@ export default function BlocksGalleryPage() {
 
             {/* Dropdown Filters */}
             <div className="dropdown-filters">
-              <select
-                className="filter-select"
-                value={stylingFilter}
-                onChange={(e) => setStylingFilter(e.target.value)}
-              >
-                <option value="all">Styling: All</option>
-                <option value="NativeWind">NativeWind</option>
-                <option value="StyleSheet">StyleSheet</option>
-              </select>
+              <div className="filter-select-wrap">
+                <select
+                  className="filter-select"
+                  value={stylingFilter}
+                  onChange={(e) => setStylingFilter(e.target.value)}
+                  aria-label="Filter by styling"
+                >
+                  <option value="all">Styling: All</option>
+                  <option value="NativeWind">NativeWind</option>
+                  <option value="StyleSheet">StyleSheet</option>
+                </select>
+                <ChevronDown size={14} className="select-chevron" />
+              </div>
 
-              <select
-                className="filter-select"
-                value={frameworkFilter}
-                onChange={(e) => setFrameworkFilter(e.target.value)}
-              >
-                <option value="all">Framework: All</option>
-                <option value="expo">Expo</option>
-                <option value="react-native">Bare React Native</option>
-              </select>
+              <div className="filter-select-wrap">
+                <select
+                  className="filter-select"
+                  value={frameworkFilter}
+                  onChange={(e) => setFrameworkFilter(e.target.value)}
+                  aria-label="Filter by framework"
+                >
+                  <option value="all">Framework: All</option>
+                  <option value="expo">Expo</option>
+                  <option value="react-native">Bare React Native</option>
+                </select>
+                <ChevronDown size={14} className="select-chevron" />
+              </div>
             </div>
           </div>
 
@@ -230,9 +238,9 @@ export default function BlocksGalleryPage() {
 
         .search-control-bar {
           display: flex;
-          gap: 14px;
+          gap: 12px;
           align-items: center;
-          margin-bottom: 18px;
+          margin-bottom: 20px;
         }
 
         .search-input-wrap {
@@ -240,71 +248,112 @@ export default function BlocksGalleryPage() {
           position: relative;
           display: flex;
           align-items: center;
+          width: 100%;
         }
 
-        .search-icon {
+        .search-input-wrap :global(.search-icon) {
           position: absolute;
           left: 14px;
-          color: var(--text-muted);
+          top: 50%;
+          transform: translateY(-50%);
+          color: #71717a;
           pointer-events: none;
+          z-index: 2;
         }
 
         .search-input {
           width: 100%;
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-md);
-          padding: 12px 38px 12px 42px;
+          height: 42px;
+          background: #111114;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+          padding: 0 38px 0 42px;
           font-family: var(--font-sans);
-          font-size: 14px;
-          color: var(--text-primary);
+          font-size: 13.5px;
+          color: #ffffff;
           outline: none;
+          box-sizing: border-box;
           transition: border-color var(--transition-fast), background var(--transition-fast);
         }
 
         .search-input:focus {
-          border-color: var(--border-hover);
-          background: var(--bg-card-hover);
+          border-color: rgba(255, 255, 255, 0.25);
+          background: #141418;
         }
 
         .search-input::placeholder {
-          color: var(--text-muted);
+          color: #71717a;
         }
 
         .clear-search-btn {
           position: absolute;
           right: 12px;
-          color: var(--text-muted);
+          top: 50%;
+          transform: translateY(-50%);
+          color: #71717a;
+          background: none;
+          border: none;
           padding: 4px;
           display: flex;
           align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          border-radius: 4px;
+          z-index: 2;
         }
 
         .clear-search-btn:hover {
-          color: var(--text-primary);
+          color: #ffffff;
         }
 
         .dropdown-filters {
           display: flex;
           gap: 10px;
+          align-items: center;
+        }
+
+        .filter-select-wrap {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
         }
 
         .filter-select {
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-md);
-          padding: 10px 14px;
-          color: var(--text-secondary);
+          height: 42px;
+          background: #111114;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+          padding: 0 36px 0 14px;
+          color: #d1d5db;
           font-family: var(--font-sans);
           font-size: 13px;
           outline: none;
           cursor: pointer;
-          transition: border-color var(--transition-fast);
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          white-space: nowrap;
+          box-sizing: border-box;
+          transition: border-color var(--transition-fast), color var(--transition-fast);
         }
 
         .filter-select:hover {
-          border-color: var(--border-hover);
-          color: var(--text-primary);
+          border-color: rgba(255, 255, 255, 0.2);
+          color: #ffffff;
+        }
+
+        .filter-select:focus {
+          border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .filter-select-wrap :global(.select-chevron) {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          pointer-events: none;
+          color: #71717a;
+          z-index: 2;
         }
 
         .category-pills-row {
@@ -312,7 +361,8 @@ export default function BlocksGalleryPage() {
           align-items: center;
           gap: 8px;
           overflow-x: auto;
-          padding-bottom: 4px;
+          padding-bottom: 6px;
+          -webkit-overflow-scrolling: touch;
         }
 
         .category-pill-btn {
@@ -410,27 +460,48 @@ export default function BlocksGalleryPage() {
         }
 
         @media (max-width: 768px) {
-          .search-control-bar {
-            flex-direction: column;
-            align-items: stretch;
-          }
-
-          .dropdown-filters {
-            width: 100%;
-          }
-
-          .filter-select {
-            flex: 1;
-          }
-
-          .gallery-grid {
-            grid-template-columns: 1fr;
+          .gallery-header {
+            margin-bottom: 24px;
           }
 
           .gallery-title-row {
             flex-direction: column;
             align-items: flex-start;
             gap: 12px;
+          }
+
+          .page-title {
+            font-size: 26px;
+          }
+
+          .search-control-bar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+          }
+
+          .dropdown-filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            gap: 8px;
+          }
+
+          .filter-select-wrap {
+            width: 100%;
+          }
+
+          .filter-select {
+            width: 100%;
+          }
+
+          .category-pills-row {
+            margin-right: -16px;
+            padding-right: 16px;
+          }
+
+          .gallery-grid {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>

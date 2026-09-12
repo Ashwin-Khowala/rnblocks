@@ -120,16 +120,6 @@ export function Footer() {
             © {new Date().getFullYear()} RNBlocks. Built for React Native builders.
           </p>
 
-          <a
-            href="https://vercel.com?utm_source=rnblocks&utm_campaign=oss"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="vercel-badge-link"
-            title="Powered by Vercel"
-          >
-            <span className="vercel-logo">▲</span>
-            <span>Powered by <span className="font-semibold text-white">Vercel</span></span>
-          </a>
 
           <div className="bottom-socials">
             <a
