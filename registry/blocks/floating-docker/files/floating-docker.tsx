@@ -93,12 +93,36 @@ function TeamIconSvg({ color, filled, size = 22 }: { color: string; filled: bool
   );
 }
 
-function AIIconSvg({ color, size = 22 }: { color: string; filled?: boolean; size?: number }) {
+function AIIconSvg({ color, filled, size = 22 }: { color: string; filled?: boolean; size?: number }) {
+  if (filled) {
+    return (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+        <path
+          d="M12 2C12 7.5 7.5 12 2 12C7.5 12 12 16.5 12 22C12 16.5 16.5 12 22 12C16.5 12 12 7.5 12 2Z"
+          fill={color}
+        />
+        <path
+          d="M19 3C19 4.65 17.65 6 16 6C17.65 6 19 7.35 19 9C19 7.35 20.35 6 22 6C20.35 6 19 4.65 19 3Z"
+          fill={color}
+        />
+      </svg>
+    );
+  }
   return (
-    <svg width={size} height={size} viewBox="0 0 375 375" fill="none">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <path
-        d="M 105.24 238.85 L 93.39 223.78 C 63.43 185.67 76.20 129.64 119.71 108.27 L 311.58 14.01 L 311.58 52.81 C 311.58 82.49 294.63 109.57 267.95 122.57 L 140.40 184.73 C 131.11 189.26 122.98 195.89 116.84 204.19 C 110.67 212.53 105.37 223.98 105.78 238.41 C 109.99 235.07 114.64 232.12 119.70 229.64 L 311.57 135.37 L 311.57 174.18 C 311.57 203.85 294.62 230.94 267.94 243.94 L 140.40 306.09 C 131.11 310.62 122.98 317.25 116.84 325.55 C 110.50 334.13 105.08 345.97 105.83 360.97 L 93.39 345.14 C 67.06 311.65 73.72 264.33 105.24 238.85 Z M 229.87 318.46 L 311.52 361.00 L 311.49 254.73 L 230.03 295.75 C 220.74 300.42 220.65 313.66 229.87 318.46 Z"
-        fill={color}
+        d="M12 2C12 7.5 7.5 12 2 12C7.5 12 12 16.5 12 22C12 16.5 16.5 12 22 12C16.5 12 12 7.5 12 2Z"
+        stroke={color}
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M19 3C19 4.65 17.65 6 16 6C17.65 6 19 7.35 19 9C19 7.35 20.35 6 22 6C20.35 6 19 4.65 19 3Z"
+        stroke={color}
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
