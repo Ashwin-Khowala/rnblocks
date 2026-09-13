@@ -7,7 +7,6 @@
         ".next/**",
         "!.next/cache/**",
         "apps/web/.next/**",
-        "apps/docs/.next/**",
         "dist/**"
       ]
     },
