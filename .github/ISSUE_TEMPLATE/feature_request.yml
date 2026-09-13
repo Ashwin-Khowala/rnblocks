@@ -1,0 +1,43 @@
+name: Feature Request
+description: Suggest an enhancement or new capability for the RNBlocks platform
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make RNBlocks better? Let us know what you would like to see!
+        If you want to suggest a specific component block, please use the **Block Proposal** template instead.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement or Opportunity
+      description: Is your feature request related to a problem or limitation? Please describe.
+      placeholder: A clear description of the current limitation or enhancement opportunity.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you would like to see implemented.
+      placeholder: How should this feature work?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions or features you have evaluated.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Willingness to Contribute
+      options:
+        - label: I would be interested in submitting a Pull Request for this feature.

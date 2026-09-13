@@ -1,0 +1,9 @@
+# RNBlocks Code Owners
+# Maintainer review and sign-off required for changes to registry, packages, tooling, and workflows.
+
+*              @Ashwin-Khowala
+/registry/     @Ashwin-Khowala
+/packages/     @Ashwin-Khowala
+/.github/      @Ashwin-Khowala
+/scripts/      @Ashwin-Khowala
+/SECURITY.md   @Ashwin-Khowala

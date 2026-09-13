@@ -51,6 +51,9 @@ function generateRegistry() {
       const relImportPath = `../../../registry/${type}/${slug}/${primaryFile.path.replace(/\.tsx$/, "")}`;
       imports.push(`import { default as ${compName} } from "${relImportPath}";`);
 
+      const authorStr = typeof parsed.author === "object" ? parsed.author.name : parsed.author;
+      const primaryFramework = (parsed.frameworks && parsed.frameworks[0]) || parsed.framework || "react-native";
+
       exportedItems.push(`  {
     slug: "${slug}",
     name: "${parsed.name}",
@@ -58,13 +61,16 @@ function generateRegistry() {
     description: ${JSON.stringify(parsed.description)},
     type: "${parsed.type}",
     category: "${parsed.category}",
-    author: ${JSON.stringify(parsed.author)},
+    author: ${JSON.stringify(authorStr)},
     version: "${parsed.version}",
     platforms: ${JSON.stringify(parsed.platforms)},
-    framework: "${parsed.framework}",
+    framework: "${primaryFramework}",
+    frameworks: ${JSON.stringify(parsed.frameworks ?? [primaryFramework])},
     styling: ${JSON.stringify(parsed.styling)},
     themes: ${JSON.stringify(parsed.themes ?? [])},
+    tags: ${JSON.stringify(parsed.tags ?? [])},
     dependencies: ${JSON.stringify(parsed.dependencies)},
+    devDependencies: ${JSON.stringify(parsed.devDependencies ?? {})},
     registryDependencies: ${JSON.stringify(parsed.registryDependencies)},
     code: ${JSON.stringify(code)},
     Component: ${compName} as React.ComponentType,
@@ -108,9 +114,12 @@ export interface RegistryWebItem {
   version: string;
   platforms: string[];
   framework: string;
+  frameworks?: string[];
   styling: string[];
   themes?: string[];
+  tags?: string[];
   dependencies: string[];
+  devDependencies?: Record<string, string>;
   registryDependencies: string[];
   code: string;
   Component: React.ComponentType;

@@ -5,7 +5,7 @@ on:
     paths:
       - "registry/**"
       - "packages/registry/**"
-      - "scripts/validate-registry.ts"
+      - "scripts/**"
 
 jobs:
   validate:
@@ -23,11 +23,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: ".nvmrc"
           cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Validate Registry Schema & Files
+      - name: Validate Registry Schema, Duplicates & Files
         run: pnpm run validate:registry

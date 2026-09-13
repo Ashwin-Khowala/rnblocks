@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/Ashwin-Khowala/rnblocks/discussions
+    about: Ask general questions, propose ideas, or discuss React Native architecture.
+  - name: Security Vulnerability Report
+    url: mailto:ashwinkhowala@gmail.com
+    about: Report potential security vulnerabilities privately per SECURITY.md.

@@ -1,15 +1,24 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-09-13T14:49:39.977Z",
+  "generatedAt": "2026-09-13T16:45:30.301Z",
   "items": [
     {
       "name": "floating-docker",
       "title": "Floating Glassmorphic Docker",
       "description": "An interactive floating bottom dock navigation component with smooth sliding active pill capsule, notification badge indicators, and haptic feedback support.",
       "type": "block",
-      "author": "Ashwin Khowala",
+      "author": {
+        "name": "Ashwin Khowala",
+        "github": "Ashwin-Khowala"
+      },
       "version": "1.0.0",
       "category": "navigation",
+      "tags": [
+        "navigation",
+        "tab-bar",
+        "animated",
+        "dock"
+      ],
       "files": [
         {
           "path": "files/floating-docker.tsx",
@@ -17,6 +26,7 @@
         }
       ],
       "dependencies": [],
+      "devDependencies": {},
       "registryDependencies": [],
       "platforms": [
         "ios",
@@ -24,6 +34,10 @@
         "web"
       ],
       "framework": "react-native",
+      "frameworks": [
+        "expo",
+        "react-native"
+      ],
       "styling": [
         "StyleSheet"
       ],
@@ -37,9 +51,17 @@
       "title": "Interactive Calendar",
       "description": "A sleek, zero-dependency month calendar date picker with event dot indicators, smooth date navigation, and dark & light themes.",
       "type": "block",
-      "author": "Ashwin Khowala",
+      "author": {
+        "name": "Ashwin Khowala",
+        "github": "Ashwin-Khowala"
+      },
       "version": "1.0.0",
       "category": "data-display",
+      "tags": [
+        "calendar",
+        "date-picker",
+        "scheduling"
+      ],
       "files": [
         {
           "path": "files/interactive-calendar.tsx",
@@ -47,6 +69,7 @@
         }
       ],
       "dependencies": [],
+      "devDependencies": {},
       "registryDependencies": [],
       "platforms": [
         "ios",
@@ -54,6 +77,10 @@
         "web"
       ],
       "framework": "react-native",
+      "frameworks": [
+        "expo",
+        "react-native"
+      ],
       "styling": [
         "StyleSheet"
       ],
@@ -67,9 +94,18 @@
       "title": "Social OAuth Authentication Buttons",
       "description": "Brand-compliant Apple, Google, and GitHub social sign-in buttons with official vector logos, loading spinners, divider rule, and light/dark theme variants.",
       "type": "block",
-      "author": "Ashwin Khowala",
+      "author": {
+        "name": "Ashwin Khowala",
+        "github": "Ashwin-Khowala"
+      },
       "version": "1.0.0",
       "category": "authentication",
+      "tags": [
+        "auth",
+        "social-login",
+        "oauth",
+        "buttons"
+      ],
       "files": [
         {
           "path": "files/social-auth-buttons.tsx",
@@ -77,6 +113,7 @@
         }
       ],
       "dependencies": [],
+      "devDependencies": {},
       "registryDependencies": [],
       "platforms": [
         "ios",
@@ -84,6 +121,10 @@
         "web"
       ],
       "framework": "react-native",
+      "frameworks": [
+        "expo",
+        "react-native"
+      ],
       "styling": [
         "StyleSheet"
       ],
@@ -97,9 +138,18 @@
       "title": "SVG Gradient Area Trend Line Chart",
       "description": "A lightweight, zero-dependency SVG line chart with smooth gradient area fill, dual-axis labels, reference gridlines, and responsive layout.",
       "type": "block",
-      "author": "Ashwin Khowala",
+      "author": {
+        "name": "Ashwin Khowala",
+        "github": "Ashwin-Khowala"
+      },
       "version": "1.0.0",
       "category": "analytics",
+      "tags": [
+        "chart",
+        "analytics",
+        "data-visualization",
+        "svg"
+      ],
       "files": [
         {
           "path": "files/trend-chart.tsx",
@@ -107,6 +157,7 @@
         }
       ],
       "dependencies": [],
+      "devDependencies": {},
       "registryDependencies": [],
       "platforms": [
         "ios",
@@ -114,6 +165,10 @@
         "web"
       ],
       "framework": "react-native",
+      "frameworks": [
+        "expo",
+        "react-native"
+      ],
       "styling": [
         "StyleSheet"
       ],

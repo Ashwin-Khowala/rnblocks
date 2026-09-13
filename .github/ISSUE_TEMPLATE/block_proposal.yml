@@ -1,0 +1,84 @@
+name: Block or Screen Proposal
+description: Propose a new React Native component block or screen template for the registry
+title: "[Proposal]: "
+labels: ["block-proposal", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing a new block or screen for RNBlocks.
+        Please provide as much visual and functional detail as possible so maintainers can review the design and architecture.
+
+  - type: input
+    id: block_name
+    attributes:
+      label: Suggested Block Name / Slug
+      description: Use lowercase kebab-case (e.g. `notification-drawer`, `biometric-prompt`).
+      placeholder: e.g. floating-action-menu
+    validations:
+      required: true
+
+  - type: dropdown
+    id: block_type
+    attributes:
+      label: Component Type
+      description: Is this an individual component block or a full-screen template?
+      options:
+        - Block (isolated UI component)
+        - Screen (full-screen flow or template)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - navigation
+        - authentication
+        - analytics
+        - data-display
+        - forms
+        - feedback
+        - media
+        - ecommerce
+        - onboarding
+        - settings
+        - other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem and Use Case
+      description: What user experience or development problem does this block solve? Where is it typically used?
+      placeholder: Explain why mobile developers need this component and how it fits into a typical React Native app.
+    validations:
+      required: true
+
+  - type: textarea
+    id: visual_reference
+    attributes:
+      label: Visual Reference or Mockup
+      description: Attach screenshots, GIFs, Figma links, or Dribbble references illustrating the desired visual style and interaction.
+      placeholder: Drag and drop images or paste reference links here.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_dependencies
+    attributes:
+      label: Proposed Dependencies
+      description: List any third-party npm packages this component would require (e.g. `lucide-react-native`, `react-native-svg`). Remember RNBlocks prefers zero or minimal dependencies.
+      placeholder: None (pure React Native StyleSheet) or list specific packages.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: implementation
+    attributes:
+      label: Implementation
+      options:
+        - label: I plan to submit a Pull Request implementing this block myself.
+        - label: I have verified this is not a duplicate of an existing block in `registry/blocks/`.

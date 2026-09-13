@@ -21,9 +21,13 @@ export default function SubmitPage() {
   "title": "Subscription Pricing Card",
   "description": "A responsive pricing card for in-app mobile subscriptions.",
   "type": "block",
-  "author": "your_github_username",
+  "author": {
+    "name": "Your Name",
+    "github": "your_github_username"
+  },
   "version": "1.0.0",
   "category": "payments",
+  "tags": ["pricing", "subscription", "cards"],
   "files": [
     {
       "path": "files/subscription-card.tsx",
@@ -31,9 +35,10 @@ export default function SubmitPage() {
     }
   ],
   "dependencies": ["lucide-react-native"],
+  "devDependencies": {},
   "registryDependencies": [],
   "platforms": ["ios", "android", "web"],
-  "framework": "react-native",
+  "frameworks": ["expo", "react-native"],
   "styling": ["StyleSheet"],
   "themes": ["dark", "light"]
 }`;

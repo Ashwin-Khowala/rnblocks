@@ -21,7 +21,8 @@ export async function addCommand(name: string, options: AddOptions) {
     process.exit(1);
   }
 
-  logger.info(`Found ${pc.bold(item.title)} (${item.type}) by ${pc.dim(item.author)}`);
+  const authorStr = typeof item.author === "object" ? item.author.name : item.author;
+  logger.info(`Found ${pc.bold(item.title)} (${item.type}) by ${pc.dim(authorStr)}`);
 
   const projectRoot = detectProjectRoot();
   const defaultDir = item.type === "screen" ? "screens" : "components/rnblocks";

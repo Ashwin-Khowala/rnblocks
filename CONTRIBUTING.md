@@ -6,6 +6,22 @@ Please take a moment to review this document to make the contribution process sm
 
 ---
 
+## Before You Contribute
+
+Before opening a pull request or building a new component, please ensure your contribution satisfies these core criteria:
+
+1. **Search existing blocks**: Avoid duplicate implementations. Check `registry/blocks/` and open issues before starting. If a similar block exists, consider proposing an enhancement or variant rather than creating a near-duplicate.
+2. **Open a proposal for complex items**: For full-screen templates, complex multi-screen flows, or non-trivial dependencies, open a [Block Proposal](https://github.com/Ashwin-Khowala/rnblocks/issues/new?template=block_proposal.yml) first so maintainers can align on direction.
+3. **Original work only**: All contributed code must be your original work or permissibly licensed open-source code with explicit attribution. Do not submit proprietary designs, copied commercial UI kits, or copyrighted assets.
+4. **No secrets or unauthorized network calls**: Never include API keys, tokens, credentials, analytics telemetry, or hidden network requests. All dependencies must be explicitly declared and open-source.
+5. **Zero-runtime principle**: Blocks must remain standalone React Native source code that users copy into their repositories. Do not add runtime provider requirements or global state dependencies.
+
+### License Agreement
+
+By submitting a pull request or contribution to RNBlocks, you agree that your contribution is provided under the terms of the project's [MIT License](LICENSE), and you confirm that you have the right to submit the code under this license.
+
+---
+
 ## Code of Conduct
 
 By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md). Please report any unacceptable behavior to [ashwinkhowala@gmail.com](mailto:ashwinkhowala@gmail.com).
@@ -15,7 +31,7 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 ## Getting Started
 
 ### Prerequisites
-- **Node.js**: v18.18 or higher (v20+ recommended)
+- **Node.js**: v20 or higher (v20 LTS recommended, see `.nvmrc`)
 - **pnpm**: v9.0 or higher (`npm install -g pnpm`)
 - **Git**
 
@@ -65,8 +81,11 @@ rnblocks/
 │   ├── blocks/        # Individual UI component blocks (e.g. floating-docker)
 │   ├── screens/       # Full-screen template flows
 │   └── registry.json  # Auto-generated registry bundle
+├── docs/              # In-depth architectural & reference documentation
 └── scripts/           # Registry generation and validation scripts
 ```
+
+For complete architecture details, see [docs/architecture.md](docs/architecture.md).
 
 ---
 
@@ -95,9 +114,13 @@ Every block must have a `registry.json` defining its metadata and dependencies:
   "title": "My Block Title",
   "description": "Clean, responsive mobile component designed for React Native & Expo.",
   "type": "block",
-  "author": "Your Name",
+  "author": {
+    "name": "Your Name",
+    "github": "your-username"
+  },
   "version": "1.0.0",
   "category": "navigation",
+  "tags": ["navigation", "tab-bar", "animated"],
   "files": [
     {
       "path": "files/my-block.tsx",
@@ -105,19 +128,24 @@ Every block must have a `registry.json` defining its metadata and dependencies:
     }
   ],
   "dependencies": ["lucide-react-native"],
+  "devDependencies": {},
   "registryDependencies": [],
   "platforms": ["ios", "android", "web"],
-  "framework": "react-native",
+  "frameworks": ["expo", "react-native"],
   "styling": ["StyleSheet"],
   "themes": ["dark", "light"]
 }
 ```
 
+For detailed schema documentation, see [docs/registry-format.md](docs/registry-format.md).
+
+---
+
 ### Design Philosophy
 
 RNBlocks is built on a simple foundation:
 
-**copy -> own -> customize**
+**copy → own → customize**
 
 Every block is:
 - **Standalone and source-owned**: Delivered directly into the user's project codebase. There is no runtime npm package, no required `ThemeProvider`, and no forced styling dependency.
@@ -167,6 +195,7 @@ Before submitting a block or screen, verify it meets the RNBlocks quality standa
 #### Registry
 - [ ] Valid `registry.json` matching the schema with accurate metadata
 - [ ] Accurate `themes` array declared (`["dark", "light"]` or `["dark"]`)
+- [ ] Accurate `tags` array declared with lowercase keywords
 - [ ] All external dependencies explicitly listed
 - [ ] Declared platform support tested and verified
 - [ ] Web preview renders cleanly in the registry studio
@@ -181,6 +210,8 @@ Run the registry builder to compile `registry/registry.json` and synchronize wit
 pnpm run generate:registry
 pnpm run validate:registry
 ```
+
+---
 
 ### Step 4: Test in the Web App
 
@@ -217,19 +248,22 @@ node dist/index.js add floating-docker
 
 3. **Check CI checks locally:**
    ```bash
+   pnpm run validate:registry
    pnpm run typecheck
    pnpm run build
    ```
 
 4. **Submit your Pull Request:**
-   - Provide a clear title and description.
-   - Include screenshots or screen recordings (for new mobile components/screens).
-   - Link any related issues.
+   - Use the provided PR template.
+   - Complete the quality checklist.
+   - Attach screenshots or screen recordings.
+   - Confirm licensing agreement.
 
 ---
 
 ## Community & Questions
 
+- **Security**: Report vulnerabilities privately to [ashwinkhowala@gmail.com](mailto:ashwinkhowala@gmail.com). See [SECURITY.md](SECURITY.md).
 - **Issues**: If you discover a bug or have a feature request, please open a [GitHub Issue](https://github.com/Ashwin-Khowala/rnblocks/issues).
 - **Discussions**: Share ideas, component suggestions, or show off apps built with RNBlocks on [GitHub Discussions](https://github.com/Ashwin-Khowala/rnblocks/discussions).
 

@@ -1,12 +1,6 @@
-<div align="center">
-
 # RNBlocks
 
-### Production-ready React Native & Expo UI, delivered as source code you own
-
-Every block is designed to be responsive, customizable, and easy to integrate without forcing a styling framework or runtime dependency.
-
-<br />
+Production-ready React Native and Expo UI components, delivered as source code you own. Every block is standalone, responsive, and customizable without forcing a styling framework or runtime dependency.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
@@ -15,122 +9,63 @@ Every block is designed to be responsive, customizable, and easy to integrate wi
 [![Expo](https://img.shields.io/badge/Expo-SDK%2052+-000020?logo=expo)](https://expo.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8+-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-<br />
-
-[**Explore Registry**](https://rnblocks.vercel.app/blocks) · [**Documentation**](https://rnblocks.vercel.app/docs) · [**Contribute**](CONTRIBUTING.md) · [**Submit Block**](https://rnblocks.vercel.app/submit)
-
-</div>
+[Explore Registry](https://rnblocks.vercel.app/blocks) · [Documentation](https://rnblocks.vercel.app/docs) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
 ---
 
 ## Why RNBlocks?
 
-Web developers have had game-changing registry tools like **shadcn/ui** that revolutionized frontend engineering by advocating for **code ownership over monolithic npm packages**.
-
-Mobile developers building on React Native and Expo deserve the same superpower.
-
-RNBlocks is an open-source registry designed specifically for React Native and Expo:
-- **Copy, Don't Install**: You own the component code. Modify colors, curves, and layouts directly in your repository.
-- **Standalone & Source-Owned**: Free from heavy runtime wrappers, forced `ThemeProvider` contexts, or mandatory design-token systems.
-- **Automated CLI**: Run `npx rnblocks add <block>` to automatically place component files and install required peer dependencies.
-- **Universal Mobile Compatibility**: Tested across Expo SDK (Managed & Bare workflows) and standard React Native CLI.
-- **Type Safe & Modular**: Written in strict TypeScript with minimal third-party runtime baggage.
-- **StyleSheet Standard**: Built with standard React Native `StyleSheet` primitives, making it trivial to keep as-is or adapt to NativeWind.
+- **Source Code Ownership**: You copy the component code into your repository. Modify styles, behavior, and layout directly.
+- **Zero Runtime Dependencies**: No wrapper contexts, no mandatory `ThemeProvider`, no design-token dependencies.
+- **React Native Primitives**: Authored using standard `StyleSheet.create` for universal compatibility. Adaptable to NativeWind or any styling library.
+- **Universal Compatibility**: Tested across Expo (SDK 52+) and React Native CLI (0.78+).
+- **CLI Workflow**: Add components with a single command: `npx rnblocks add <block>`.
 
 ---
 
 ## Quick Start
 
-### 1. Initialize your project
-Configure your project directory and preferences:
+Add a component directly into your project:
 
 ```bash
-npx rnblocks init
-```
-
-### 2. Add a block
-Fetch production-ready components directly into your codebase:
-
-```bash
-# Add the interactive floating docker component
 npx rnblocks add floating-docker
 ```
 
-The CLI will:
-1. Fetch the component metadata and code from the registry.
-2. Resolve and install necessary peer dependencies (e.g. `lucide-react-native`).
-3. Place clean, formatted TypeScript source files directly into your project's `components/` directory.
-
-### 3. Or copy directly from the Web Registry
-Visit [rnblocks.vercel.app](https://rnblocks.vercel.app) to inspect the component live in dark mode, browse the full source code, and copy it with one click.
+Or browse, preview, and copy components directly from the web registry at [rnblocks.vercel.app](https://rnblocks.vercel.app).
 
 ---
 
-## Repository Architecture
-
-RNBlocks is organized as a high-performance **Turborepo** monorepo using **pnpm workspaces**:
-
-```
-rnblocks/
-├── apps/
-│   ├── web/           # Next.js 16 web registry showcase, studio inspection, & API routes
-│   └── docs/          # Next.js 16 documentation and API specification site
-├── packages/
-│   ├── cli/           # 'rnblocks' CLI tool (Commander + tsup + zod)
-│   ├── registry/      # Shared registry types and schema definitions
-│   ├── ui/            # Shared UI design system
-│   ├── tsconfig/      # Shared TypeScript configs
-│   └── eslint-config/ # Shared ESLint configs
-├── registry/          # Source-of-truth component directory
-│   ├── blocks/        # Registered mobile UI component blocks
-│   ├── screens/       # Registered mobile full-screen templates
-│   └── registry.json  # Auto-generated registry bundle consumed by web & CLI
-└── scripts/           # Registry generation and schema validation scripts
-```
-
----
-
-## Local Development
-
-Clone and run RNBlocks locally in under two minutes:
+## Development
 
 ```bash
-# 1. Clone the repository
 git clone https://github.com/Ashwin-Khowala/rnblocks.git
 cd rnblocks
-
-# 2. Install monorepo dependencies
 pnpm install
-
-# 3. Start local development server
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the web registry.
-
-### Common Scripts
+### Common Commands
 
 | Command | Description |
-| :--- | :--- |
+|---|---|
 | `pnpm dev` | Run all applications and packages in watch mode |
-| `pnpm build` | Build all apps (`@rnblocks/web`, `@rnblocks/docs`, `rnblocks` CLI) |
-| `pnpm typecheck` | Run strict TypeScript validation across the entire monorepo |
-| `pnpm run generate:registry` | Scan `registry/` and generate `registry.json` |
-| `pnpm run validate:registry` | Validate registry items against zod schemas |
+| `pnpm build` | Build web registry, documentation site, and CLI |
+| `pnpm typecheck` | Run TypeScript validation across all workspaces |
+| `pnpm run validate:registry` | Validate registry items against schema and file checks |
+| `pnpm run generate:registry` | Recompile `registry.json` and sync with web app |
 
 ---
 
-## Contributing
+## Documentation
 
-We welcome contributions of all kinds! Whether you're designing new React Native blocks, adding full-screen templates, improving documentation, or enhancing the CLI:
-
-1. Read our [Contributing Guide](CONTRIBUTING.md).
-2. Check out our [Code of Conduct](CODE_OF_CONDUCT.md).
-3. Visit our interactive [Contribution Portal](https://rnblocks.vercel.app/contribute) or submit a block directly via the [Web Submission Form](https://rnblocks.vercel.app/submit).
+- [Architecture Overview](docs/architecture.md)
+- [Registry Schema Reference](docs/registry-format.md)
+- [Creating a Block Guide](docs/creating-a-block.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [Security Policy](SECURITY.md)
 
 ---
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-Feel free to use the blocks in personal, commercial, and client applications.

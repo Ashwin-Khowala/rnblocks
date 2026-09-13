@@ -1,0 +1,42 @@
+name: Documentation Issue
+description: Report missing, outdated, or unclear documentation
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report an issue with the RNBlocks documentation site (`docs.rnblocks.dev` / `apps/docs`) or repository documentation files.
+
+  - type: input
+    id: page_url
+    attributes:
+      label: Page URL or File Path
+      description: Where did you find the issue?
+      placeholder: e.g. https://rnblocks.vercel.app/docs/creating-blocks or docs/registry-format.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the Issue
+      description: What is inaccurate, missing, or confusing?
+      placeholder: Describe what needs updating or correcting.
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested_fix
+    attributes:
+      label: Suggested Fix or Addition
+      description: If you know what the documentation should say, please provide it here.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Willingness to Contribute
+      options:
+        - label: I would be happy to submit a Pull Request to fix this documentation issue.

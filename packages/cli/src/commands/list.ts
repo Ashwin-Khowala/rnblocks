@@ -18,8 +18,9 @@ export async function listCommand() {
   if (blocks.length > 0) {
     console.log(pc.bold(pc.white("Blocks:")));
     for (const b of blocks) {
+      const authorStr = typeof b.author === "object" ? b.author.name : b.author;
       console.log(
-        `  ${pc.cyan(b.name.padEnd(24))} ${pc.dim(b.title.padEnd(36))} ${pc.gray(`by ${b.author}`)}`
+        `  ${pc.cyan(b.name.padEnd(24))} ${pc.dim(b.title.padEnd(36))} ${pc.gray(`by ${authorStr}`)}`
       );
     }
     console.log();
@@ -28,8 +29,9 @@ export async function listCommand() {
   if (screens.length > 0) {
     console.log(pc.bold(pc.white("Screens:")));
     for (const s of screens) {
+      const authorStr = typeof s.author === "object" ? s.author.name : s.author;
       console.log(
-        `  ${pc.cyan(s.name.padEnd(24))} ${pc.dim(s.title.padEnd(36))} ${pc.gray(`by ${s.author}`)}`
+        `  ${pc.cyan(s.name.padEnd(24))} ${pc.dim(s.title.padEnd(36))} ${pc.gray(`by ${authorStr}`)}`
       );
     }
     console.log();

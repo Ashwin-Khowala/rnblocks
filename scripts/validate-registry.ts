@@ -4,11 +4,21 @@ import { RegistryItemSchema } from "../packages/registry/src/schema";
 
 const REGISTRY_DIR = path.join(process.cwd(), "registry");
 
+const SUSPICIOUS_PATTERNS = [
+  { regex: /\beval\s*\(/, label: "eval() call" },
+  { regex: /\bXMLHttpRequest\b/, label: "XMLHttpRequest usage" },
+  { regex: /require\s*\(\s*["']child_process["']\s*\)/, label: "child_process execution" },
+  { regex: /\bnew\s+Function\s*\(/, label: "Function constructor" },
+];
+
 function validateRegistry() {
   console.log("Validating RNBlocks Registry at:", REGISTRY_DIR);
 
   let errorCount = 0;
+  let warningCount = 0;
   let totalChecked = 0;
+
+  const seenNames = new Map<string, string>();
 
   for (const type of ["blocks", "screens"] as const) {
     const typeDir = path.join(REGISTRY_DIR, type);
@@ -51,7 +61,29 @@ function validateRegistry() {
           errorCount++;
         }
 
-        // Verify each file physically exists
+        // Duplicate name detection across registry
+        if (seenNames.has(parsed.data.name)) {
+          console.error(
+            `[ERROR] [${type}/${slug}] Duplicate item name detected: "${parsed.data.name}" already used in "${seenNames.get(parsed.data.name)}"`
+          );
+          errorCount++;
+        } else {
+          seenNames.set(parsed.data.name, `${type}/${slug}`);
+        }
+
+        // Validate tags formatting
+        if (parsed.data.tags) {
+          for (const tag of parsed.data.tags) {
+            if (tag !== tag.toLowerCase() || tag.trim() !== tag) {
+              console.error(
+                `[ERROR] [${type}/${slug}] Tag "${tag}" must be lowercase with no leading or trailing whitespace.`
+              );
+              errorCount++;
+            }
+          }
+        }
+
+        // Verify each file physically exists and scan for suspicious patterns
         for (const file of parsed.data.files) {
           const filePath = path.join(itemDir, file.path);
           if (!fs.existsSync(filePath)) {
@@ -66,6 +98,16 @@ function validateRegistry() {
                 `[ERROR] [${type}/${slug}] Referenced file is empty: ${file.path}`
               );
               errorCount++;
+            } else {
+              const content = fs.readFileSync(filePath, "utf-8");
+              for (const check of SUSPICIOUS_PATTERNS) {
+                if (check.regex.test(content)) {
+                  console.warn(
+                    `[WARN] [${type}/${slug}] Flagged pattern in ${file.path}: ${check.label} (requires manual security review before merge)`
+                  );
+                  warningCount++;
+                }
+              }
             }
           }
         }
@@ -79,6 +121,10 @@ function validateRegistry() {
   }
 
   console.log(`\nRegistry validation summary: ${totalChecked} items checked.`);
+  if (warningCount > 0) {
+    console.warn(`[NOTICE] ${warningCount} warnings flagged for maintainer review.`);
+  }
+
   if (errorCount > 0) {
     console.error(`[FAIL] Validation failed with ${errorCount} errors.`);
     process.exit(1);

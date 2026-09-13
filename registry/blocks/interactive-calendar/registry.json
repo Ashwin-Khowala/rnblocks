@@ -3,9 +3,13 @@
   "title": "Interactive Calendar",
   "description": "A sleek, zero-dependency month calendar date picker with event dot indicators, smooth date navigation, and dark & light themes.",
   "type": "block",
-  "author": "Ashwin Khowala",
+  "author": {
+    "name": "Ashwin Khowala",
+    "github": "Ashwin-Khowala"
+  },
   "version": "1.0.0",
   "category": "data-display",
+  "tags": ["calendar", "date-picker", "scheduling"],
   "files": [
     {
       "path": "files/interactive-calendar.tsx",
@@ -13,6 +17,7 @@
     }
   ],
   "dependencies": [],
+  "devDependencies": {},
   "registryDependencies": [],
   "platforms": [
     "ios",
@@ -20,6 +25,10 @@
     "web"
   ],
   "framework": "react-native",
+  "frameworks": [
+    "expo",
+    "react-native"
+  ],
   "styling": [
     "StyleSheet"
   ],

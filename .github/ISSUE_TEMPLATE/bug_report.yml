@@ -1,0 +1,68 @@
+name: Bug Report
+description: Report a bug or styling defect in an existing component or package
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue with RNBlocks! Please provide clear reproduction steps to help us fix the issue quickly.
+
+  - type: input
+    id: affected_item
+    attributes:
+      label: Affected Component or Package
+      description: e.g. `floating-docker`, `trend-chart`, `@rnblocks/cli`, `@rnblocks/web`
+      placeholder: e.g. trend-chart
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Description of the Bug
+      description: A clear and concise description of what the bug is.
+      placeholder: What happened when using this component?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Steps to Reproduce
+      description: Provide step-by-step instructions to reproduce the behavior.
+      placeholder: |
+        1. Install block via 'npx rnblocks add <name>'
+        2. Render inside container with properties: ...
+        3. Observe layout/rendering issue on Android
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Details
+      description: Specify versions and platform where the bug occurs.
+      placeholder: |
+        - React Native version:
+        - Expo SDK version (if applicable):
+        - Platform tested: [iOS / Android / Web]
+        - Device / Simulator model & OS version:
+    validations:
+      required: true
+
+  - type: textarea
+    id: visual_evidence
+    attributes:
+      label: Screenshots or Screen Recordings
+      description: Attach screenshots or video demonstrating the defect.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Verification
+      options:
+        - label: I have searched existing issues to confirm this is not already reported.
+        - label: This is a bug in RNBlocks source, not a generic React Native/Expo configuration issue.

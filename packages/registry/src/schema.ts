@@ -6,6 +6,16 @@ export const RegistryItemFileSchema = z.object({
   target: z.string().optional(),
 });
 
+export const RegistryAuthorSchema = z.union([
+  z.string(),
+  z.object({
+    name: z.string(),
+    github: z.string().optional(),
+  }),
+]);
+
+export type RegistryAuthor = z.infer<typeof RegistryAuthorSchema>;
+
 export const RegistryItemSchema = z.object({
   name: z.string().min(1, "Name is required"),
   title: z.string().min(1, "Title is required"),
@@ -13,21 +23,27 @@ export const RegistryItemSchema = z.object({
 
   type: z.enum(["block", "screen"]),
 
-  author: z.string(),
+  author: RegistryAuthorSchema,
 
   version: z.string().default("1.0.0"),
 
   category: z.string().default("general"),
 
+  tags: z.array(z.string()).default([]),
+
   files: z.array(RegistryItemFileSchema).min(1, "At least one file must be declared"),
 
   dependencies: z.array(z.string()).default([]),
+
+  devDependencies: z.record(z.string()).default({}),
 
   registryDependencies: z.array(z.string()).default([]),
 
   platforms: z.array(z.enum(["ios", "android", "web"])).default(["ios", "android", "web"]),
 
-  framework: z.enum(["expo", "react-native"]).default("react-native"),
+  framework: z.enum(["expo", "react-native"]).optional(),
+
+  frameworks: z.array(z.enum(["expo", "react-native"])).default(["react-native"]),
 
   styling: z.array(z.string()).default(["StyleSheet"]),
 

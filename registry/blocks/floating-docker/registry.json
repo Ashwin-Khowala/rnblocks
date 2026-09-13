@@ -3,9 +3,13 @@
   "title": "Floating Glassmorphic Docker",
   "description": "An interactive floating bottom dock navigation component with smooth sliding active pill capsule, notification badge indicators, and haptic feedback support.",
   "type": "block",
-  "author": "Ashwin Khowala",
+  "author": {
+    "name": "Ashwin Khowala",
+    "github": "Ashwin-Khowala"
+  },
   "version": "1.0.0",
   "category": "navigation",
+  "tags": ["navigation", "tab-bar", "animated", "dock"],
   "files": [
     {
       "path": "files/floating-docker.tsx",
@@ -13,9 +17,11 @@
     }
   ],
   "dependencies": [],
+  "devDependencies": {},
   "registryDependencies": [],
   "platforms": ["ios", "android", "web"],
   "framework": "react-native",
+  "frameworks": ["expo", "react-native"],
   "styling": ["StyleSheet"],
   "themes": ["dark", "light"]
 }

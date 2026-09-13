@@ -1,0 +1,48 @@
+name: CLI Issue
+description: Report a bug or issue with the `rnblocks` command line interface
+title: "[CLI]: "
+labels: ["cli", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report an issue with the `@rnblocks/cli` package (e.g. `rnblocks add`, `rnblocks init`, `rnblocks list`).
+
+  - type: input
+    id: cli_version
+    attributes:
+      label: CLI Version
+      description: Run `npx rnblocks --version` or check your installed package version.
+      placeholder: e.g. 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: command_run
+    attributes:
+      label: Exact Command Executed
+      description: What command did you execute?
+      placeholder: e.g. npx rnblocks add floating-docker --path src/components
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Terminal Output and Error Log
+      description: Copy and paste the full terminal output, including any error traces.
+      placeholder: Paste terminal logs here.
+    validations:
+      required: true
+
+  - type: textarea
+    id: project_context
+    attributes:
+      label: Project Context
+      description: What type of project are you adding the block into?
+      placeholder: |
+        - Expo SDK version (or React Native CLI version):
+        - Package manager: [npm / pnpm / yarn / bun]
+        - Operating System: [macOS / Windows / Linux]
+    validations:
+      required: true
