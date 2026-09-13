@@ -279,47 +279,50 @@ export function FloatingDocker({ initialTab = "team", onTabChange }: FloatingDoc
     <View style={styles.outerCanvas}>
       {/* The Floating Docker Pill Bar */}
       <View style={styles.dockerContainer}>
-        {/* Animated Active Sliding Indicator Capsule */}
-        <View
-          style={[
-            styles.indicator,
-            {
-              width: `${tabPercent}%`,
-              left: `${activeIndex * tabPercent}%`,
-            },
-          ]}
-        >
-          <View style={styles.indicatorInner} />
-        </View>
+        {/* Unified track that bounds both the sliding indicator and tab buttons */}
+        <View style={styles.dockTrack}>
+          {/* Animated Active Sliding Indicator Capsule */}
+          <View
+            style={[
+              styles.indicator,
+              {
+                width: `${tabPercent}%`,
+                left: `${activeIndex * tabPercent}%`,
+              },
+            ]}
+          >
+            <View style={styles.indicatorInner} />
+          </View>
 
-        {/* Tab Buttons */}
-        {TABS.map((tab) => {
-          const isFocused = tab.id === activeTab;
-          const iconColor = isFocused ? "#0A0A0A" : "#8E8E93";
+          {/* Tab Buttons */}
+          {TABS.map((tab) => {
+            const isFocused = tab.id === activeTab;
+            const iconColor = isFocused ? "#0A0A0A" : "#8E8E93";
 
-          return (
-            <TouchableOpacity
-              key={tab.id}
-              activeOpacity={0.7}
-              onPress={() => handleSelectTab(tab.id)}
-              style={styles.tabButton}
-            >
-              <View style={styles.tabContent}>
-                <View style={styles.tabIconWrap}>
-                  {tab.renderIcon(iconColor, isFocused)}
+            return (
+              <TouchableOpacity
+                key={tab.id}
+                activeOpacity={0.7}
+                onPress={() => handleSelectTab(tab.id)}
+                style={styles.tabButton}
+              >
+                <View style={styles.tabContent}>
+                  <View style={styles.tabIconWrap}>
+                    {tab.renderIcon(iconColor, isFocused)}
+                  </View>
+                  <Text
+                    style={[
+                      styles.tabLabel,
+                      isFocused ? styles.tabLabelActive : styles.tabLabelInactive,
+                    ]}
+                  >
+                    {tab.label}
+                  </Text>
                 </View>
-                <Text
-                  style={[
-                    styles.tabLabel,
-                    isFocused ? styles.tabLabelActive : styles.tabLabelInactive,
-                  ]}
-                >
-                  {tab.label}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </View>
     </View>
   );
@@ -334,17 +337,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   dockerContainer: {
-    flexDirection: "row",
     backgroundColor: "rgba(15, 15, 15, 0.92)",
     borderRadius: 28,
     height: 68,
     width: "100%",
     maxWidth: 380,
     position: "relative",
-    alignItems: "center",
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.14)",
-    paddingHorizontal: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 6,
     overflow: "hidden",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 8 },
@@ -352,11 +354,19 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 12,
   },
+  dockTrack: {
+    flex: 1,
+    flexDirection: "row",
+    position: "relative",
+    height: "100%",
+    alignItems: "center",
+  },
   indicator: {
     position: "absolute",
-    height: 56,
-    top: 6,
-    paddingHorizontal: 3,
+    height: "100%",
+    top: 0,
+    bottom: 0,
+    paddingHorizontal: 2,
     transition: "left 0.24s cubic-bezier(0.25, 1, 0.5, 1)",
     zIndex: 1,
   } as any,
@@ -364,7 +374,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     backgroundColor: "#ffffff",
-    borderRadius: 24,
+    borderRadius: 22,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,

@@ -8,6 +8,8 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx"
+  },
+  "exclude": ["apps", "packages", "node_modules"]
 }

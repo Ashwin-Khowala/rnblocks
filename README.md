@@ -81,7 +81,7 @@ rnblocks/
 │   ├── tsconfig/      # Shared TypeScript configs
 │   └── eslint-config/ # Shared ESLint configs
 ├── registry/          # Source-of-truth component directory
-│   ├── components/    # Registered mobile UI components
+│   ├── blocks/        # Registered mobile UI component blocks
 │   ├── screens/       # Registered mobile full-screen templates
 │   └── registry.json  # Auto-generated registry bundle consumed by web & CLI
 └── scripts/           # Registry generation and schema validation scripts

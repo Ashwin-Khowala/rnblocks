@@ -16,12 +16,24 @@ export function BlockCard({ block }: BlockCardProps) {
   const authorInitials = typeof author === "string" ? author.slice(0, 2).toUpperCase() : "RN";
   const stylingLabel = Array.isArray(styling) ? styling.join(", ") : styling;
 
+  const previewScale =
+    slug === "floating-docker"
+      ? 0.76
+      : slug === "interactive-calendar"
+      ? 0.58
+      : slug === "trend-chart"
+      ? 0.68
+      : 0.70;
+
   return (
     <div className="card-root">
       {/* Top Interactive Mini-Preview Canvas */}
       <Link href={`/blocks/${slug}`} className="preview-link" title={`View ${title}`}>
         <div className="preview-canvas-box">
-          <div className="scaled-content">
+          <div
+            className="scaled-content"
+            style={{ transform: `scale(${previewScale})` }}
+          >
             <Component />
           </div>
           <div className="preview-overlay">
@@ -108,10 +120,12 @@ export function BlockCard({ block }: BlockCardProps) {
         }
 
         .scaled-content {
-          width: 300px;
+          width: 340px;
           pointer-events: none;
-          transform: scale(0.72);
           transform-origin: center center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .preview-overlay {

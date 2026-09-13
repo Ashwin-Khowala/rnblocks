@@ -62,7 +62,7 @@ rnblocks/
 │   ├── tsconfig/      # Shared TypeScript configuration
 │   └── eslint-config/ # Shared ESLint configuration
 ├── registry/          # Source of truth for all components and screens
-│   ├── components/    # Individual UI components (e.g. floating-docker)
+│   ├── blocks/        # Individual UI component blocks (e.g. floating-docker)
 │   ├── screens/       # Full-screen template flows
 │   └── registry.json  # Auto-generated registry bundle
 └── scripts/           # Registry generation and validation scripts
@@ -74,37 +74,41 @@ rnblocks/
 
 Every block in RNBlocks lives under `registry/` and is validated against strict schemas before inclusion.
 
-### Step 1: Create the Component Directory
+### Step 1: Create the Block Directory
 
-Create a new directory in `registry/components/<your-block-name>` (or `registry/screens/<your-screen-name>`):
+Create a new directory in `registry/blocks/<your-block-slug>` (or `registry/screens/<your-screen-slug>`):
 
 ```
-registry/components/my-block/
-├── meta.json
+registry/blocks/my-block/
+├── registry.json
 └── files/
     └── my-block.tsx
 ```
 
-### Step 2: Define `meta.json`
+### Step 2: Define `registry.json`
 
-Every block must have a `meta.json` defining its metadata and dependencies:
+Every block must have a `registry.json` defining its metadata and dependencies:
 
 ```json
 {
-  "name": "My Block Name",
-  "slug": "my-block",
+  "name": "my-block",
+  "title": "My Block Title",
   "description": "Clean, responsive mobile component designed for React Native & Expo.",
-  "type": "component",
+  "type": "block",
+  "author": "Your Name",
+  "version": "1.0.0",
   "category": "navigation",
-  "dependencies": ["lucide-react-native"],
-  "peerDependencies": ["react-native-reanimated", "react-native-gesture-handler"],
   "files": [
     {
-      "name": "my-block.tsx",
       "path": "files/my-block.tsx",
-      "type": "component"
+      "type": "registry:component"
     }
-  ]
+  ],
+  "dependencies": ["lucide-react-native"],
+  "registryDependencies": [],
+  "platforms": ["ios", "android", "web"],
+  "framework": "react-native",
+  "styling": ["StyleSheet"]
 }
 ```
 
