@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-09-13T09:40:20.528Z",
+  "generatedAt": "2026-09-13T14:49:39.977Z",
   "items": [
     {
       "name": "floating-docker",
@@ -26,6 +26,10 @@
       "framework": "react-native",
       "styling": [
         "StyleSheet"
+      ],
+      "themes": [
+        "dark",
+        "light"
       ]
     },
     {
@@ -52,6 +56,10 @@
       "framework": "react-native",
       "styling": [
         "StyleSheet"
+      ],
+      "themes": [
+        "dark",
+        "light"
       ]
     },
     {
@@ -78,6 +86,10 @@
       "framework": "react-native",
       "styling": [
         "StyleSheet"
+      ],
+      "themes": [
+        "dark",
+        "light"
       ]
     },
     {
@@ -104,6 +116,10 @@
       "framework": "react-native",
       "styling": [
         "StyleSheet"
+      ],
+      "themes": [
+        "dark",
+        "light"
       ]
     }
   ]

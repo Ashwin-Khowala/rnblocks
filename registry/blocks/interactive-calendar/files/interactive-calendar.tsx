@@ -10,6 +10,8 @@ import {
 
 // ─── Type Definitions ──────────────────────────────────────────────────────────
 
+export type Theme = "dark" | "light";
+
 export interface MarkedDateConfig {
   marked?: boolean;
   dotColor?: string;
@@ -19,12 +21,40 @@ export interface MarkedDateConfig {
 export interface InteractiveCalendarProps {
   initialDate?: Date;
   selectedDate?: Date;
-  theme?: "dark" | "light";
+  theme?: Theme;
   accentColor?: string;
   markedDates?: Record<string, MarkedDateConfig>;
   onSelectDate?: (date: Date) => void;
   showTodayButton?: boolean;
 }
+
+const COLORS_DARK = {
+  background: "#121217",
+  border: "rgba(255, 255, 255, 0.08)",
+  foreground: "#FFFFFF",
+  muted: "#94A3B8",
+  buttonBg: "rgba(255, 255, 255, 0.05)",
+  buttonBorder: "rgba(255, 255, 255, 0.10)",
+  todayBorder: "rgba(99, 102, 241, 0.4)",
+  todayBg: "rgba(99, 102, 241, 0.1)",
+  fadedDay: "rgba(255, 255, 255, 0.20)",
+  iconColor: "#FFFFFF",
+  defaultAccent: "#4F46E5",
+};
+
+const COLORS_LIGHT = {
+  background: "#FFFFFF",
+  border: "rgba(0, 0, 0, 0.08)",
+  foreground: "#0F172A",
+  muted: "#64748B",
+  buttonBg: "rgba(0, 0, 0, 0.04)",
+  buttonBorder: "rgba(0, 0, 0, 0.10)",
+  todayBorder: "rgba(79, 70, 229, 0.4)",
+  todayBg: "rgba(79, 70, 229, 0.08)",
+  fadedDay: "rgba(0, 0, 0, 0.25)",
+  iconColor: "#0F172A",
+  defaultAccent: "#4F46E5",
+};
 
 // ─── Default Sample Marked Dates ──────────────────────────────────────────────
 
@@ -117,7 +147,7 @@ export function InteractiveCalendar({
   onSelectDate,
   showTodayButton = true,
 }: InteractiveCalendarProps) {
-  const isDark = theme === "dark";
+  const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
   const [currentDate, setCurrentDate] = useState<Date>(initialDate);
   const [internalSelectedDate, setInternalSelectedDate] = useState<Date>(initialDate);
 
@@ -199,16 +229,19 @@ export function InteractiveCalendar({
     <View
       style={[
         styles.container,
-        isDark ? styles.containerDark : styles.containerLight,
+        {
+          backgroundColor: colors.background,
+          borderColor: colors.border,
+        },
       ]}
     >
       {/* ── Top Header Navigation Bar ───────────────────────────────── */}
       <View style={styles.headerBar}>
         <View>
-          <Text style={[styles.headerTitle, isDark ? styles.textWhite : styles.textDark]}>
+          <Text style={[styles.headerTitle, { color: colors.foreground }]}>
             {MONTH_NAMES[currentDate.getMonth()]} {currentDate.getFullYear()}
           </Text>
-          <Text style={[styles.headerSubtitle, isDark ? styles.textMutedDark : styles.textMutedLight]}>
+          <Text style={[styles.headerSubtitle, { color: colors.muted }]}>
             Select date
           </Text>
         </View>
@@ -218,12 +251,17 @@ export function InteractiveCalendar({
             <TouchableOpacity
               style={[
                 styles.todayBtn,
-                isDark ? styles.todayBtnDark : styles.todayBtnLight,
+                {
+                  backgroundColor: colors.buttonBg,
+                  borderColor: colors.buttonBorder,
+                },
               ]}
               onPress={handleToday}
               activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel="Go to today"
             >
-              <Text style={[styles.todayBtnText, isDark ? styles.textWhite : styles.textDark]}>
+              <Text style={[styles.todayBtnText, { color: colors.foreground }]}>
                 Today
               </Text>
             </TouchableOpacity>
@@ -231,29 +269,45 @@ export function InteractiveCalendar({
 
           <View style={styles.navGroup}>
             <TouchableOpacity
-              style={[styles.navBtn, isDark ? styles.navBtnDark : styles.navBtnLight]}
+              style={[
+                styles.navBtn,
+                {
+                  backgroundColor: colors.buttonBg,
+                  borderColor: colors.buttonBorder,
+                },
+              ]}
               onPress={handlePrev}
               activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel="Previous month"
             >
-              <ChevronLeftIcon color={isDark ? "#FFFFFF" : "#0F172A"} size={15} />
+              <ChevronLeftIcon color={colors.iconColor} size={15} />
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.navBtn, isDark ? styles.navBtnDark : styles.navBtnLight]}
+              style={[
+                styles.navBtn,
+                {
+                  backgroundColor: colors.buttonBg,
+                  borderColor: colors.buttonBorder,
+                },
+              ]}
               onPress={handleNext}
               activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel="Next month"
             >
-              <ChevronRightIcon color={isDark ? "#FFFFFF" : "#0F172A"} size={15} />
+              <ChevronRightIcon color={colors.iconColor} size={15} />
             </TouchableOpacity>
           </View>
         </View>
       </View>
 
       {/* ── Weekday Labels Header ───────────────────────────────────── */}
-      <View style={styles.weekdayRow}>
+      <View style={styles.weekdayRow} aria-hidden={true}>
         {WEEKDAY_NAMES.map((w, idx) => (
           <Text
             key={idx}
-            style={[styles.weekdayLabel, isDark ? styles.textMutedDark : styles.textMutedLight]}
+            style={[styles.weekdayLabel, { color: colors.muted }]}
           >
             {w}
           </Text>
@@ -261,13 +315,14 @@ export function InteractiveCalendar({
       </View>
 
       {/* ── Month Days Grid ─────────────────────────────────────────── */}
-      <View style={styles.gridMatrix}>
+      <View style={styles.gridMatrix} accessibilityRole="grid">
         {monthCalendarDays.map((item) => {
           const isSelected = isSameDay(item.date, activeSelectedDate);
           const isCurrentDay = isSameDay(item.date, today);
           const dateKey = toDateKey(item.date);
           const dayMarking = markedDates[dateKey];
           const dots = dayMarking?.dots || (dayMarking?.marked ? [{ color: dayMarking.dotColor || accentColor }] : []);
+          const dayA11yLabel = `${MONTH_NAMES[item.date.getMonth()]} ${item.date.getDate()}, ${item.date.getFullYear()}${isCurrentDay ? ", today" : ""}${isSelected ? ", selected" : ""}`;
 
           return (
             <TouchableOpacity
@@ -277,14 +332,21 @@ export function InteractiveCalendar({
               style={[
                 styles.dayCell,
                 isSelected && { backgroundColor: accentColor },
-                isCurrentDay && !isSelected && (isDark ? styles.todayCellDark : styles.todayCellLight),
+                isCurrentDay && !isSelected && {
+                  borderWidth: 1,
+                  borderColor: colors.todayBorder,
+                  backgroundColor: colors.todayBg,
+                },
               ]}
+              accessibilityRole="button"
+              accessibilityLabel={dayA11yLabel}
+              accessibilityState={{ selected: isSelected }}
             >
               <Text
                 style={[
                   styles.dayCellText,
-                  !item.isCurrentMonth && (isDark ? styles.fadedDayDark : styles.fadedDayLight),
-                  item.isCurrentMonth && (isDark ? styles.textWhite : styles.textDark),
+                  !item.isCurrentMonth && { color: colors.fadedDay },
+                  item.isCurrentMonth && !isSelected && !isCurrentDay && { color: colors.foreground },
                   isSelected && styles.selectedDayText,
                   isCurrentDay && !isSelected && { color: accentColor, fontWeight: "700" },
                 ]}
@@ -313,10 +375,6 @@ export function InteractiveCalendar({
   );
 }
 
-export default InteractiveCalendar;
-
-// ─── Stylesheet ────────────────────────────────────────────────────────────────
-
 const styles = StyleSheet.create({
   container: {
     width: "100%",
@@ -326,16 +384,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 20,
   },
-  containerDark: {
-    backgroundColor: "#121217",
-    borderColor: "rgba(255, 255, 255, 0.08)",
-  },
-  containerLight: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "rgba(0, 0, 0, 0.08)",
-  },
-
-  /* Header */
   headerBar: {
     flexDirection: "row",
     alignItems: "center",
@@ -363,14 +411,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
   },
-  todayBtnDark: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-    borderColor: "rgba(255, 255, 255, 0.12)",
-  },
-  todayBtnLight: {
-    backgroundColor: "rgba(0, 0, 0, 0.04)",
-    borderColor: "rgba(0, 0, 0, 0.1)",
-  },
   todayBtnText: {
     fontSize: 11,
     fontWeight: "600",
@@ -387,16 +427,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 1,
   },
-  navBtnDark: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-    borderColor: "rgba(255, 255, 255, 0.1)",
-  },
-  navBtnLight: {
-    backgroundColor: "rgba(0, 0, 0, 0.04)",
-    borderColor: "rgba(0, 0, 0, 0.1)",
-  },
-
-  /* Weekday Header */
   weekdayRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -408,8 +438,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "600",
   },
-
-  /* Days Grid */
   gridMatrix: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -431,22 +459,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "700",
   },
-  todayCellDark: {
-    borderWidth: 1,
-    borderColor: "rgba(99, 102, 241, 0.4)",
-    backgroundColor: "rgba(99, 102, 241, 0.1)",
-  },
-  todayCellLight: {
-    borderWidth: 1,
-    borderColor: "rgba(79, 70, 229, 0.4)",
-    backgroundColor: "rgba(79, 70, 229, 0.08)",
-  },
-  fadedDayDark: {
-    color: "rgba(255, 255, 255, 0.2)",
-  },
-  fadedDayLight: {
-    color: "rgba(0, 0, 0, 0.25)",
-  },
   dotsContainer: {
     flexDirection: "row",
     gap: 2,
@@ -458,18 +470,6 @@ const styles = StyleSheet.create({
     height: 3.5,
     borderRadius: 2,
   },
-
-  /* Common Color Utilities */
-  textWhite: {
-    color: "#FFFFFF",
-  },
-  textDark: {
-    color: "#0F172A",
-  },
-  textMutedDark: {
-    color: "#94A3B8",
-  },
-  textMutedLight: {
-    color: "#64748B",
-  },
 });
+
+export default InteractiveCalendar;

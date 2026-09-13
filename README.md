@@ -2,9 +2,9 @@
 
 # RNBlocks
 
-### The Open Source React Native & Expo UI Block Registry
+### Production-ready React Native & Expo UI, delivered as source code you own
 
-Crafted mobile blocks, screens, and components ready to drop into your Expo or React Native app. No bloated libraries. Zero vendor lock-in. Full code ownership.
+Every block is designed to be responsive, customizable, and easy to integrate without forcing a styling framework or runtime dependency.
 
 <br />
 
@@ -30,11 +30,12 @@ Web developers have had game-changing registry tools like **shadcn/ui** that rev
 Mobile developers building on React Native and Expo deserve the same superpower.
 
 RNBlocks is an open-source registry designed specifically for React Native and Expo:
-- **Copy, Don't Install**: You own the component code. Modify colors, curves, haptics, and physics directly in your repository.
+- **Copy, Don't Install**: You own the component code. Modify colors, curves, and layouts directly in your repository.
+- **Standalone & Source-Owned**: Free from heavy runtime wrappers, forced `ThemeProvider` contexts, or mandatory design-token systems.
 - **Automated CLI**: Run `npx rnblocks add <block>` to automatically place component files and install required peer dependencies.
 - **Universal Mobile Compatibility**: Tested across Expo SDK (Managed & Bare workflows) and standard React Native CLI.
 - **Type Safe & Modular**: Written in strict TypeScript with minimal third-party runtime baggage.
-- **NativeWind & StyleSheet Friendly**: Built to look crisp whether you use NativeWind v4 (Tailwind) or classic React Native `StyleSheet`.
+- **StyleSheet Standard**: Built with standard React Native `StyleSheet` primitives, making it trivial to keep as-is or adapt to NativeWind.
 
 ---
 

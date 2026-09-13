@@ -16,5 +16,6 @@
   "registryDependencies": [],
   "platforms": ["ios", "android", "web"],
   "framework": "react-native",
-  "styling": ["StyleSheet"]
+  "styling": ["StyleSheet"],
+  "themes": ["dark", "light"]
 }

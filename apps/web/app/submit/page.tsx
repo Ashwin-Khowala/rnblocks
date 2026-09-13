@@ -20,12 +20,22 @@ export default function SubmitPage() {
   "name": "subscription-card",
   "title": "Subscription Pricing Card",
   "description": "A responsive pricing card for in-app mobile subscriptions.",
-  "category": "payments",
+  "type": "block",
   "author": "your_github_username",
+  "version": "1.0.0",
+  "category": "payments",
+  "files": [
+    {
+      "path": "files/subscription-card.tsx",
+      "type": "registry:component"
+    }
+  ],
+  "dependencies": ["lucide-react-native"],
+  "registryDependencies": [],
   "platforms": ["ios", "android", "web"],
-  "frameworks": ["expo", "react-native"],
-  "styling": "NativeWind",
-  "dependencies": ["nativewind", "lucide-react-native"]
+  "framework": "react-native",
+  "styling": ["StyleSheet"],
+  "themes": ["dark", "light"]
 }`;
 
   return (
@@ -73,7 +83,7 @@ export default function SubmitPage() {
               <div className="step-content-col">
                 <h3 className="step-item-title">Build your component</h3>
                 <p className="step-item-desc">
-                  Create a self-contained component in <code>registry/blocks/[your-block-name]/</code>. Use NativeWind or standard StyleSheet. Ensure clean props and zero unnecessary dependencies.
+                  Create a self-contained component in <code>registry/blocks/[your-block-name]/files/</code> using standard React Native primitives (<code>StyleSheet</code>). Keep it responsive to its container, extract semantic colors at the top of the file, and include accessibility attributes.
                 </p>
               </div>
             </div>
@@ -84,9 +94,9 @@ export default function SubmitPage() {
                 <div className="step-line" />
               </div>
               <div className="step-content-col">
-                <h3 className="step-item-title">Add metadata (meta.json)</h3>
+                <h3 className="step-item-title">Add metadata (registry.json)</h3>
                 <p className="step-item-desc">
-                  Every component requires a <code>meta.json</code> file describing its category, dependencies, and author information:
+                  Every component requires a <code>registry.json</code> file declaring its name, title, category, dependencies, supported themes, and platforms:
                 </p>
                 <div className="meta-preview-box">
                   <pre>{metaJsonExample}</pre>
@@ -101,9 +111,9 @@ export default function SubmitPage() {
                 <div className="step-line" />
               </div>
               <div className="step-content-col">
-                <h3 className="step-item-title">Open a Pull Request</h3>
+                <h3 className="step-item-title">Validate locally</h3>
                 <p className="step-item-desc">
-                  Push your branch to your fork and open a Pull Request against <code>main</code>. Our GitHub Actions CI will automatically run type checking and registry validation.
+                  Run <code>pnpm run validate:registry</code> and <code>pnpm run typecheck</code> to verify that your block adheres to schema rules and passes TypeScript checks.
                 </p>
               </div>
             </div>
@@ -111,6 +121,19 @@ export default function SubmitPage() {
             <div className="step-item">
               <div className="step-number-col">
                 <span className="step-num-badge">5</span>
+                <div className="step-line" />
+              </div>
+              <div className="step-content-col">
+                <h3 className="step-item-title">Open a Pull Request</h3>
+                <p className="step-item-desc">
+                  Push your branch to your fork and open a Pull Request against <code>master</code>. Our GitHub Actions CI will automatically run type checking and registry validation.
+                </p>
+              </div>
+            </div>
+
+            <div className="step-item">
+              <div className="step-number-col">
+                <span className="step-num-badge">6</span>
               </div>
               <div className="step-content-col">
                 <h3 className="step-item-title">Review & Published</h3>
@@ -126,35 +149,49 @@ export default function SubmitPage() {
         <div className="quality-card">
           <div className="quality-header">
             <ShieldCheck size={20} className="shield-icon" />
-            <h3 className="quality-title">Author & Quality Guidelines</h3>
+            <h3 className="quality-title">Author & Quality Standards</h3>
           </div>
           <div className="guidelines-grid">
             <div className="guide-box">
               <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
               <div>
-                <strong>Self-Contained</strong>
-                <p>Blocks should not require complex global state or hidden providers unless explicitly documented.</p>
+                <strong>Standalone & Source-Owned</strong>
+                <p>Follow copy → own → customize. No mandatory ThemeProvider wrappers, forced runtime packages, or token abstraction bloat.</p>
               </div>
             </div>
             <div className="guide-box">
               <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
               <div>
-                <strong>TypeScript First</strong>
-                <p>All component props and exported interfaces must be strictly typed.</p>
+                <strong>Container-Responsive</strong>
+                <p>Components adapt to container width (tested across 320pt to 428pt+). No hardcoded screen-width assumptions (e.g. width: 390).</p>
               </div>
             </div>
             <div className="guide-box">
               <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
               <div>
-                <strong>Native & Expo Tested</strong>
-                <p>Verify that components render without layout errors on both iOS and Android devices.</p>
+                <strong>Semantic Colors & Theming</strong>
+                <p>Place semantic color constants (COLORS_DARK / COLORS_LIGHT) at the top of the file. Provide theme?: "dark" | "light" where appropriate.</p>
               </div>
             </div>
             <div className="guide-box">
               <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
               <div>
-                <strong>Clean Styling</strong>
-                <p>Support light and dark mode colors or provide sensible defaults.</p>
+                <strong>Accessibility & Performance</strong>
+                <p>Declare accessibilityRole, accessibilityLabel, reasonable touch targets, sufficient color contrast, and avoid unnecessary re-renders.</p>
+              </div>
+            </div>
+            <div className="guide-box">
+              <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <strong>Strict TypeScript</strong>
+                <p>All component props and exported interfaces must be strictly typed without any or untyped callback handlers.</p>
+              </div>
+            </div>
+            <div className="guide-box">
+              <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <strong>Expo & Native Verified</strong>
+                <p>Verify that components render without layout errors across iOS, Android, and web previews.</p>
               </div>
             </div>
           </div>

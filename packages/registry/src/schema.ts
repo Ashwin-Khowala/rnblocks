@@ -30,6 +30,8 @@ export const RegistryItemSchema = z.object({
   framework: z.enum(["expo", "react-native"]).default("react-native"),
 
   styling: z.array(z.string()).default(["StyleSheet"]),
+
+  themes: z.array(z.enum(["dark", "light"])).optional(),
 });
 
 export type RegistryItem = z.infer<typeof RegistryItemSchema>;

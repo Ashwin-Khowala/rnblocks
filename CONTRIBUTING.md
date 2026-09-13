@@ -108,16 +108,70 @@ Every block must have a `registry.json` defining its metadata and dependencies:
   "registryDependencies": [],
   "platforms": ["ios", "android", "web"],
   "framework": "react-native",
-  "styling": ["StyleSheet"]
+  "styling": ["StyleSheet"],
+  "themes": ["dark", "light"]
 }
 ```
 
-#### Guidelines for Block Code:
-- **Clean & Self-Contained**: Components should be copy-paste ready with minimal extraneous external setup.
-- **Expo & React Native CLI Ready**: Use standard React Native APIs (`react-native` or Expo SDK primitives).
-- **TypeScript**: Use strict TypeScript definitions for all props.
-- **Icons**: Prefer `lucide-react-native` for lightweight, modern icons.
-- **No Hardcoded Secrets or Mocks**: Provide clear default props or mock data structures that developers can easily replace.
+### Design Philosophy
+
+RNBlocks is built on a simple foundation:
+
+**copy -> own -> customize**
+
+Every block is:
+- **Standalone and source-owned**: Delivered directly into the user's project codebase. There is no runtime npm package, no required `ThemeProvider`, and no forced styling dependency.
+- **Built with standard React Native primitives**: Uses `StyleSheet.create` as the baseline. Developers who prefer NativeWind or other styling solutions can easily adapt the styles after copying.
+- **Easy to customize without token bloat**: Semantic color constants (`COLORS_DARK`, `COLORS_LIGHT`) live directly at the top of each component file. Avoid multi-layered token or design-system abstractions.
+- **Pragmatic about design values**: Fixed design values such as font sizes, spacing, radii, and component dimensions are acceptable in standalone blocks. Contributors should avoid unnecessary abstraction and keep styling easy to customize.
+- **Responsive to containers, not screen assumptions**: Components must adapt to whatever container they are placed in. Never hardcode screen-width assumptions (e.g. `width: 390`).
+
+---
+
+### Block Quality Checklist
+
+Before submitting a block or screen, verify it meets the RNBlocks quality standards:
+
+#### Functionality
+- [ ] Works across iOS, Android, and Web
+- [ ] Fully compatible with Expo and React Native CLI
+- [ ] Strict TypeScript definitions for all props
+- [ ] Clean state handling (loading, disabled, active, empty states where applicable)
+- [ ] No unnecessary third-party runtime dependencies
+
+#### Layout
+- [ ] Responsive to container width (`width: "100%"`, `flex: 1`, flexbox)
+- [ ] Visually verified on compact (320pt), standard (375pt-390pt), and large (428pt+) viewports
+- [ ] No unexplained layout assumptions or arbitrary values
+- [ ] Dynamic and edge-case content handled cleanly without overflow
+
+#### Styling
+- [ ] Semantic color constants (`COLORS_DARK` / `COLORS_LIGHT`) at the top of the file
+- [ ] Consistent `theme?: "dark" | "light"` prop where the block genuinely benefits from theming
+- [ ] No unnecessary abstraction layers or external token systems
+- [ ] Clean visual hierarchy and consistent spacing
+
+#### Accessibility
+- [ ] Interactive elements have accessible labels (`accessibilityLabel`)
+- [ ] Buttons and pressable elements declare appropriate accessibility roles (`accessibilityRole`)
+- [ ] Text remains readable with larger font settings where practical
+- [ ] Sufficient contrast between foreground and background colors
+- [ ] Touch targets are reasonably sized (minimum 44x44pt recommended for touch interactions)
+
+#### Performance
+- [ ] No unnecessary re-renders (leverage `useMemo` / `useCallback` where appropriate)
+- [ ] No expensive calculations on every render cycle
+- [ ] Lists use appropriate `FlatList` or `SectionList` patterns for large collections
+- [ ] Animations use appropriate native or UI-thread mechanisms where needed
+
+#### Registry
+- [ ] Valid `registry.json` matching the schema with accurate metadata
+- [ ] Accurate `themes` array declared (`["dark", "light"]` or `["dark"]`)
+- [ ] All external dependencies explicitly listed
+- [ ] Declared platform support tested and verified
+- [ ] Web preview renders cleanly in the registry studio
+
+---
 
 ### Step 3: Generate and Validate Registry
 

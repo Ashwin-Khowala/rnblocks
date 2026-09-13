@@ -63,6 +63,7 @@ function generateRegistry() {
     platforms: ${JSON.stringify(parsed.platforms)},
     framework: "${parsed.framework}",
     styling: ${JSON.stringify(parsed.styling)},
+    themes: ${JSON.stringify(parsed.themes ?? [])},
     dependencies: ${JSON.stringify(parsed.dependencies)},
     registryDependencies: ${JSON.stringify(parsed.registryDependencies)},
     code: ${JSON.stringify(code)},
@@ -108,6 +109,7 @@ export interface RegistryWebItem {
   platforms: string[];
   framework: string;
   styling: string[];
+  themes?: string[];
   dependencies: string[];
   registryDependencies: string[];
   code: string;

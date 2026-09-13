@@ -153,22 +153,54 @@ export default function DocsPage() {
           {activeSection === "styling" && (
             <div>
               <span className="doc-eyebrow">Design Systems</span>
-              <h1 className="doc-h1">Styling with NativeWind & StyleSheet</h1>
+              <h1 className="doc-h1">Styling Philosophy & Standards</h1>
               <p className="doc-lead">
-                Blocks in the registry are primarily built with either <strong>NativeWind v4</strong> or standard React Native <strong>StyleSheet</strong> primitives.
+                RNBlocks follows a simple, defensible standard: <strong>copy → own → customize</strong>. We deliver standalone, source-owned components that are responsive to their container, easy to customize, and free from unnecessary dependencies or styling abstractions.
               </p>
 
-              <h2 className="doc-h2">NativeWind (Tailwind CSS)</h2>
+              <h2 className="doc-h2">Standard StyleSheet Baseline</h2>
               <p className="doc-text">
-                NativeWind translates Tailwind utility classes directly into performant native styles. Most blocks with the "NativeWind" badge use utility classes that you can edit instantly:
+                Every block in RNBlocks is built with standard React Native <code>StyleSheet.create</code> primitives. This ensures zero runtime wrappers, no mandatory <code>ThemeProvider</code> contexts, and 100% compatibility across Expo SDK and standard React Native CLI.
+              </p>
+
+              <h2 className="doc-h2">Semantic Color Constants</h2>
+              <p className="doc-text">
+                Instead of multi-layered token abstraction directories, each standalone component extracts semantic color constants directly at the top of the file:
               </p>
               <div className="doc-code-block">
-                <code>{'<View className="bg-zinc-900 p-4 rounded-2xl border border-zinc-800" />'}</code>
-              </div>
+                <pre>{`const COLORS_DARK = {
+  background: "#111116",
+  border: "rgba(255, 255, 255, 0.1)",
+  title: "#FFFFFF",
+  axisText: "#71717A",
+  defaultPrimary: "#10B981",
+};
 
-              <h2 className="doc-h2">Standard StyleSheet</h2>
+const COLORS_LIGHT = {
+  background: "#FFFFFF",
+  border: "rgba(0, 0, 0, 0.08)",
+  title: "#0F172A",
+  axisText: "#64748B",
+  defaultPrimary: "#059669",
+};`}</pre>
+              </div>
+              <p className="doc-caption">
+                This makes it effortless for any developer to customize brand colors directly after copying the source.
+              </p>
+
+              <h2 className="doc-h2">Theming Convention</h2>
               <p className="doc-text">
-                Blocks tagged with "StyleSheet" use zero CSS preprocessors and work in any bare React Native or Expo project out of the box with zero setup.
+                Blocks that benefit from dark and light variations expose a standard <code>theme?: "dark" | "light"</code> prop (defaulting to <code>"dark"</code>). Components dynamically apply the appropriate semantic color set without requiring context providers.
+              </p>
+
+              <h2 className="doc-h2">Pragmatic Design Values vs Layout Assumptions</h2>
+              <p className="doc-text">
+                Fixed design values such as font sizes, spacing, radii, and component dimensions (e.g. <code>padding: 16</code>, <code>borderRadius: 12</code>, <code>height: 48</code>) are acceptable in standalone blocks. What is avoided are unexplained layout assumptions about screen width (such as hardcoded <code>width: 390</code>). All components scale to their parent container using <code>width: "100%"</code>, <code>flex: 1</code>, and flexbox.
+              </p>
+
+              <h2 className="doc-h2">Adapting to NativeWind</h2>
+              <p className="doc-text">
+                Because you own the component source, adapting any block to NativeWind v4 (Tailwind) is straightforward. Simply replace <code>style=&#123;styles.card&#125;</code> with <code>className="w-full rounded-2xl bg-zinc-900 p-4 border border-zinc-800"</code>. We don't force a styling framework on you upfront.
               </p>
             </div>
           )}
@@ -196,20 +228,23 @@ export default function DocsPage() {
           {activeSection === "authoring" && (
             <div>
               <span className="doc-eyebrow">Contribution</span>
-              <h1 className="doc-h1">Authoring & Creating Blocks</h1>
+              <h1 className="doc-h1">Authoring & Quality Checklist</h1>
               <p className="doc-lead">
-                Want to publish your own block to the registry? Follow our simple authoring standard:
+                Want to publish your own block to the registry? Every block must meet our 6-part quality checklist before inclusion:
               </p>
 
-              <h2 className="doc-h2">Guidelines</h2>
+              <h2 className="doc-h2">Block Quality Checklist</h2>
               <ul className="doc-ul">
-                <li>Create clean, focused components that solve one clear mobile design challenge.</li>
-                <li>Avoid hardcoded business logic or non-standard third-party SDK dependencies.</li>
-                <li>Always provide TypeScript prop types so developers get instant autocomplete.</li>
+                <li><strong>Functionality</strong>: Works across iOS, Android, and Web; compatible with Expo; strict TypeScript for all props; handles loading, disabled, and active states.</li>
+                <li><strong>Layout</strong>: Responsive to container width; tested across 320pt–428pt viewports; no unexplained layout assumptions or hardcoded device widths.</li>
+                <li><strong>Styling</strong>: Top-level semantic <code>COLORS</code> constants; standard <code>theme?: "dark" | "light"</code> where appropriate; clean visual hierarchy.</li>
+                <li><strong>Accessibility</strong>: Declares <code>accessibilityRole</code> and <code>accessibilityLabel</code>; readable text scaling; sufficient contrast; minimum 44pt touch targets.</li>
+                <li><strong>Performance</strong>: No unnecessary re-renders; no expensive work per render; efficient lists and native-driven animations.</li>
+                <li><strong>Registry</strong>: Valid <code>registry.json</code> declaring metadata, supported <code>themes</code>, dependencies, and verified platforms.</li>
               </ul>
 
               <Link href="/submit" className="btn-primary" style={{ marginTop: 24 }}>
-                View Full Contribution Guide
+                View Full Submission Guide
               </Link>
             </div>
           )}

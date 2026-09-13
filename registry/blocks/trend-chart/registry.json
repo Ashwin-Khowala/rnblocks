@@ -22,5 +22,9 @@
   "framework": "react-native",
   "styling": [
     "StyleSheet"
+  ],
+  "themes": [
+    "dark",
+    "light"
   ]
 }

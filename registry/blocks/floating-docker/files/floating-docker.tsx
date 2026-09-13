@@ -259,13 +259,41 @@ const TABS: TabItem[] = [
   },
 ];
 
-interface FloatingDockerProps {
+export type Theme = "dark" | "light";
+
+const COLORS_DARK = {
+  background: "rgba(15, 15, 15, 0.92)",
+  border: "rgba(255, 255, 255, 0.14)",
+  indicatorFill: "#FFFFFF",
+  indicatorShadow: "#000000",
+  activeText: "#0A0A0A",
+  inactiveText: "#8E8E93",
+  shadow: "#000000",
+};
+
+const COLORS_LIGHT = {
+  background: "rgba(255, 255, 255, 0.95)",
+  border: "rgba(0, 0, 0, 0.08)",
+  indicatorFill: "#0F172A",
+  indicatorShadow: "#0F172A",
+  activeText: "#FFFFFF",
+  inactiveText: "#64748B",
+  shadow: "#0F172A",
+};
+
+export interface FloatingDockerProps {
   initialTab?: string;
   onTabChange?: (tabId: string) => void;
+  theme?: Theme;
 }
 
-export function FloatingDocker({ initialTab = "team", onTabChange }: FloatingDockerProps) {
+export function FloatingDocker({
+  initialTab = "team",
+  onTabChange,
+  theme = "dark",
+}: FloatingDockerProps) {
   const [activeTab, setActiveTab] = useState<string>(initialTab);
+  const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
 
   const handleSelectTab = (id: string) => {
     setActiveTab(id);
@@ -278,7 +306,17 @@ export function FloatingDocker({ initialTab = "team", onTabChange }: FloatingDoc
   return (
     <View style={styles.outerCanvas}>
       {/* The Floating Docker Pill Bar */}
-      <View style={styles.dockerContainer}>
+      <View
+        style={[
+          styles.dockerContainer,
+          {
+            backgroundColor: colors.background,
+            borderColor: colors.border,
+            shadowColor: colors.shadow,
+          },
+        ]}
+        accessibilityRole="tablist"
+      >
         {/* Unified track that bounds both the sliding indicator and tab buttons */}
         <View style={styles.dockTrack}>
           {/* Animated Active Sliding Indicator Capsule */}
@@ -291,13 +329,21 @@ export function FloatingDocker({ initialTab = "team", onTabChange }: FloatingDoc
               },
             ]}
           >
-            <View style={styles.indicatorInner} />
+            <View
+              style={[
+                styles.indicatorInner,
+                {
+                  backgroundColor: colors.indicatorFill,
+                  shadowColor: colors.indicatorShadow,
+                },
+              ]}
+            />
           </View>
 
           {/* Tab Buttons */}
           {TABS.map((tab) => {
             const isFocused = tab.id === activeTab;
-            const iconColor = isFocused ? "#0A0A0A" : "#8E8E93";
+            const iconColor = isFocused ? colors.activeText : colors.inactiveText;
 
             return (
               <TouchableOpacity
@@ -305,6 +351,9 @@ export function FloatingDocker({ initialTab = "team", onTabChange }: FloatingDoc
                 activeOpacity={0.7}
                 onPress={() => handleSelectTab(tab.id)}
                 style={styles.tabButton}
+                accessibilityRole="tab"
+                accessibilityLabel={tab.label}
+                accessibilityState={{ selected: isFocused }}
               >
                 <View style={styles.tabContent}>
                   <View style={styles.tabIconWrap}>
@@ -313,6 +362,7 @@ export function FloatingDocker({ initialTab = "team", onTabChange }: FloatingDoc
                   <Text
                     style={[
                       styles.tabLabel,
+                      { color: isFocused ? colors.activeText : colors.inactiveText },
                       isFocused ? styles.tabLabelActive : styles.tabLabelInactive,
                     ]}
                   >
@@ -337,18 +387,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   dockerContainer: {
-    backgroundColor: "rgba(15, 15, 15, 0.92)",
     borderRadius: 28,
     height: 68,
     width: "100%",
     maxWidth: 380,
     position: "relative",
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.14)",
     paddingHorizontal: 6,
     paddingVertical: 6,
     overflow: "hidden",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
@@ -373,9 +420,7 @@ const styles = StyleSheet.create({
   indicatorInner: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#ffffff",
     borderRadius: 22,
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
@@ -405,11 +450,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   tabLabelInactive: {
-    color: "#8E8E93",
     fontWeight: "500",
   },
   tabLabelActive: {
-    color: "#0A0A0A",
     fontWeight: "700",
   },
 });
