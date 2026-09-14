@@ -7,8 +7,8 @@ import { BLOCKS_DATA } from "@/data/blocks";
 import { LiveBlockPreview } from "@/components/LiveBlockPreview";
 import { CodeViewer } from "@/components/CodeViewer";
 import { CopyButton } from "@/components/CopyButton";
+import { BackIcon } from "@/components/icons/BackIcon";
 import {
-  ArrowLeft,
   CheckCircle2,
   Terminal,
   FileCode,
@@ -29,8 +29,9 @@ export default function BlockDetailPage() {
       <div className="container-main not-found-wrap">
         <h2>Block Not Found</h2>
         <p>The requested block "{slug}" does not exist in the registry.</p>
-        <Link href="/blocks" className="btn-primary">
-          Back to Blocks
+        <Link href="/blocks" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+          <BackIcon size={16} />
+          <span>Back to Blocks</span>
         </Link>
         <style jsx>{`
           .not-found-wrap {
@@ -54,7 +55,7 @@ export default function BlockDetailPage() {
         {/* Breadcrumb Back Link */}
         <div className="breadcrumb-bar">
           <Link href="/blocks" className="back-link">
-            <ArrowLeft size={14} />
+            <BackIcon size={15} />
             <span>Back to Blocks</span>
           </Link>
           <span className="breadcrumb-divider">/</span>

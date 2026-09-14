@@ -18,7 +18,7 @@ export function Footer() {
             <span className="brand-name">RNBlocks</span>
           </div>
           <p className="brand-desc">
-            The open-source UI block registry for React Native and Expo developers. Discover, inspect, and copy production-ready mobile components.
+            The open-source UI block registry for React Native and Expo developers. Discover, inspect, and copy production ready mobile components.
           </p>
           <div className="license-tag">
             <span>MIT Licensed</span>

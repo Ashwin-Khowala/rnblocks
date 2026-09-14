@@ -225,7 +225,7 @@ export default function SubmitPage() {
 
       <style jsx>{`
         .submit-page {
-          padding: 60px 0 100px;
+          padding: 96px 0 100px;
           background: var(--bg-primary);
           flex: 1;
         }
@@ -457,6 +457,10 @@ export default function SubmitPage() {
         }
 
         @media (max-width: 768px) {
+          .submit-page {
+            padding: 86px 0 60px;
+          }
+
           .guidelines-grid {
             grid-template-columns: 1fr;
           }

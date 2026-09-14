@@ -76,7 +76,7 @@ export default function BlocksGalleryPage() {
             <div>
               <h1 className="page-title">Explore Blocks</h1>
               <p className="page-subtitle">
-                Browse production-ready React Native components with live previews and copy-paste source code.
+                Browse production ready React Native components with live previews and copy-paste source code.
               </p>
             </div>
             <div className="blocks-count-pill">
@@ -185,7 +185,7 @@ export default function BlocksGalleryPage() {
 
       <style jsx>{`
         .gallery-page {
-          padding: 48px 0 80px;
+          padding: 96px 0 80px;
           background: var(--bg-primary);
           flex: 1;
         }
@@ -460,7 +460,11 @@ export default function BlocksGalleryPage() {
           }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 860px) {
+          .gallery-page {
+            padding: 86px 0 60px;
+          }
+
           .gallery-header {
             margin-bottom: 24px;
           }

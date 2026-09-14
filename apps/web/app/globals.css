@@ -87,6 +87,11 @@ button {
   background: none;
 }
 
+/* Clearance for fixed floating navbar on subpages */
+main:not(:has(.landing-root)) {
+  padding-top: 64px;
+}
+
 /* Scrollbar Styling - Technical & Minimal */
 ::-webkit-scrollbar {
   width: 8px;
@@ -198,6 +203,89 @@ button {
   color: var(--text-secondary);
 }
 
+/* Registry Section Eyebrow & Pill utilities */
+.section-eyebrow-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.section-counter-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  color: #32c798;
+  background: rgba(50, 199, 152, 0.1);
+  border: 1px solid rgba(50, 199, 152, 0.28);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.section-eyebrow-text {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #32c798;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* View all components pill button */
+.view-all-pill-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  color: #f3f4f6 !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  padding: 8px 16px !important;
+  border-radius: 9999px !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+}
+
+.view-all-pill-btn span {
+  display: inline-block;
+  line-height: 1;
+}
+
+.view-all-pill-btn svg {
+  display: block;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.view-all-pill-btn:hover {
+  color: #32c798 !important;
+  border-color: rgba(50, 199, 152, 0.35) !important;
+  background: rgba(50, 199, 152, 0.08) !important;
+  transform: translateY(-1px);
+}
+
+.view-all-pill-btn:hover svg {
+  transform: translateX(2px);
+}
+
+
 /* Containers */
 .container-main {
   max-width: 1200px;
@@ -214,7 +302,7 @@ button {
 
 /* Documentation Pages */
 .docs-page {
-  padding: 48px 0 90px;
+  padding: 96px 0 90px;
   background: var(--bg-primary);
   flex: 1;
 }

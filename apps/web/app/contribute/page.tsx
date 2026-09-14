@@ -208,7 +208,7 @@ export default function ContributePage() {
                 <span className="dot dot-yellow" />
                 <span className="dot dot-green" />
               </div>
-              <span className="terminal-filename">bash — setup monorepo</span>
+              <span className="terminal-filename">bash: setup monorepo</span>
               <button
                 onClick={() =>
                   copyToClipboard(
@@ -325,7 +325,7 @@ export default function ContributePage() {
 
       <style jsx>{`
         .contribute-page {
-          padding: 60px 0 100px;
+          padding: 96px 0 100px;
           min-height: 80vh;
         }
 
@@ -746,6 +746,9 @@ export default function ContributePage() {
         }
 
         @media (max-width: 640px) {
+          .contribute-page {
+            padding: 86px 0 60px;
+          }
           .pillars-grid,
           .wishlist-grid {
             grid-template-columns: 1fr;

@@ -2,16 +2,26 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu, X, ArrowUpRight, Layers } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, X, ArrowUpRight, Layers, Search } from "lucide-react";
 import { GitHubIcon } from "./icons/GitHubIcon";
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [starCount, setStarCount] = useState<number>(2);
+  const [isMac, setIsMac] = useState(false);
 
-  // Fetch latest GitHub stars with fallback
+  // Platform detection for keyboard shortcut display
+  useEffect(() => {
+    if (typeof navigator !== "undefined") {
+      setIsMac(/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform));
+    }
+  }, []);
+
+  // Fetch latest GitHub stars with cached fallback
   useEffect(() => {
     fetch("/api/github-stars")
       .then((res) => res.json())
@@ -22,6 +32,31 @@ export function Navbar() {
       })
       .catch(() => {});
   }, []);
+
+  // Detect scroll to toggle floating dock state
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Keyboard shortcut Ctrl+K / Cmd+K to trigger search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        handleSearchClick();
+      }
+      if (e.key === "Escape" && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [pathname, mobileMenuOpen]);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -35,6 +70,19 @@ export function Navbar() {
     };
   }, [mobileMenuOpen]);
 
+  const handleSearchClick = () => {
+    if (pathname === "/blocks") {
+      const existingInput = document.querySelector<HTMLInputElement>(".search-input");
+      if (existingInput) {
+        existingInput.focus();
+        existingInput.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+    }
+    router.push("/blocks");
+  };
+
+  // RNBlocks navigation items (preserved per requirements)
   const navLinks = [
     { label: "Blocks", href: "/blocks" },
     { label: "Dashboard", href: "/dashboard" },
@@ -44,82 +92,76 @@ export function Navbar() {
   ];
 
   return (
-    <header className="navbar-root">
-      <div className="container-main navbar-inner">
-        {/* Left: Brand */}
-        <Link href="/" className="brand-logo" aria-label="RNBlocks Registry Homepage">
-          <div className="brand-icon">
-            <Layers size={16} />
-          </div>
-          <span className="brand-name">
-            RN<span className="brand-name-sub">Blocks</span>
-          </span>
-          <span className="brand-badge">
-            <span className="badge-dot" />
-            Registry
-          </span>
-        </Link>
+    <header className="navbar-fixed-wrapper">
+      <div className={`navbar-dock ${isScrolled ? "is-scrolled" : ""}`}>
+        {/* Left Section: Brand Logo + Desktop Nav Links */}
+        <div className="navbar-left">
+          <Link href="/" className="brand-logo" aria-label="RNBlocks Registry Homepage">
+            <div className="brand-icon">
+              <Layers size={16} />
+            </div>
+            <span className="brand-name">
+              RN<span className="brand-name-sub">Blocks</span>
+            </span>
+          </Link>
 
-        {/* Center: Desktop Segmented Pill Nav */}
-        <nav className="desktop-nav" aria-label="Main Navigation">
-          {navLinks.map((link) => {
-            const isActive =
-              pathname === link.href ||
-              (link.href !== "/" && pathname.startsWith(`${link.href}/`));
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`nav-link ${isActive ? "nav-link-active" : ""}`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
+          {/* Inline Desktop Nav (directly next to logo, clean typography) */}
+          <nav className="desktop-nav" aria-label="Main Navigation">
+            {navLinks.map((link) => {
+              const isActive =
+                pathname === link.href ||
+                (link.href !== "/" && pathname.startsWith(`${link.href}/`));
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`nav-link ${isActive ? "nav-link-active" : ""}`}
+                >
+                  <span>{link.label}</span>
+                  {isActive && <span className="nav-link-dot" />}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
 
-        {/* Right: Actions */}
-        <div className="navbar-actions">
+        {/* Right Section: Search Trigger, Divider, GitHub Stars, Mobile Toggle */}
+        <div className="navbar-right">
+          {/* Search Trigger Button */}
+          <button
+            type="button"
+            className="search-trigger-btn"
+            onClick={handleSearchClick}
+            aria-label="Search blocks (Ctrl+K)"
+          >
+            <Search size={13} className="search-icon" />
+            <span className="search-placeholder">Search...</span>
+            <kbd className="search-kbd">{isMac ? "⌘K" : "Ctrl K"}</kbd>
+          </button>
+
+          <span className="action-divider" />
+
           {/* GitHub Star Pill Button */}
           <a
             href="https://github.com/Ashwin-Khowala/rnblocks"
             target="_blank"
             rel="noopener noreferrer"
-            className="github-pill-btn"
+            className="github-star-link"
             title="RNBlocks on GitHub"
-            aria-label="GitHub repository and star count"
+            aria-label={`GitHub repository - ${starCount} stars`}
           >
-            <GitHubIcon size={14} />
-            <span className="github-divider" />
-            <span className="github-stars">
-              <svg
-                className="star-svg"
-                width="11"
-                height="11"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-              </svg>
-              <span>{starCount}</span>
-            </span>
+            <GitHubIcon size={15} />
+            <span className="github-star-count">{starCount}</span>
           </a>
 
-          {/* Desktop Explore CTA */}
-          <Link href="/blocks" className="explore-btn">
-            <span>Explore</span>
-            <ArrowUpRight size={14} />
-          </Link>
-
-          {/* Mobile Toggle Button */}
+          {/* Mobile Menu Toggle Button */}
           <button
             className="mobile-toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? <X size={19} /> : <Menu size={19} />}
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </div>
@@ -127,7 +169,25 @@ export function Navbar() {
       {/* Mobile Menu Drawer Overlay */}
       {mobileMenuOpen && (
         <div className="mobile-overlay" onClick={() => setMobileMenuOpen(false)}>
-          <div className="mobile-menu" onClick={(e) => e.stopPropagation()}>
+          <div
+            className={`mobile-drawer ${isScrolled ? "is-scrolled" : ""}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Quick Search Button in Mobile Drawer */}
+            <button
+              type="button"
+              className="mobile-search-bar"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleSearchClick();
+              }}
+            >
+              <Search size={15} className="mobile-search-icon" />
+              <span>Search blocks & components...</span>
+              <kbd className="search-kbd">{isMac ? "⌘K" : "Ctrl K"}</kbd>
+            </button>
+
+            {/* Mobile Nav Links */}
             <div className="mobile-nav-list">
               {navLinks.map((link) => {
                 const isActive =
@@ -148,7 +208,7 @@ export function Navbar() {
 
               <div className="mobile-menu-divider" />
 
-              {/* Mobile GitHub Direct Row */}
+              {/* Mobile GitHub Row with Star Count */}
               <a
                 href="https://github.com/Ashwin-Khowala/rnblocks"
                 target="_blank"
@@ -179,22 +239,71 @@ export function Navbar() {
       )}
 
       <style jsx>{`
-        .navbar-root {
-          position: sticky;
+        /* ─── Outer Fixed Shell (Zero click-blocking on sides) ─────────────── */
+        .navbar-fixed-wrapper {
+          position: fixed;
           top: 0;
+          left: 0;
+          right: 0;
+          width: 100%;
           z-index: 1000;
-          background: rgba(8, 8, 11, 0.85);
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-          box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.55);
+          pointer-events: none;
+          padding: 0;
+          box-sizing: border-box;
         }
 
-        .navbar-inner {
+        /* ─── Inner Floating Dock Container ────────────────────────────────── */
+        .navbar-dock {
+          pointer-events: auto;
+          width: 100%;
+          max-width: 1280px;
+          margin: 0 auto;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          height: 60px;
+          height: 58px;
+          padding: 0 24px;
+          box-sizing: border-box;
+          background: transparent;
+          border: 1px solid transparent;
+          border-radius: 0;
+          box-shadow: none;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          transform: translateY(0);
+          transition:
+            max-width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+            background 0.3s ease,
+            border-color 0.3s ease,
+            border-radius 0.3s ease,
+            box-shadow 0.3s ease,
+            backdrop-filter 0.3s ease,
+            height 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+            padding 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Scrolled state: Morph into a detached floating island dock */
+        .navbar-dock.is-scrolled {
+          max-width: 1140px;
+          height: 52px;
+          margin-top: 14px;
+          padding: 0 18px;
+          background: rgba(6, 6, 9, 0.94);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          border-radius: 14px;
+          box-shadow:
+            0 16px 40px -6px rgba(0, 0, 0, 0.85),
+            0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        /* ─── Left Section ─────────────────────────────────────────────────── */
+        .navbar-left {
+          display: flex;
+          align-items: center;
+          gap: 14px;
         }
 
         :global(.brand-logo),
@@ -209,8 +318,8 @@ export function Navbar() {
 
         :global(.brand-icon),
         .brand-icon {
-          width: 30px;
-          height: 30px;
+          width: 28px;
+          height: 28px;
           border-radius: 8px;
           background: linear-gradient(135deg, #1f1f27 0%, #101014 100%);
           border: 1px solid rgba(255, 255, 255, 0.12);
@@ -233,7 +342,7 @@ export function Navbar() {
         :global(.brand-name),
         .brand-name {
           font-weight: 700;
-          font-size: 16px;
+          font-size: 15.5px;
           letter-spacing: -0.025em;
           color: #ffffff;
           white-space: nowrap;
@@ -245,156 +354,137 @@ export function Navbar() {
           font-weight: 600;
         }
 
-        :global(.brand-badge),
-        .brand-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          font-family: var(--font-mono, monospace);
-          font-size: 10px;
-          font-weight: 600;
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
-          padding: 2px 7px;
-          border-radius: 9999px;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #a1a1aa;
-          margin-left: 2px;
-          white-space: nowrap;
-        }
-
-        .badge-dot {
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: #32c798;
-          box-shadow: 0 0 6px rgba(50, 199, 152, 0.8);
-        }
-
-        /* ─── Segmented Pill Desktop Navigation ────────────────────────────── */
+        /* Desktop Nav: Clean typography links aligned inline next to logo */
         .desktop-nav {
           display: flex;
           align-items: center;
           gap: 2px;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.07);
-          padding: 3.5px 5px;
-          border-radius: 9999px;
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+          margin-left: 12px;
         }
 
         .desktop-nav :global(.nav-link),
         .nav-link {
           display: inline-flex;
           align-items: center;
-          font-size: 13px;
+          gap: 5px;
+          font-size: 13.5px;
           font-weight: 500;
           color: #a1a1aa;
-          padding: 5px 13px;
-          border-radius: 9999px;
+          padding: 6px 12px;
+          border-radius: 8px;
           text-decoration: none;
           white-space: nowrap;
-          transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: all 0.16s ease;
         }
 
         .desktop-nav :global(.nav-link:hover),
         .nav-link:hover {
           color: #ffffff;
-          background: rgba(255, 255, 255, 0.06);
+          background: rgba(255, 255, 255, 0.05);
         }
 
         .desktop-nav :global(.nav-link.nav-link-active),
         .nav-link-active {
           color: #ffffff;
-          background: rgba(255, 255, 255, 0.12);
           font-weight: 600;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.08);
         }
 
-        /* ─── Right Actions ────────────────────────────────────────────────── */
-        .navbar-actions {
+        .nav-link-dot {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: #32c798;
+          box-shadow: 0 0 6px rgba(50, 199, 152, 0.9);
+        }
+
+        /* ─── Right Section ────────────────────────────────────────────────── */
+        .navbar-right {
           display: flex;
           align-items: center;
-          gap: 9px;
+          gap: 8px;
         }
 
-        /* Modern GitHub Pill with Star Count */
-        .github-pill-btn {
+        /* Search Trigger Button */
+        .search-trigger-btn {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          height: 33px;
-          padding: 0 11px;
-          border-radius: 9999px;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #d1d5db;
+          height: 32px;
+          padding: 0 10px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          border-radius: 8px;
+          color: #9ca3af;
           font-size: 12.5px;
-          font-weight: 500;
-          text-decoration: none;
-          box-sizing: border-box;
-          line-height: 1;
+          cursor: pointer;
           transition: all 0.18s ease;
           user-select: none;
         }
 
-        .github-pill-btn:hover {
+        .search-trigger-btn:hover {
+          background: rgba(255, 255, 255, 0.07);
+          border-color: rgba(255, 255, 255, 0.18);
           color: #ffffff;
-          border-color: rgba(255, 255, 255, 0.22);
-          background: rgba(255, 255, 255, 0.08);
-          transform: translateY(-1px);
-          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
         }
 
-        .github-divider {
+        .search-trigger-btn :global(.search-icon) {
+          color: #9ca3af;
+          transition: color 0.18s ease;
+        }
+
+        .search-trigger-btn:hover :global(.search-icon) {
+          color: #ffffff;
+        }
+
+        .search-placeholder {
+          font-weight: 400;
+        }
+
+        .search-kbd {
+          font-family: var(--font-mono, monospace);
+          font-size: 10px;
+          font-weight: 600;
+          color: #71717a;
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 4px;
+          padding: 1px 5px;
+          line-height: 1.2;
+        }
+
+        /* Subtle Vertical Action Divider */
+        .action-divider {
           width: 1px;
-          height: 12px;
-          background: rgba(255, 255, 255, 0.14);
+          height: 16px;
+          background: rgba(255, 255, 255, 0.12);
+          margin: 0 3px;
         }
 
-        .github-stars {
+        /* GitHub Star Action Button */
+        .github-star-link {
           display: inline-flex;
           align-items: center;
-          gap: 4px;
-          font-family: var(--font-mono, monospace);
-          font-size: 11.5px;
-          font-weight: 600;
+          gap: 6px;
+          height: 32px;
+          padding: 0 9px;
+          border-radius: 8px;
           color: #d1d5db;
+          text-decoration: none;
+          transition: all 0.18s ease;
+          user-select: none;
         }
 
-        .star-svg {
-          color: #32c798;
+        .github-star-link:hover {
+          color: #ffffff;
+          background: rgba(255, 255, 255, 0.06);
         }
 
-        /* Desktop Explore Button */
-        :global(.explore-btn),
-        .explore-btn {
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 5px !important;
-          height: 33px !important;
-          padding: 0 14px !important;
-          font-size: 13px !important;
-          font-weight: 600 !important;
-          border-radius: 9999px !important;
-          background: #ffffff !important;
-          color: #09090b !important;
-          text-decoration: none !important;
-          border: none !important;
-          box-sizing: border-box !important;
-          line-height: 1 !important;
-          white-space: nowrap !important;
-          transition: all 0.18s ease !important;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
-        }
-
-        :global(.explore-btn:hover),
-        .explore-btn:hover {
-          background: #f4f4f5 !important;
-          transform: translateY(-1px) !important;
-          box-shadow: 0 4px 14px rgba(255, 255, 255, 0.2) !important;
+        .github-star-count {
+          font-family: var(--font-mono, monospace);
+          font-size: 12.5px;
+          font-weight: 500;
+          color: #d1d5db;
         }
 
         /* Mobile Hamburger Toggle */
@@ -407,7 +497,7 @@ export function Navbar() {
           color: #d1d5db;
           background: rgba(255, 255, 255, 0.04);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 9999px;
+          border-radius: 8px;
           cursor: pointer;
           padding: 0;
           transition: all 0.18s ease;
@@ -422,31 +512,64 @@ export function Navbar() {
         /* ─── Mobile Drawer Overlay ────────────────────────────────────────── */
         .mobile-overlay {
           position: fixed;
-          top: 60px;
-          left: 0;
-          right: 0;
-          bottom: 0;
+          inset: 0;
           background: rgba(0, 0, 0, 0.65);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
           z-index: 999;
           animation: fadeIn 0.2s ease-out;
+          pointer-events: auto;
+          display: flex;
+          justify-content: center;
+          padding: 0 14px;
+          box-sizing: border-box;
         }
 
-        .mobile-menu {
-          background: rgba(10, 10, 14, 0.98);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          padding: 16px 20px 24px;
-          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+        .mobile-drawer {
+          width: 100%;
+          max-width: 480px;
+          margin-top: 68px;
+          background: rgba(6, 6, 9, 0.98);
+          backdrop-filter: blur(28px);
+          -webkit-backdrop-filter: blur(28px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          padding: 16px;
+          box-shadow: 0 20px 48px rgba(0, 0, 0, 0.92);
           animation: slideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+          height: fit-content;
+          box-sizing: border-box;
+        }
+
+        .mobile-drawer.is-scrolled {
+          margin-top: 72px;
+        }
+
+        .mobile-search-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          height: 38px;
+          padding: 0 12px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          border-radius: 10px;
+          color: #9ca3af;
+          font-size: 13px;
+          margin-bottom: 12px;
+          cursor: pointer;
+        }
+
+        .mobile-search-bar :global(.mobile-search-icon) {
+          color: #71717a;
+          margin-right: 8px;
         }
 
         .mobile-nav-list {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 4px;
         }
 
         .mobile-nav-list :global(.mobile-nav-link),
@@ -454,9 +577,9 @@ export function Navbar() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 12px 16px;
-          border-radius: 12px;
-          font-size: 15px;
+          padding: 11px 14px;
+          border-radius: 10px;
+          font-size: 14.5px;
           font-weight: 500;
           color: #d1d5db;
           text-decoration: none;
@@ -487,16 +610,16 @@ export function Navbar() {
         .mobile-menu-divider {
           height: 1px;
           background: rgba(255, 255, 255, 0.08);
-          margin: 10px 0;
+          margin: 8px 0;
         }
 
         .mobile-github-row {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 12px 16px;
-          border-radius: 12px;
-          font-size: 14.5px;
+          padding: 11px 14px;
+          border-radius: 10px;
+          font-size: 14px;
           color: #d1d5db;
           text-decoration: none;
           background: rgba(255, 255, 255, 0.03);
@@ -534,10 +657,10 @@ export function Navbar() {
           justify-content: center;
           gap: 6px;
           width: 100%;
-          height: 42px;
-          font-size: 14.5px;
+          height: 40px;
+          font-size: 14px;
           font-weight: 600;
-          border-radius: 12px;
+          border-radius: 10px;
           background: #ffffff;
           color: #09090b;
           text-decoration: none;
@@ -566,28 +689,44 @@ export function Navbar() {
         }
 
         /* ─── Responsive Media Queries ─────────────────────────────────────── */
-        @media (max-width: 860px) {
-          .desktop-nav {
+        @media (max-width: 880px) {
+          .desktop-nav,
+          .search-trigger-btn,
+          .action-divider {
             display: none !important;
           }
 
           .mobile-toggle {
-            display: flex;
+            display: inline-flex;
+          }
+
+          .navbar-dock {
+            padding: 0 16px;
+            height: 54px;
+          }
+
+          .navbar-dock.is-scrolled {
+            max-width: calc(100% - 24px);
+            margin-top: 10px;
+            height: 48px;
+            padding: 0 14px;
+            border-radius: 12px;
           }
         }
 
-        @media (max-width: 640px) {
-          .brand-badge {
-            display: none !important;
+        @media (max-width: 480px) {
+          .navbar-dock {
+            padding: 0 12px;
           }
 
-          :global(.explore-btn),
-          .explore-btn {
-            display: none !important;
+          .navbar-dock.is-scrolled {
+            max-width: calc(100% - 16px);
+            margin-top: 8px;
+            padding: 0 12px;
           }
 
-          .github-pill-btn {
-            padding: 0 9px;
+          .brand-name {
+            font-size: 15px;
           }
         }
       `}</style>

@@ -5,8 +5,8 @@ import Link from "next/link";
 import { BLOCKS_DATA } from "@/data/blocks";
 import { CopyButton } from "@/components/CopyButton";
 import { BlockCard } from "@/components/BlockCard";
+import { NextIcon } from "@/components/icons";
 import {
-  ArrowRight,
   Sparkles,
   Terminal,
   Layers,
@@ -50,37 +50,32 @@ export default function HomePage() {
         <div className="container-main hero-container">
           {/* Left Column: Headline, Description, CTAs, and CLI */}
           <div className="hero-content-col">
-            {/* Top Pill Eyebrow */}
-            <div className="hero-badge">
-              <span className="hero-badge-tag">Registry</span>
-              <span className="hero-badge-divider" />
-              <span className="badge-pulse" />
-              <span className="badge-text">v1.0 — Open Source</span>
-            </div>
-
             {/* Main Title */}
             <h1 className="hero-title">
-              Production-ready UI for
-              <br />
-              <span className="title-highlight">React Native & Expo.</span>
+              UI blocks for{" "}
+              <span className="title-highlight">React Native.</span>
             </h1>
 
             {/* Subtitle */}
             <p className="hero-description">
-              Explore live previews, copy clean source code, or install directly into your codebase.
-              Zero runtime dependencies, standard StyleSheet primitives, and full New Architecture support.
+              <span className="desc-desktop">
+                Explore live previews, copy clean source code, or install directly into your codebase. Zero runtime dependencies and full New Architecture support.
+              </span>
+              <span className="desc-mobile">
+                Open source copy-paste blocks. Zero dependencies.
+              </span>
             </p>
 
             {/* Actions */}
             <div className="hero-actions">
               <Link href="/blocks" className="btn-primary hero-btn-lg">
-                <span>Explore Registry</span>
-                <ArrowRight size={16} />
+                <span>Explore Blocks</span>
+                <NextIcon size={16} />
               </Link>
 
-              <Link href="/docs" className="btn-secondary hero-btn-lg">
-                <Terminal size={15} />
-                <span>Documentation</span>
+              <Link href="/docs" className="btn-secondary hero-btn-lg hero-doc-btn">
+                <Terminal size={14} />
+                <span>Docs</span>
               </Link>
             </div>
 
@@ -108,40 +103,17 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right Column: Live Component Preview Window */}
+          {/* Right Column: Free-Floating Live Docker Component */}
           <div className="hero-preview-col">
-            <div className="hero-preview-stage">
-              {/* Header Bar with 3-dot design & component name */}
-              <div className="stage-header-bar">
-                <div className="window-dots">
-                  <span className="dot dot-red" />
-                  <span className="dot dot-yellow" />
-                  <span className="dot dot-green" />
-                  <span className="window-file-name">floating-docker.tsx</span>
-                </div>
-                <div className="stage-status-badge">
-                  <span className="live-dot" />
-                  <span>Interactive</span>
-                </div>
-              </div>
-
-              {/* Component Canvas */}
-              <div className="stage-canvas">
-                <div className="canvas-glow" />
-                <div className="component-holder">
-                  <DockerComponent
-                    {...({
-                      initialTab: spotlightTab,
-                      onTabChange: (tab: string) => setSpotlightTab(tab),
-                    } as any)}
-                  />
-                </div>
-              </div>
-
-              {/* Footer status pill */}
-              <div className="stage-footer-bar">
-                <span className="caption-dot" />
-                <span>Interactive preview • Tap any tab</span>
+            <div className="hero-docker-stage">
+              <div className="hero-docker-glow" aria-hidden="true" />
+              <div className="hero-docker-inner">
+                <DockerComponent
+                  {...({
+                    initialTab: spotlightTab,
+                    onTabChange: (tab: string) => setSpotlightTab(tab),
+                  } as any)}
+                />
               </div>
             </div>
           </div>
@@ -157,7 +129,7 @@ export default function HomePage() {
             <div>
               <div className="section-eyebrow-wrap">
                 <span className="section-counter-pill">{BLOCKS_DATA.length} blocks</span>
-                <span className="section-eyebrow">Available in Registry</span>
+                <span className="section-eyebrow-text">Available in Registry</span>
               </div>
               <h2 className="section-title">Components you <span className="font-editorial">copy</span> and own</h2>
               <p className="section-subtitle">
@@ -166,20 +138,40 @@ export default function HomePage() {
             </div>
             <Link href="/blocks" className="view-all-pill-btn">
               <span>View all components</span>
-              <ArrowRight size={15} />
+              <NextIcon size={14} />
             </Link>
           </div>
 
-          <div className="blocks-grid">
-            {featuredBlocks.map((block) => (
-              <BlockCard key={block.slug} block={block} />
-            ))}
+          <div className="blocks-grid-wrapper">
+            <div className="blocks-grid-container">
+              {/* Corner Hatch Accent */}
+              <div className="grid-corner-hatch" aria-hidden="true" />
+
+              {/* Architectural Grid Intersection Node Dots */}
+              <div className="grid-node-dot dot-row1-top" aria-hidden="true" />
+              <div className="grid-node-dot dot-mid-left-border" aria-hidden="true" />
+              <div className="grid-node-dot dot-mid-row1" aria-hidden="true" />
+              <div className="grid-node-dot dot-mid-row2" aria-hidden="true" />
+              <div className="grid-node-dot dot-mid-right-border" aria-hidden="true" />
+              <div className="grid-node-dot dot-row2-bottom" aria-hidden="true" />
+
+              <div className="blocks-grid">
+                {featuredBlocks.map((block, index) => (
+                  <BlockCard
+                    key={block.slug}
+                    block={block}
+                    index={index}
+                    total={featuredBlocks.length}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="grid-footer-cta">
             <Link href="/blocks" className="btn-secondary">
               <span>Explore all {BLOCKS_DATA.length} components in registry</span>
-              <ArrowRight size={14} />
+              <NextIcon size={15} />
             </Link>
           </div>
         </div>
@@ -284,7 +276,7 @@ export default function HomePage() {
               <div className="pillar-icon-box">
                 <Sparkles size={20} />
               </div>
-              <h3 className="pillar-title">Native 60–120 FPS Physics</h3>
+              <h3 className="pillar-title">Native 60-120 FPS Physics</h3>
               <p className="pillar-desc">
                 Smooth cubic-bezier animations using React Native's native driver for butter-smooth
                 performance across iOS, Android, and Web.
@@ -395,7 +387,7 @@ export default function HomePage() {
             <div className="cta-buttons">
               <Link href="/blocks" className="btn-primary hero-btn-lg">
                 <span>Explore the Registry</span>
-                <ArrowRight size={16} />
+                <NextIcon size={16} />
               </Link>
               <Link href="/docs" className="btn-secondary hero-btn-lg">
                 <span>Read Documentation</span>
@@ -414,7 +406,7 @@ export default function HomePage() {
 
         /* ─── Hero Section (Split Layout) ──────────────────────────────────── */
         .hero-section {
-          padding: 84px 0 108px;
+          padding: 136px 0 108px;
           position: relative;
           overflow: hidden;
           background-color: #070709;
@@ -550,6 +542,14 @@ export default function HomePage() {
           margin-bottom: 28px;
         }
 
+        .desc-desktop {
+          display: inline;
+        }
+
+        .desc-mobile {
+          display: none;
+        }
+
         .hero-actions {
           display: flex;
           align-items: center;
@@ -630,130 +630,36 @@ export default function HomePage() {
           color: #f3f4f6;
         }
 
-        /* ─── Window-Style Component Preview Stage ────────────────────────── */
-        .hero-preview-stage {
-          width: 100%;
-          max-width: 460px;
-          background: #0c0c11;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          border-radius: 20px;
-          overflow: hidden;
+        /* ─── Free-Floating Docker in Hero (No Card Structure) ─────────────── */
+        .hero-docker-stage {
           position: relative;
-          box-shadow:
-            0 24px 64px -16px rgba(0, 0, 0, 0.85),
-            0 0 0 1px rgba(255, 255, 255, 0.04);
-        }
-
-        .stage-header-bar {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 12px 18px;
-          background: #09090d;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .window-dots {
-          display: flex;
-          align-items: center;
-          gap: 7px;
-        }
-
-        .dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-        }
-
-        .dot-red {
-          background: #ff5f56;
-        }
-
-        .dot-yellow {
-          background: #ffbd2e;
-        }
-
-        .dot-green {
-          background: #27c93f;
-        }
-
-        .window-file-name {
-          font-family: var(--font-mono);
-          font-size: 12px;
-          color: #a1a1aa;
-          margin-left: 8px;
-          font-weight: 500;
-        }
-
-        .stage-status-badge {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 11px;
-          color: #9ca3af;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          padding: 3px 10px;
-          border-radius: 9999px;
-          font-weight: 500;
-        }
-
-        .live-dot {
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: #32c798;
-          box-shadow: 0 0 6px rgba(50, 199, 152, 0.8);
-        }
-
-        .stage-canvas {
-          padding: 44px 20px 32px;
+          width: 100%;
+          max-width: 540px;
           display: flex;
           align-items: center;
           justify-content: center;
-          position: relative;
-          background: radial-gradient(circle at center, #101015 0%, #08080b 100%);
-          overflow: hidden;
         }
 
-        .canvas-glow {
+        .hero-docker-glow {
           position: absolute;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 280px;
+          width: 360px;
           height: 140px;
-          background: radial-gradient(circle, rgba(50, 199, 152, 0.1) 0%, transparent 70%);
+          background: radial-gradient(ellipse at center, rgba(50, 199, 152, 0.16) 0%, rgba(99, 102, 241, 0.08) 50%, transparent 75%);
+          filter: blur(28px);
           pointer-events: none;
+          z-index: 0;
         }
 
-        .component-holder {
+        .hero-docker-inner {
           position: relative;
-          z-index: 2;
+          z-index: 1;
           width: 100%;
           display: flex;
           justify-content: center;
-        }
-
-        .stage-footer-bar {
-          display: flex;
           align-items: center;
-          justify-content: center;
-          gap: 7px;
-          padding: 10px 16px;
-          background: #08080c;
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
-          font-size: 12px;
-          color: #71717a;
-          letter-spacing: -0.1px;
-        }
-
-        .caption-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #32c798;
-          box-shadow: 0 0 6px rgba(50, 199, 152, 0.8);
         }
 
         /* ─── Registry Preview Grid Section ────────────────────────────────── */
@@ -775,10 +681,10 @@ export default function HomePage() {
         }
 
         .section-eyebrow-wrap {
-          display: flex;
+          display: inline-flex;
           align-items: center;
           gap: 10px;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
         }
 
         .section-counter-pill {
@@ -787,41 +693,156 @@ export default function HomePage() {
           font-weight: 700;
           color: #32c798;
           background: rgba(50, 199, 152, 0.1);
-          border: 1px solid rgba(50, 199, 152, 0.25);
-          padding: 2px 8px;
+          border: 1px solid rgba(50, 199, 152, 0.28);
+          padding: 0 8px;
+          height: 22px;
           border-radius: 9999px;
           text-transform: uppercase;
           letter-spacing: 0.04em;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          line-height: 1;
+        }
+
+        .section-eyebrow-text {
+          font-family: var(--font-mono);
+          font-size: 11.5px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #32c798;
+          display: inline-flex;
+          align-items: center;
+          line-height: 1;
+          margin: 0;
         }
 
         .view-all-pill-btn {
           display: inline-flex;
           align-items: center;
+          justify-content: center;
           gap: 8px;
-          font-size: 13.5px;
+          font-size: 13px;
           font-weight: 600;
+          line-height: 1;
           color: #f3f4f6;
           background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           padding: 8px 16px;
           border-radius: 9999px;
-          transition: all 0.2s ease;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
           white-space: nowrap;
+          text-decoration: none;
+        }
+
+        .view-all-pill-btn span {
+          display: inline-block;
+          line-height: 1;
+        }
+
+        .view-all-pill-btn :global(svg) {
+          display: block;
+          flex-shrink: 0;
+          transition: transform 0.2s ease;
         }
 
         .view-all-pill-btn:hover {
           color: #32c798;
           border-color: rgba(50, 199, 152, 0.35);
-          background: rgba(50, 199, 152, 0.06);
+          background: rgba(50, 199, 152, 0.08);
           transform: translateY(-1px);
         }
 
+        .view-all-pill-btn:hover :global(svg) {
+          transform: translateX(2px);
+        }
+
+        .blocks-grid-wrapper {
+          width: 100%;
+          max-width: 1180px;
+          margin: 0 auto 40px;
+        }
+
+        .blocks-grid-container {
+          position: relative;
+          width: 100%;
+          background: #050508;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .grid-corner-hatch {
+          position: absolute;
+          top: -1px;
+          right: -1px;
+          width: 18px;
+          height: 18px;
+          background: #050508;
+          border-left: 1px solid rgba(255, 255, 255, 0.18);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+          background-image: repeating-linear-gradient(
+            45deg,
+            rgba(255, 255, 255, 0.22) 0,
+            rgba(255, 255, 255, 0.22) 1px,
+            transparent 0,
+            transparent 4px
+          );
+          z-index: 15;
+          pointer-events: none;
+        }
+
+        .grid-node-dot {
+          position: absolute;
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 255, 255, 0.38);
+          background: #050508;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+          z-index: 16;
+        }
+
+        .dot-row1-top { top: 0; left: 58.333%; }
+        .dot-mid-left-border { top: 50%; left: 0; }
+        .dot-mid-row1 { top: 50%; left: 58.333%; }
+        .dot-mid-row2 { top: 50%; left: 41.667%; }
+        .dot-mid-right-border { top: 50%; left: 100%; }
+        .dot-row2-bottom { top: 100%; left: 41.667%; }
+
         .blocks-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          max-width: 960px;
-          margin: 0 auto 40px;
-          gap: 24px;
+          grid-template-columns: repeat(12, 1fr);
+          gap: 0;
+          margin: 0;
+          width: 100%;
+        }
+
+        :global(.blocks-grid > .grid-block-cell) {
+          border: none;
+          border-radius: 0;
+        }
+
+        /* Row 1: Floating Docker (Wide ~58%) + Interactive Calendar (~42%) */
+        :global(.blocks-grid > .grid-block-cell:nth-child(1)) {
+          grid-column: span 7;
+          border-right: 1px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        :global(.blocks-grid > .grid-block-cell:nth-child(2)) {
+          grid-column: span 5;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Row 2: Social Auth Buttons (~42%) + Trend Chart (Wide ~58%) */
+        :global(.blocks-grid > .grid-block-cell:nth-child(3)) {
+          grid-column: span 5;
+          border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        :global(.blocks-grid > .grid-block-cell:nth-child(4)) {
+          grid-column: span 7;
         }
 
         .grid-footer-cta {
@@ -1164,6 +1185,10 @@ export default function HomePage() {
               radial-gradient(circle 280px at 50% 65%, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
           }
 
+          .hero-section {
+            padding: 128px 0 72px;
+          }
+
           .hero-container {
             grid-template-columns: 1fr;
             gap: 48px;
@@ -1199,20 +1224,13 @@ export default function HomePage() {
             margin-right: auto;
           }
 
-          .hero-preview-stage {
-            max-width: 480px;
+          .hero-docker-stage {
+            max-width: 500px;
             margin: 0 auto;
           }
 
           .section-header-row {
             max-width: 740px;
-          }
-
-          .blocks-grid {
-            grid-template-columns: repeat(2, 1fr);
-            max-width: 740px;
-            margin: 0 auto 36px;
-            gap: 20px;
           }
 
           .pillars-grid {
@@ -1228,36 +1246,117 @@ export default function HomePage() {
           }
         }
 
+        @media (max-width: 860px) {
+          .blocks-grid-wrapper {
+            padding: 0 16px;
+            box-sizing: border-box;
+            margin-bottom: 28px;
+          }
+
+          .blocks-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+          }
+
+          .grid-node-dot {
+            display: none !important;
+          }
+
+          :global(.blocks-grid > .grid-block-cell) {
+            width: 100% !important;
+            grid-column: auto !important;
+            border-right: none !important;
+          }
+
+          :global(.blocks-grid > .grid-block-cell:not(:last-child)) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+          }
+        }
+
         @media (max-width: 768px) {
+          .desc-desktop {
+            display: none !important;
+          }
+
+          .desc-mobile {
+            display: inline !important;
+          }
+
+          .cli-terminal-wrap {
+            display: none !important;
+          }
+
           .hero-section {
-            padding: 44px 0 56px;
+            padding: 116px 0 44px;
+          }
+
+          .hero-container {
+            gap: 16px;
           }
 
           .hero-title {
-            font-size: 34px;
-            letter-spacing: -0.8px;
+            font-size: clamp(35px, 6.5vw, 40px);
+            line-height: 1.1;
+            letter-spacing: -1px;
+            max-width: 440px;
+            margin: 0 auto 14px;
+            text-wrap: balance;
           }
 
           .hero-description {
-            font-size: 15px;
+            font-size: 13.5px;
+            line-height: 1.5;
+            max-width: 300px;
+            margin: 0 auto 20px;
+            color: #9ca3af;
           }
 
           .hero-actions {
-            flex-direction: column;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 22px;
             width: 100%;
           }
 
           .hero-btn-lg {
-            width: 100%;
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
+            height: 35px;
+            padding: 0 13px;
+            font-size: 12px;
+            font-weight: 600;
+            gap: 6px;
+            border-radius: 9999px;
+            flex: 1;
+            max-width: 135px;
+            margin: 0;
           }
 
-          .cli-terminal-wrap {
-            max-width: 100%;
+          .hero-btn-lg :global(svg) {
+            width: 13px;
+            height: 13px;
           }
 
-          .hero-preview-stage {
-            max-width: 100%;
+          .hero-docker-stage {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+          }
+
+          .hero-docker-glow {
+            width: 240px;
+            height: 90px;
+            filter: blur(20px);
+          }
+
+          .hero-docker-inner {
+            transform: scale(0.94);
+            transform-origin: center center;
+            width: 100%;
           }
 
           .section-header-row {
@@ -1266,15 +1365,84 @@ export default function HomePage() {
             max-width: 440px;
           }
 
+          .section-eyebrow-wrap {
+            margin-bottom: 8px;
+            gap: 8px;
+          }
+
+          .section-title {
+            font-size: 21px !important;
+            letter-spacing: -0.3px !important;
+            margin-bottom: 6px !important;
+          }
+
+          .section-subtitle {
+            font-size: 13px !important;
+            line-height: 1.4 !important;
+            max-width: 310px !important;
+          }
+
+          .view-all-pill-btn {
+            font-size: 12.5px !important;
+            padding: 7px 14px !important;
+            margin-top: 8px !important;
+            gap: 7px !important;
+          }
+
+          .blocks-grid-wrapper {
+            padding: 0 16px;
+            box-sizing: border-box;
+            margin-bottom: 28px;
+          }
+
           .blocks-grid {
-            grid-template-columns: 1fr;
-            max-width: 440px;
-            margin: 0 auto 32px;
-            gap: 20px;
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+          }
+
+          .grid-node-dot {
+            display: none !important;
+          }
+
+          :global(.blocks-grid > .grid-block-cell) {
+            width: 100% !important;
+            grid-column: auto !important;
+            border-right: none !important;
+          }
+
+          :global(.blocks-grid > .grid-block-cell:not(:last-child)) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+          }
+
+          .workflow-step-card {
+            padding: 18px 14px !important;
+          }
+
+          .step-name {
+            font-size: 16px !important;
+          }
+
+          .step-text {
+            font-size: 12.5px !important;
+            line-height: 1.4 !important;
           }
 
           .pillars-grid {
             grid-template-columns: 1fr;
+          }
+
+          .pillar-card {
+            padding: 18px 14px !important;
+          }
+
+          .pillar-title {
+            font-size: 15.5px !important;
+          }
+
+          .pillar-desc {
+            font-size: 12.5px !important;
+            line-height: 1.4 !important;
           }
 
           .steps-row {
@@ -1286,11 +1454,16 @@ export default function HomePage() {
           }
 
           .community-card {
-            padding: 32px 20px;
+            padding: 28px 18px;
           }
 
           .community-title {
-            font-size: 26px;
+            font-size: 22px;
+          }
+
+          .community-desc {
+            font-size: 13px !important;
+            line-height: 1.45 !important;
           }
 
           .community-actions {
@@ -1304,16 +1477,28 @@ export default function HomePage() {
           }
 
           .cta-box {
-            padding: 40px 20px;
+            padding: 32px 18px;
           }
 
           .cta-headline {
-            font-size: 26px;
+            font-size: 22px;
+          }
+
+          .cta-subtext {
+            font-size: 13px !important;
+            line-height: 1.45 !important;
           }
 
           .cta-buttons {
             flex-direction: column;
             width: 100%;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-docker-inner {
+            transform: scale(0.86);
+            transform-origin: center center;
           }
         }
       `}</style>

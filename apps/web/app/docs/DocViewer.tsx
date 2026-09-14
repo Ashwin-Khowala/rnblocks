@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { ChevronRight, ArrowLeft, ArrowRight } from "lucide-react";
-import { GitHubIcon } from "@/components/icons/GitHubIcon";
+import { ChevronRight } from "lucide-react";
+import { GitHubIcon, BackIcon, NextIcon } from "@/components/icons";
 import { DOC_CATEGORIES, DocItem } from "@/lib/docs-data";
 
 interface DocViewerProps {
@@ -54,7 +54,7 @@ export function DocViewer({ slug, title, html }: DocViewerProps) {
         {prevItem ? (
           <Link href={`/docs/${prevItem.slug}`} className="pagination-card prev">
             <span className="pagination-label">
-              <ArrowLeft size={13} /> Previous
+              <BackIcon size={14} /> Previous
             </span>
             <span className="pagination-title">{prevItem.title}</span>
           </Link>
@@ -65,7 +65,7 @@ export function DocViewer({ slug, title, html }: DocViewerProps) {
         {nextItem ? (
           <Link href={`/docs/${nextItem.slug}`} className="pagination-card next">
             <span className="pagination-label">
-              Next <ArrowRight size={13} />
+              Next <NextIcon size={14} />
             </span>
             <span className="pagination-title">{nextItem.title}</span>
           </Link>

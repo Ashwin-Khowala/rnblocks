@@ -4,347 +4,424 @@ import React from "react";
 import Link from "next/link";
 import { BlockItem } from "@/data/blocks";
 import { CopyButton } from "./CopyButton";
-import { ArrowUpRight, Terminal } from "lucide-react";
 
 interface BlockCardProps {
   block: BlockItem;
+  index?: number;
+  total?: number;
 }
 
-export function BlockCard({ block }: BlockCardProps) {
-  const { slug, title, description, category, author, styling, framework, Component } = block;
-
-  const authorInitials = typeof author === "string" ? author.slice(0, 2).toUpperCase() : "RN";
+export function BlockCard({ block, index = 0 }: BlockCardProps) {
+  const { slug, title, category, styling, framework, Component } = block;
   const stylingLabel = Array.isArray(styling) ? styling.join(", ") : styling;
 
+  // Tailored scaling for each block in desktop bento layout
   const previewScale =
     slug === "floating-docker"
-      ? 0.76
+      ? 1.0
       : slug === "interactive-calendar"
-      ? 0.58
-      : slug === "trend-chart"
+      ? 0.78
+      : slug === "social-auth-buttons"
+      ? 0.88
+      : 1.0;
+
+  const mobilePreviewScale =
+    slug === "floating-docker"
+      ? 0.84
+      : slug === "interactive-calendar"
       ? 0.68
-      : 0.70;
+      : slug === "social-auth-buttons"
+      ? 0.78
+      : 0.82;
+
+  const canvasMaxWidth =
+    slug === "floating-docker"
+      ? "400px"
+      : slug === "trend-chart"
+      ? "360px"
+      : "360px";
 
   return (
-    <div className="card-root">
-      {/* Top Interactive Mini-Preview Canvas with Window Bar */}
-      <div className="card-window-bar">
-        <div className="window-dots">
-          <span className="dot dot-red" />
-          <span className="dot dot-yellow" />
-          <span className="dot dot-green" />
-          <span className="card-filename">{slug}.tsx</span>
+    <div className={`grid-block-cell cell-${slug}`}>
+      {/* Top Left Sleek Floating Control: Docs & Redirect to Component */}
+      <div className="cell-top-actions">
+        <div className="hover-action-pill">
+          <Link href="/docs" className="hover-action-link hover-docs-link" title="Documentation">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+              <path d="M6 6h10" />
+              <path d="M6 10h10" />
+            </svg>
+            <span>Docs</span>
+          </Link>
+          <span className="hover-action-sep" aria-hidden="true" />
+          <Link
+            href={`/blocks/${slug}`}
+            className="hover-action-link hover-component-link"
+            title={`View ${title}`}
+          >
+            <span>Component</span>
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M7 17L17 7" />
+              <path d="M7 7h10v10" />
+            </svg>
+          </Link>
         </div>
-        <span className="card-status-pill">Interactive</span>
       </div>
 
-      <Link href={`/blocks/${slug}`} className="preview-link" title={`View ${title}`}>
-        <div className="preview-canvas-box">
-          <div
-            className="scaled-content"
-            style={{ transform: `scale(${previewScale})` }}
-          >
-            <Component />
-          </div>
-          <div className="preview-overlay">
-            <span className="view-details-tag">
-              <span>Inspect Block</span>
-              <ArrowUpRight size={14} />
-            </span>
-          </div>
+      {/* Top Right Quick Copy CLI */}
+      <div className="cell-top-right">
+        <CopyButton
+          text={`npx rnblocks add ${slug}`}
+          className="cell-cli-btn"
+          label="CLI"
+        />
+      </div>
+
+      {/* Interactive Canvas Preview */}
+      <div className="cell-canvas">
+        <div
+          className="scaled-content-wrap"
+          style={
+            {
+              width: "100%",
+              maxWidth: canvasMaxWidth,
+              "--scale-desktop": previewScale,
+              "--scale-mobile": mobilePreviewScale,
+            } as React.CSSProperties
+          }
+        >
+          <Component />
         </div>
-      </Link>
+      </div>
 
-      {/* Card Info Content */}
-      <div className="card-info">
-        {/* Badges Row */}
-        <div className="badges-row">
-          <span className="category-pill">{category}</span>
-          <div className="tech-tags">
-            <span className="badge-tech">{stylingLabel}</span>
-            <span className="badge-tech">{framework === "expo" ? "Expo" : "React Native"}</span>
-          </div>
+      {/* Bottom Architectural Info Bar */}
+      <div className="cell-footer-bar">
+        <div className="cell-footer-left">
+          <Link href={`/blocks/${slug}`} className="cell-title-link">
+            <span className="cell-title">{title}</span>
+          </Link>
+          <span className="cell-category-pill">{category}</span>
         </div>
-
-        {/* Title & Description */}
-        <Link href={`/blocks/${slug}`} className="title-link">
-          <h3 className="card-title">{title}</h3>
-        </Link>
-        <p className="card-desc">{description}</p>
-
-        {/* Author & Install Footer */}
-        <div className="card-footer">
-          <div className="author-wrap">
-            <div className="author-avatar">{authorInitials}</div>
-            <div className="author-text">
-              <span className="author-name">{author}</span>
-              <span className="author-handle">Maintainer</span>
-            </div>
-          </div>
-
-          <div className="quick-install">
-            <CopyButton
-              text={`npx rnblocks add ${slug}`}
-              className="install-copy-btn"
-              label="CLI"
-            />
-          </div>
+        <div className="cell-footer-right">
+          <Link href="/docs" className="cell-docs-tag" title="Documentation">
+            Docs
+          </Link>
+          <span className="cell-tech-pill">{stylingLabel}</span>
+          <span className="cell-tech-pill">{framework === "expo" ? "Expo" : "React Native"}</span>
         </div>
       </div>
 
       <style jsx>{`
-        .card-root {
-          background: #0d0d12;
-          border: 1px solid rgba(255, 255, 255, 0.09);
-          border-radius: 16px;
-          overflow: hidden;
+        .grid-block-cell {
+          position: relative;
+          background: #050508;
           display: flex;
           flex-direction: column;
-          transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .card-root:hover {
-          background: #101017;
-          border-color: rgba(50, 199, 152, 0.35);
-          transform: translateY(-2px);
-          box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(50, 199, 152, 0.15);
-        }
-
-        .card-window-bar {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 8px 12px;
-          background: #08080b;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .window-dots {
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-
-        .dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-        }
-
-        .dot-red { background: #ff5f56; }
-        .dot-yellow { background: #ffbd2e; }
-        .dot-green { background: #27c93f; }
-
-        .card-filename {
-          font-family: var(--font-mono);
-          font-size: 11px;
-          color: #71717a;
-          margin-left: 6px;
-          font-weight: 500;
-        }
-
-        .card-status-pill {
-          font-family: var(--font-mono);
-          font-size: 9.5px;
-          color: #32c798;
-          background: rgba(50, 199, 152, 0.08);
-          border: 1px solid rgba(50, 199, 152, 0.2);
-          padding: 1px 6px;
-          border-radius: 9999px;
-          text-transform: uppercase;
-          letter-spacing: 0.04em;
-        }
-
-        .preview-link {
-          display: block;
-          position: relative;
-          cursor: pointer;
-        }
-
-        .preview-canvas-box {
-          height: 220px;
-          background: #09090b;
-          background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-          background-size: 14px 14px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-          position: relative;
           overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 10px;
+          transition: background 0.2s ease;
         }
 
-        .scaled-content {
-          width: 340px;
-          pointer-events: none;
-          transform-origin: center center;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+        .grid-block-cell:hover {
+          background: #07070c;
         }
 
-        .preview-overlay {
+        /* ─── Top Left Actions (Docs & Redirect) ────────────────────────── */
+        :global(.cell-top-actions) {
           position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(7, 7, 9, 0.75) 0%, rgba(7, 7, 9, 0.2) 40%, transparent 80%);
+          top: 14px;
+          left: 14px;
+          z-index: 25;
           opacity: 0;
-          display: flex;
-          align-items: flex-end;
-          justify-content: center;
-          padding-bottom: 14px;
-          transition: opacity 0.2s ease;
+          transform: translateY(-4px);
+          pointer-events: none;
+          transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .card-root:hover .preview-overlay {
+        .grid-block-cell:hover :global(.cell-top-actions),
+        .grid-block-cell:focus-within :global(.cell-top-actions) {
           opacity: 1;
+          transform: translateY(0);
+          pointer-events: auto;
         }
 
-        .view-details-tag {
+        :global(.hover-action-pill) {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
-          background: #32c798;
-          color: #070709;
-          font-weight: 700;
-          font-size: 11.5px;
-          padding: 6px 14px;
+          background: rgba(12, 12, 16, 0.88);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 9999px;
-          box-shadow: 0 4px 14px rgba(50, 199, 152, 0.35);
-          transform: translateY(4px);
+          padding: 3px;
+          box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04);
+        }
+
+        :global(.hover-action-link) {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 4px 10px;
+          border-radius: 9999px;
+          font-family: var(--font-mono);
+          font-size: 11px;
+          font-weight: 500;
+          line-height: 1;
+          color: #94a3b8 !important;
+          text-decoration: none !important;
+          transition: all 0.15s ease;
+        }
+
+        :global(.hover-action-link:hover) {
+          color: #ffffff !important;
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        :global(.hover-action-link.hover-component-link) {
+          color: #32c798 !important;
+          font-weight: 600;
+        }
+
+        :global(.hover-action-link.hover-component-link:hover) {
+          color: #4ade80 !important;
+          background: rgba(50, 199, 152, 0.14);
+        }
+
+        :global(.hover-action-sep) {
+          width: 1px;
+          height: 12px;
+          background: rgba(255, 255, 255, 0.15);
+          margin: 0 1px;
+        }
+
+        :global(.hover-action-link svg) {
+          display: block;
+          flex-shrink: 0;
+        }
+
+        /* ─── Top Right CLI Copy ────────────────────────────────────────── */
+        :global(.cell-top-right) {
+          position: absolute;
+          top: 14px;
+          right: 14px;
+          z-index: 25;
+          opacity: 0;
+          transform: translateY(-4px);
+          pointer-events: none;
+          transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .grid-block-cell:hover :global(.cell-top-right),
+        .grid-block-cell:focus-within :global(.cell-top-right) {
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: auto;
+        }
+
+        :global(.cell-cli-btn) {
+          background: rgba(12, 12, 16, 0.88) !important;
+          backdrop-filter: blur(16px) !important;
+          -webkit-backdrop-filter: blur(16px) !important;
+          border: 1px solid rgba(255, 255, 255, 0.12) !important;
+          border-radius: 9999px !important;
+          padding: 4px 10px !important;
+          font-family: var(--font-mono) !important;
+          font-size: 11px !important;
+          font-weight: 500 !important;
+          color: #94a3b8 !important;
+          box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04) !important;
+          transition: all 0.15s ease !important;
+        }
+
+        :global(.cell-cli-btn:hover) {
+          color: #ffffff !important;
+          border-color: rgba(255, 255, 255, 0.22) !important;
+          background: rgba(20, 20, 26, 0.95) !important;
+        }
+
+        /* ─── Canvas Preview ────────────────────────────────────────────── */
+        .cell-canvas {
+          position: relative;
+          width: 100%;
+          height: 360px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #050508;
+          background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+          background-size: 18px 18px;
+          overflow: hidden;
+          padding: 24px 20px;
+          box-sizing: border-box;
+        }
+
+        .scaled-content-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: scale(var(--scale-desktop, 0.9));
+          transform-origin: center center;
+          pointer-events: auto;
+          user-select: none;
           transition: transform 0.2s ease;
         }
 
-        .card-root:hover .view-details-tag {
-          transform: translateY(0);
-        }
-
-        .card-info {
-          padding: 14px 16px;
+        .scaled-content-wrap :global(> div) {
+          width: 100%;
           display: flex;
-          flex-direction: column;
-          flex: 1;
+          justify-content: center;
         }
 
-        .badges-row {
+        /* ─── Bottom Footer Bar ─────────────────────────────────────────── */
+        .cell-footer-bar {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: 10px;
-          gap: 6px;
+          padding: 12px 18px;
+          background: #07070b;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          gap: 12px;
         }
 
-        .category-pill {
+        .cell-footer-left {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          min-width: 0;
+        }
+
+        :global(.cell-title-link) {
+          text-decoration: none !important;
+          min-width: 0;
           display: inline-flex;
           align-items: center;
+        }
+
+        .cell-title {
+          font-size: 13.5px;
+          font-weight: 600;
+          color: #f3f4f6;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          transition: color 0.15s ease;
+        }
+
+        .cell-title:hover {
+          color: #32c798;
+        }
+
+        .cell-category-pill {
+          font-family: var(--font-mono);
           font-size: 10px;
-          font-weight: 700;
+          font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: #a1a1aa;
+          letter-spacing: 0.04em;
+          color: #71717a;
           background: rgba(255, 255, 255, 0.04);
           border: 1px solid rgba(255, 255, 255, 0.08);
           padding: 2px 7px;
           border-radius: 9999px;
-        }
-
-        .tech-tags {
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-
-        .badge-tech {
-          display: inline-flex;
-          align-items: center;
-          font-family: var(--font-mono);
-          font-size: 10.5px;
-          font-weight: 500;
-          padding: 2px 6px;
-          border-radius: 5px;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #d1d5db;
           white-space: nowrap;
         }
 
-        .title-link {
-          display: inline-block;
-          margin-bottom: 4px;
-        }
-
-        .card-title {
-          font-size: 15px;
-          font-weight: 700;
-          color: var(--text-primary);
-          transition: color var(--transition-fast);
-        }
-
-        .card-title:hover {
-          color: #ffffff;
-        }
-
-        .card-desc {
-          font-size: 12.5px;
-          color: var(--text-muted);
-          line-height: 17px;
-          margin-bottom: 14px;
-          flex: 1;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-
-        .card-footer {
+        .cell-footer-right {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding-top: 10px;
-          border-top: 1px solid var(--border);
+          gap: 6px;
+          flex-shrink: 0;
         }
 
-        .author-wrap {
-          display: flex;
-          align-items: center;
-          gap: 7px;
-        }
-
-        .author-avatar {
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          background: var(--bg-elevated);
-          border: 1px solid var(--border);
-          color: var(--text-secondary);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 9.5px;
-          font-weight: 700;
-        }
-
-        .author-text {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .author-name {
-          font-size: 11.5px;
-          font-weight: 600;
-          color: var(--text-primary);
-        }
-
-        .author-handle {
+        :global(.cell-docs-tag) {
+          font-family: var(--font-mono);
           font-size: 10px;
-          color: var(--text-muted);
+          font-weight: 600;
+          color: #94a3b8 !important;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 2px 7px;
+          border-radius: 4px;
+          text-decoration: none !important;
+          display: inline-flex;
+          align-items: center;
+          line-height: 1.2;
+          transition: all 0.15s ease;
         }
 
-        .quick-install {
-          display: flex;
-          align-items: center;
+        :global(.cell-docs-tag:hover) {
+          color: #32c798 !important;
+          border-color: rgba(50, 199, 152, 0.3);
+          background: rgba(50, 199, 152, 0.08);
+        }
+
+        .cell-tech-pill {
+          font-family: var(--font-mono);
+          font-size: 10px;
+          font-weight: 500;
+          color: #a1a1aa;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 2px 6px;
+          border-radius: 4px;
+          white-space: nowrap;
+        }
+
+        /* ─── Mobile Clean Layout (≤ 860px) ────────────────────────────── */
+        @media (max-width: 860px) {
+          :global(.cell-top-actions) {
+            display: none !important;
+          }
+
+          :global(.cell-top-right) {
+            display: none !important;
+          }
+
+          .cell-canvas {
+            height: 290px;
+            padding: 14px 10px;
+          }
+
+          .scaled-content-wrap {
+            transform: scale(var(--scale-mobile, 0.76));
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+
+          .cell-footer-bar {
+            padding: 10px 14px;
+          }
+
+          .cell-title {
+            font-size: 12.5px;
+          }
+
+          .cell-tech-pill:last-child {
+            display: none;
+          }
         }
       `}</style>
     </div>
   );
 }
+
+export default BlockCard;

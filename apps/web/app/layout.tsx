@@ -29,11 +29,11 @@ const timesItalic = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL("https://rnblocks.vercel.app"),
   title: {
-    default: "RNBlocks — The Open-Source React Native & Expo UI Registry",
+    default: "RNBlocks | The Open Source React Native & Expo UI Registry",
     template: "%s | RNBlocks",
   },
   description:
-    "Production-ready React Native blocks and screens for Expo and React Native apps. Discover, inspect source code, and copy components directly into your codebase.",
+    "Production ready React Native blocks and screens for Expo and React Native apps. Discover, inspect source code, and copy components directly into your codebase.",
   alternates: {
     canonical: "https://rnblocks.vercel.app",
   },
@@ -66,16 +66,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://rnblocks.vercel.app",
-    title: "RNBlocks — The Open-Source React Native & Expo UI Registry",
+    title: "RNBlocks | The Open Source React Native & Expo UI Registry",
     description:
-      "Production-ready React Native blocks and screens. Discover, inspect live previews, and copy code directly into your Expo or React Native app.",
+      "Production ready React Native blocks and screens. Discover, inspect live previews, and copy code directly into your Expo or React Native app.",
     siteName: "RNBlocks",
   },
   twitter: {
     card: "summary_large_image",
-    title: "RNBlocks — The Open-Source React Native & Expo UI Registry",
+    title: "RNBlocks | The Open Source React Native & Expo UI Registry",
     description:
-      "Production-ready React Native blocks and screens. Discover, inspect live previews, and copy code directly into your Expo or React Native app.",
+      "Production ready React Native blocks and screens. Discover, inspect live previews, and copy code directly into your Expo or React Native app.",
   },
 };
 
@@ -88,7 +88,7 @@ const jsonLd = {
       "name": "RNBlocks",
       "url": "https://rnblocks.vercel.app",
       "description":
-        "Production-ready React Native blocks and screens for Expo and React Native apps. Discover, inspect source code, and copy components directly into your codebase.",
+        "Production ready React Native blocks and screens for Expo and React Native apps. Discover, inspect source code, and copy components directly into your codebase.",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "iOS, Android, Web",
       "offers": {
