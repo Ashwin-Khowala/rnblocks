@@ -1,7 +1,7 @@
 {
   "name": "interactive-calendar",
   "title": "Interactive Calendar",
-  "description": "A sleek, zero-dependency month calendar date picker with event dot indicators, smooth date navigation, and dark & light themes.",
+  "description": "A sleek month calendar date picker with react-native-svg chevrons, event dot indicators, smooth date navigation, and dark & light themes. Exports DEMO_MARKED_DATES for preview stubs.",
   "type": "block",
   "author": {
     "name": "Ashwin Khowala",
@@ -16,7 +16,7 @@
       "type": "registry:component"
     }
   ],
-  "dependencies": [],
+  "dependencies": ["react-native-svg"],
   "devDependencies": {},
   "registryDependencies": [],
   "platforms": [

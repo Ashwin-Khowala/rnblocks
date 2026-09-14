@@ -1,7 +1,7 @@
 {
   "name": "social-auth-buttons",
   "title": "Social OAuth Authentication Buttons",
-  "description": "Brand-compliant Apple, Google, and GitHub social sign-in buttons with official vector logos, loading spinners, divider rule, and light/dark theme variants.",
+  "description": "Brand-compliant Apple, Google, and GitHub social sign-in buttons with react-native-svg vector logos, loading spinners, divider rule, and light/dark theme variants. Auth callbacks are UI hooks — wire up your own auth provider.",
   "type": "block",
   "author": {
     "name": "Ashwin Khowala",
@@ -16,7 +16,7 @@
       "type": "registry:component"
     }
   ],
-  "dependencies": [],
+  "dependencies": ["react-native-svg"],
   "devDependencies": {},
   "registryDependencies": [],
   "platforms": [

@@ -49,10 +49,27 @@ function generateRegistry() {
 
       // Relative import from apps/web/data/blocks.tsx to registry/
       const relImportPath = `../../../registry/${type}/${slug}/${primaryFile.path.replace(/\.tsx$/, "")}`;
+      // For components that export demo props, import them for the web preview wrapper.
+      // This keeps demo data out of the component's default props while still showing
+      // a rich preview on the docs site.
+      const previewWrapperImport = slug === "interactive-calendar"
+        ? `import { DEMO_MARKED_DATES as _CalendarDemoData } from "${relImportPath}";`
+        : null;
+
       imports.push(`import { default as ${compName} } from "${relImportPath}";`);
+      if (previewWrapperImport) imports.push(previewWrapperImport);
 
       const authorStr = typeof parsed.author === "object" ? parsed.author.name : parsed.author;
       const primaryFramework = (parsed.frameworks && parsed.frameworks[0]) || parsed.framework || "react-native";
+
+      const componentVal =
+        slug === "interactive-calendar"
+          ? `(() => {
+      const Wrapped = (props: any) => <${compName} markedDates={_CalendarDemoData} {...props} />;
+      Wrapped.displayName = "${compName}Wrapped";
+      return Wrapped;
+    })()`
+          : compName;
 
       exportedItems.push(`  {
     slug: "${slug}",
@@ -73,7 +90,7 @@ function generateRegistry() {
     devDependencies: ${JSON.stringify(parsed.devDependencies ?? {})},
     registryDependencies: ${JSON.stringify(parsed.registryDependencies)},
     code: ${JSON.stringify(code)},
-    Component: ${compName} as React.ComponentType,
+    Component: ${componentVal} as React.ComponentType,
   }`);
     }
   }

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-09-14T20:20:07.990Z",
+  "generatedAt": "2026-09-14T22:14:47.319Z",
   "items": [
     {
       "name": "floating-docker",
@@ -25,7 +25,9 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": [],
+      "dependencies": [
+        "react-native-svg"
+      ],
       "devDependencies": {},
       "registryDependencies": [],
       "platforms": [
@@ -49,7 +51,7 @@
     {
       "name": "interactive-calendar",
       "title": "Interactive Calendar",
-      "description": "A sleek, zero-dependency month calendar date picker with event dot indicators, smooth date navigation, and dark & light themes.",
+      "description": "A sleek month calendar date picker with react-native-svg chevrons, event dot indicators, smooth date navigation, and dark & light themes. Exports DEMO_MARKED_DATES for preview stubs.",
       "type": "block",
       "author": {
         "name": "Ashwin Khowala",
@@ -68,7 +70,9 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": [],
+      "dependencies": [
+        "react-native-svg"
+      ],
       "devDependencies": {},
       "registryDependencies": [],
       "platforms": [
@@ -92,7 +96,7 @@
     {
       "name": "social-auth-buttons",
       "title": "Social OAuth Authentication Buttons",
-      "description": "Brand-compliant Apple, Google, and GitHub social sign-in buttons with official vector logos, loading spinners, divider rule, and light/dark theme variants.",
+      "description": "Brand-compliant Apple, Google, and GitHub social sign-in buttons with react-native-svg vector logos, loading spinners, divider rule, and light/dark theme variants. Auth callbacks are UI hooks — wire up your own auth provider.",
       "type": "block",
       "author": {
         "name": "Ashwin Khowala",
@@ -112,7 +116,9 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": [],
+      "dependencies": [
+        "react-native-svg"
+      ],
       "devDependencies": {},
       "registryDependencies": [],
       "platforms": [
@@ -136,7 +142,7 @@
     {
       "name": "trend-chart",
       "title": "SVG Gradient Area Trend Line Chart",
-      "description": "A lightweight, zero-dependency SVG line chart with smooth gradient area fill, dual-axis labels, reference gridlines, and responsive layout.",
+      "description": "A smooth react-native-svg area trend chart with gradient fill, Animated.spring rolling digits, animated indicator, Platform-guarded hover/touch scrubbing, and responsive layout.",
       "type": "block",
       "author": {
         "name": "Ashwin Khowala",
@@ -156,7 +162,9 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": [],
+      "dependencies": [
+        "react-native-svg"
+      ],
       "devDependencies": {},
       "registryDependencies": [],
       "platforms": [

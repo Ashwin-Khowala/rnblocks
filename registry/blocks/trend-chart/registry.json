@@ -1,7 +1,7 @@
 {
   "name": "trend-chart",
   "title": "SVG Gradient Area Trend Line Chart",
-  "description": "A lightweight, zero-dependency SVG line chart with smooth gradient area fill, dual-axis labels, reference gridlines, and responsive layout.",
+  "description": "A smooth react-native-svg area trend chart with gradient fill, Animated.spring rolling digits, animated indicator, Platform-guarded hover/touch scrubbing, and responsive layout.",
   "type": "block",
   "author": {
     "name": "Ashwin Khowala",
@@ -16,7 +16,7 @@
       "type": "registry:component"
     }
   ],
-  "dependencies": [],
+  "dependencies": ["react-native-svg"],
   "devDependencies": {},
   "registryDependencies": [],
   "platforms": [

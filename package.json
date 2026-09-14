@@ -19,7 +19,11 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "validate:registry": "tsx scripts/validate-registry.ts",
+    "validate:registry": "tsx scripts/validate-registry.ts && tsx scripts/check-platform-compat.ts",
+    "validate:deps": "tsx scripts/validate-dependencies.ts",
+    "validate:native": "tsc --noEmit -p packages/native-check/tsconfig.json",
+    "check:platform-compat": "tsx scripts/check-platform-compat.ts",
+    "validate:all": "pnpm validate:registry && pnpm validate:deps && pnpm validate:native",
     "generate:registry": "tsx scripts/generate-registry.ts"
   },
   "devDependencies": {

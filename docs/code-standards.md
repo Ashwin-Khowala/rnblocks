@@ -27,7 +27,9 @@ Every component, screen, and web interface authored for or contributed to RNBloc
 Every block file in `registry/blocks/<slug>/files/<slug>.tsx` must follow this standardized section order:
 
 ```tsx
-"use client"; // If using Next.js client directives for web registry preview
+// ❌ DO NOT add "use client" — this is a Next.js-only directive and has
+// no meaning in React Native source. It must never appear in distributed
+// registry block source files. See §3.7 Platform Compatibility Rules.
 
 import React, { useState, useMemo, useCallback } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
@@ -185,6 +187,19 @@ const styles = StyleSheet.create({
 - **UI Thread First**: For complex gestures or physics, use `react-native-reanimated` with worklets (`"worklet"`).
 - **Memoization**: Memoize callbacks (`useCallback`) and derived arrays (`useMemo`) to prevent needless re-renders of list items.
 
+### 3.7. Platform Compatibility Rules
+
+Every block that claims `ios` or `android` in `registry.json → platforms` **must** pass the platform API check:
+
+- **No raw DOM SVG**: Never use `<svg>`, `<path>`, `<defs>`, `<linearGradient>`, `<circle>`, `<line>`, `<rect>` HTML elements. Use `react-native-svg` primitives (`<Svg>`, `<Path>`, `<Defs>`, `<LinearGradient>`, `<Circle>`, `<Line>`, `<Rect>`) instead and declare `"dependencies": ["react-native-svg"]` in `registry.json`.
+- **No DOM globals**: No `document.`, `window.`, `getBoundingClientRect`, `HTMLElement`, `localStorage`, `sessionStorage`.
+- **No Next.js directives**: No `"use client"` — this is a Next.js server/client boundary directive. It is meaningless in React Native and must not appear in registry source files.
+- **No `next/*` imports**: Use `react-native` alternatives.
+- **Guard web-only events**: `onMouseEnter`, `onPointerMove`, `onPointerLeave` are web-only. If needed, wrap them in `Platform.select({ web: { onPointerMove: handler }, default: {} })`.
+- **Use `onLayout` not `getBoundingClientRect`**: To measure element size, use the `onLayout` callback prop instead of `getBoundingClientRect`.
+
+The CI check (`pnpm run check:platform-compat`) enforces these rules automatically and blocks merges on violation.
+
 ---
 
 ## 4. Web App (`apps/web`) Code Standards
@@ -213,9 +228,9 @@ For the marketing site, docs, and component registry studio in `apps/web`:
 
 Before submitting code or committing changes:
 - [ ] Run `pnpm run typecheck` across all workspaces (0 errors).
-- [ ] Run `pnpm run validate:registry` (registry schema matches item code).
+- [ ] Run `pnpm run validate:registry` (schema + platform compat checks — must be 0 violations).
 - [ ] Visual preview in browser at 320px, 768px, 1280px, and 1440px viewports.
-- [ ] No extraneous npm dependencies introduced.
+- [ ] No extraneous npm dependencies introduced (react-native-svg is approved for SVG blocks).
 - [ ] Atomic, conventional commit messages (`feat(web/hero): ...`, `fix(registry): ...`).
 
 ---

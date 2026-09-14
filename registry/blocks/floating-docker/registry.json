@@ -16,7 +16,7 @@
       "type": "registry:component"
     }
   ],
-  "dependencies": [],
+  "dependencies": ["react-native-svg"],
   "devDependencies": {},
   "registryDependencies": [],
   "platforms": ["ios", "android", "web"],
