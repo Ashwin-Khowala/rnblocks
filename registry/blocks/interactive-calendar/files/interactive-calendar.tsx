@@ -71,7 +71,7 @@ function getSampleMarkedDates(): Record<string, MarkedDateConfig> {
       dots: [{ color: "#3B82F6" }, { color: "#10B981" }, { color: "#8B5CF6" }],
     },
     [formatKey(1)]: {
-      dots: [{ color: "#EF4444" }, { color: "#3B82F6" }],
+      dots: [{ color: "#EF4444" }],
     },
     [formatKey(3)]: {
       dots: [{ color: "#10B981" }],
