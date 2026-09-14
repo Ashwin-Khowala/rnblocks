@@ -2,12 +2,14 @@
 
 import React, { useMemo } from "react";
 import { CopyButton } from "./CopyButton";
-import { FileCode, Check } from "lucide-react";
+import { FileCode } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface CodeViewerProps {
   code: string;
   filename?: string;
   language?: string;
+  className?: string;
 }
 
 // Tokenizing patterns for JSX/TSX syntax highlighting
@@ -37,7 +39,7 @@ function highlightLine(line: string): React.ReactNode {
     return (
       <>
         <span>{indent}</span>
-        <span className="tok-comment">{trimmed}</span>
+        <span className="text-[#6b7280] italic">{trimmed}</span>
       </>
     );
   }
@@ -51,7 +53,6 @@ function highlightLine(line: string): React.ReactNode {
   let keyIndex = 0;
 
   while ((match = tokenRegex.exec(line)) !== null) {
-    // If there is unmatched gap, push as raw text
     if (match.index > lastIndex) {
       elements.push(
         <span key={`gap-${keyIndex++}`}>
@@ -65,56 +66,55 @@ function highlightLine(line: string): React.ReactNode {
 
     if (token.startsWith("//")) {
       elements.push(
-        <span key={`tok-${keyIndex++}`} className="tok-comment">
+        <span key={`tok-${keyIndex++}`} className="text-[#6b7280] italic">
           {token}
         </span>
       );
     } else if (token.startsWith('"') || token.startsWith("'") || token.startsWith("`")) {
       elements.push(
-        <span key={`tok-${keyIndex++}`} className="tok-string">
+        <span key={`tok-${keyIndex++}`} className="text-[#4ade80]">
           {token}
         </span>
       );
     } else if (token.startsWith("<") || token.endsWith(">")) {
       elements.push(
-        <span key={`tok-${keyIndex++}`} className="tok-tag">
+        <span key={`tok-${keyIndex++}`} className="text-[#67e8f9]">
           {token}
         </span>
       );
     } else if (match[2]) {
-      // Attribute name before =
       elements.push(
-        <span key={`tok-${keyIndex++}`} className="tok-attr">
+        <span key={`tok-${keyIndex++}`} className="text-[#fcd34d]">
           {token}
         </span>
       );
     } else if (KEYWORDS.has(token)) {
       elements.push(
-        <span key={`tok-${keyIndex++}`} className="tok-keyword">
+        <span key={`tok-${keyIndex++}`} className="text-[#c084fc] font-semibold">
           {token}
         </span>
       );
     } else if (HOOKS_AND_PRIMITIVES.has(token)) {
       elements.push(
-        <span key={`tok-${keyIndex++}`} className="tok-primitive">
+        <span key={`tok-${keyIndex++}`} className="text-[#38bdf8] font-medium">
           {token}
         </span>
       );
     } else if (/^\d+(\.\d+)?$/.test(token)) {
       elements.push(
-        <span key={`tok-${keyIndex++}`} className="tok-number">
+        <span key={`tok-${keyIndex++}`} className="text-[#fb7185]">
           {token}
         </span>
       );
     } else if (/^[{}()[\];,.:=><!&|?+\-*]+$/.test(token)) {
       elements.push(
-        <span key={`tok-${keyIndex++}`} className="tok-punct">
+        <span key={`tok-${keyIndex++}`} className="text-[#94a3b8]">
           {token}
         </span>
       );
     } else {
       elements.push(
-        <span key={`tok-${keyIndex++}`} className="tok-plain">
+        <span key={`tok-${keyIndex++}`} className="text-[#f1f5f9]">
           {token}
         </span>
       );
@@ -136,42 +136,55 @@ export function CodeViewer({
   code,
   filename = "component.tsx",
   language = "tsx",
+  className,
 }: CodeViewerProps) {
   const lines = useMemo(() => {
     return (code || "").trim().split("\n");
   }, [code]);
 
   return (
-    <div className="code-viewer-container">
+    <div
+      className={cn(
+        "bg-[#09090c] border border-white/10 rounded-2xl overflow-hidden flex flex-col font-mono text-left shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)]",
+        className
+      )}
+    >
       {/* Header bar */}
-      <div className="code-viewer-header">
-        <div className="header-left">
-          <div className="window-dots">
-            <span className="dot dot-red" />
-            <span className="dot dot-yellow" />
-            <span className="dot dot-green" />
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[#0f0f13] border-b border-white/[0.08] text-left">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
           </div>
-          <div className="file-tab">
-            <FileCode size={13} className="file-icon" />
-            <span className="file-name">{filename}</span>
+          <div className="flex items-center gap-1.5 text-xs text-[#e4e4e7] font-medium bg-white/[0.05] px-2.5 py-1 rounded-md border border-white/[0.06]">
+            <FileCode size={13} className="text-[#9ca3af]" />
+            <span>{filename}</span>
           </div>
         </div>
 
-        <div className="header-actions">
-          <span className="line-count">{lines.length} lines</span>
-          <span className="lang-tag">{language.toUpperCase()}</span>
+        <div className="flex items-center gap-2.5">
+          <span className="text-[11px] text-[#71717a] font-medium">{lines.length} lines</span>
+          <span className="text-[10.5px] text-[#a1a1aa] font-semibold tracking-wider bg-white/[0.06] border border-white/[0.08] px-2 py-0.5 rounded">
+            {language.toUpperCase()}
+          </span>
           <CopyButton text={code} label="Copy" />
         </div>
       </div>
 
       {/* Code body with line numbers */}
-      <div className="code-viewer-body">
-        <pre className="code-pre">
-          <code className="code-block">
+      <div className="py-4 overflow-x-auto overflow-y-auto max-h-[580px] bg-[#09090c] text-left">
+        <pre className="m-0 text-[12.5px] leading-[22px] text-[#f3f4f6] font-mono text-left block">
+          <code className="block text-left min-w-full">
             {lines.map((line, idx) => (
-              <div key={idx} className="code-line">
-                <span className="line-num">{idx + 1}</span>
-                <span className="line-content">
+              <div
+                key={idx}
+                className="flex items-start justify-start px-4 min-w-full text-left hover:bg-white/[0.035] transition-colors duration-100"
+              >
+                <span className="w-10 shrink-0 text-[#4b5563] select-none text-right pr-3.5 text-[11.5px] border-r border-white/[0.07] mr-4 leading-[22px]">
+                  {idx + 1}
+                </span>
+                <span className="whitespace-pre flex-1 min-w-0 text-left font-mono leading-[22px] [tab-size:2]">
                   {highlightLine(line)}
                 </span>
               </div>
@@ -179,222 +192,6 @@ export function CodeViewer({
           </code>
         </pre>
       </div>
-
-      <style jsx>{`
-        .code-viewer-container {
-          background: #09090c;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 12px;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          font-family: var(--font-mono, "JetBrains Mono", monospace);
-          text-align: left !important;
-          box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .code-viewer-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 10px 16px;
-          background: #0f0f13;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-          text-align: left;
-        }
-
-        .header-left {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .window-dots {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-
-        .dot {
-          width: 9px;
-          height: 9px;
-          border-radius: 50%;
-        }
-
-        .dot-red {
-          background: #ff5f56;
-        }
-
-        .dot-yellow {
-          background: #ffbd2e;
-        }
-
-        .dot-green {
-          background: #27c93f;
-        }
-
-        .file-tab {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 12.5px;
-          color: #e4e4e7;
-          font-weight: 500;
-          background: rgba(255, 255, 255, 0.05);
-          padding: 3px 10px;
-          border-radius: 6px;
-          border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .file-icon {
-          color: #9ca3af;
-        }
-
-        .header-actions {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .line-count {
-          font-size: 11px;
-          color: #71717a;
-          font-weight: 500;
-        }
-
-        .lang-tag {
-          font-size: 10.5px;
-          color: #a1a1aa;
-          font-weight: 600;
-          letter-spacing: 0.04em;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 2px 7px;
-          border-radius: 4px;
-        }
-
-        .code-viewer-body {
-          padding: 16px 0;
-          overflow-x: auto;
-          overflow-y: auto;
-          max-height: 560px;
-          text-align: left !important;
-          background: #09090c;
-        }
-
-        /* Custom dark sleek scrollbar */
-        .code-viewer-body::-webkit-scrollbar {
-          height: 8px;
-          width: 8px;
-        }
-
-        .code-viewer-body::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.2);
-        }
-
-        .code-viewer-body::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.15);
-          border-radius: 4px;
-        }
-
-        .code-viewer-body::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.25);
-        }
-
-        .code-pre {
-          margin: 0;
-          font-size: 12.5px;
-          line-height: 22px;
-          color: #f3f4f6;
-          font-family: inherit;
-          text-align: left !important;
-          display: block;
-        }
-
-        .code-block {
-          display: block;
-          text-align: left !important;
-          min-width: 100%;
-        }
-
-        .code-line {
-          display: flex;
-          align-items: flex-start;
-          justify-content: flex-start;
-          padding: 0 16px;
-          min-width: 100%;
-          text-align: left !important;
-          box-sizing: border-box;
-          transition: background 0.12s ease;
-        }
-
-        .code-line:hover {
-          background: rgba(255, 255, 255, 0.035);
-        }
-
-        .line-num {
-          width: 42px;
-          flex-shrink: 0;
-          color: #4b5563;
-          user-select: none;
-          text-align: right !important;
-          padding-right: 14px;
-          font-size: 11.5px;
-          border-right: 1px solid rgba(255, 255, 255, 0.07);
-          margin-right: 16px;
-          line-height: 22px;
-        }
-
-        .line-content {
-          white-space: pre !important;
-          flex: 1;
-          min-width: 0;
-          text-align: left !important;
-          tab-size: 2;
-          font-family: inherit;
-          line-height: 22px;
-        }
-
-        /* Syntax Highlight Token Colors */
-        :global(.tok-comment) {
-          color: #6b7280 !important;
-          font-style: italic;
-        }
-
-        :global(.tok-string) {
-          color: #4ade80 !important;
-        }
-
-        :global(.tok-keyword) {
-          color: #c084fc !important;
-          font-weight: 600;
-        }
-
-        :global(.tok-primitive) {
-          color: #38bdf8 !important;
-          font-weight: 500;
-        }
-
-        :global(.tok-tag) {
-          color: #67e8f9 !important;
-        }
-
-        :global(.tok-attr) {
-          color: #fcd34d !important;
-        }
-
-        :global(.tok-number) {
-          color: #fb7185 !important;
-        }
-
-        :global(.tok-punct) {
-          color: #94a3b8 !important;
-        }
-
-        :global(.tok-plain) {
-          color: #f1f5f9 !important;
-        }
-      `}</style>
     </div>
   );
 }

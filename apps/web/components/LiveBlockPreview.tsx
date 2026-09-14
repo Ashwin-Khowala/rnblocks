@@ -3,12 +3,14 @@
 import React, { useState } from "react";
 import { DeviceFrame } from "./DeviceFrame";
 import { Moon, Sun, Smartphone, Monitor } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface LiveBlockPreviewProps {
   Component: React.ComponentType;
   title?: string;
   type?: "block" | "screen";
   defaultMode?: "device" | "expanded";
+  className?: string;
 }
 
 export function LiveBlockPreview({
@@ -16,28 +18,38 @@ export function LiveBlockPreview({
   title,
   type = "block",
   defaultMode,
+  className,
 }: LiveBlockPreviewProps) {
   const initialMode = defaultMode || (type === "screen" ? "device" : "expanded");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [mode, setMode] = useState<"device" | "expanded">(initialMode);
 
   return (
-    <div className="preview-container">
+    <div
+      className={cn(
+        "border border-white/10 rounded-2xl overflow-hidden bg-[#07070a] flex flex-col",
+        className
+      )}
+    >
       {/* Canvas Controls Bar */}
-      <div className="preview-toolbar">
-        <div className="toolbar-left">
-          <span className="live-status-pill">
-            <span className="live-dot" />
-            Interactive Live React Native Preview
-          </span>
+      <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#0a0a0e] border-b border-white/[0.08] gap-2">
+        <div className="flex items-center gap-2 font-mono text-[11px] text-[#9ca3af]">
+          <span className="w-2 h-2 rounded-full bg-[#32c798] shadow-[0_0_8px_#32c798] animate-pulse" />
+          <span className="hidden sm:inline">Interactive Live React Native Preview</span>
+          <span className="sm:hidden">Live Preview</span>
         </div>
 
-        <div className="toolbar-right">
-          {/* View mode toggle */}
-          <div className="toggle-group">
+        <div className="flex items-center gap-2">
+          {/* View Mode Toggle */}
+          <div className="flex bg-white/[0.04] border border-white/[0.08] rounded-lg p-0.5">
             <button
               onClick={() => setMode("device")}
-              className={`toggle-btn ${mode === "device" ? "active" : ""}`}
+              className={cn(
+                "inline-flex items-center gap-1.5 text-[11px] font-mono px-2 py-1 rounded-md transition-colors cursor-pointer",
+                mode === "device"
+                  ? "bg-white/[0.1] text-white font-semibold"
+                  : "text-[#71717a] hover:text-white"
+              )}
               title="Mobile Device Frame"
             >
               <Smartphone size={13} />
@@ -45,7 +57,12 @@ export function LiveBlockPreview({
             </button>
             <button
               onClick={() => setMode("expanded")}
-              className={`toggle-btn ${mode === "expanded" ? "active" : ""}`}
+              className={cn(
+                "inline-flex items-center gap-1.5 text-[11px] font-mono px-2 py-1 rounded-md transition-colors cursor-pointer",
+                mode === "expanded"
+                  ? "bg-white/[0.1] text-white font-semibold"
+                  : "text-[#71717a] hover:text-white"
+              )}
               title="Expanded Card View"
             >
               <Monitor size={13} />
@@ -53,10 +70,10 @@ export function LiveBlockPreview({
             </button>
           </div>
 
-          {/* Theme toggle */}
+          {/* Theme Toggle */}
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="icon-action-btn"
+            className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[#9ca3af] hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
             title={`Switch to ${theme === "dark" ? "light" : "dark"} canvas`}
           >
             {theme === "dark" ? <Sun size={13} /> : <Moon size={13} />}
@@ -66,141 +83,25 @@ export function LiveBlockPreview({
 
       {/* Main Canvas Area */}
       <div
-        className={`preview-canvas ${theme === "light" ? "canvas-light" : "canvas-dark"}`}
+        className={cn(
+          "p-6 sm:p-9 flex justify-center items-center min-h-[460px] transition-colors duration-200 overflow-hidden",
+          theme === "light"
+            ? "bg-[#e4e4e7] bg-[radial-gradient(rgba(0,0,0,0.08)_1px,transparent_1px)] bg-[size:16px_16px]"
+            : "bg-[#09090c] bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:16px_16px]"
+        )}
       >
         {mode === "device" ? (
           <DeviceFrame theme={theme} width={360} maxHeight={580}>
-            <div className="device-component-wrap">
+            <div className="w-full min-h-full">
               <Component {...({ theme } as any)} />
             </div>
           </DeviceFrame>
         ) : (
-          <div className="expanded-card-wrap">
+          <div className="max-w-[460px] w-full flex items-center justify-center">
             <Component {...({ theme } as any)} />
           </div>
         )}
       </div>
-
-      <style jsx>{`
-        .preview-container {
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          overflow: hidden;
-          background: var(--bg-card);
-          display: flex;
-          flex-direction: column;
-        }
-
-        .preview-toolbar {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 10px 14px;
-          background: var(--bg-secondary);
-          border-bottom: 1px solid var(--border);
-        }
-
-        .live-status-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 11px;
-          font-family: var(--font-mono);
-          color: var(--text-secondary);
-        }
-
-        .live-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: var(--success);
-          box-shadow: 0 0 6px var(--success);
-        }
-
-        .toolbar-right {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .toggle-group {
-          display: flex;
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-sm);
-          padding: 2px;
-        }
-
-        .toggle-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 11px;
-          padding: 4px 8px;
-          border-radius: 4px;
-          color: var(--text-muted);
-          font-weight: 500;
-          transition: color var(--transition-fast), background var(--transition-fast);
-        }
-
-        .toggle-btn.active {
-          color: var(--text-primary);
-          background: var(--bg-elevated);
-        }
-
-        .icon-action-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: 26px;
-          height: 26px;
-          border-radius: var(--radius-sm);
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          color: var(--text-secondary);
-          transition: border-color var(--transition-fast), color var(--transition-fast);
-        }
-
-        .icon-action-btn:hover {
-          color: var(--text-primary);
-          border-color: var(--border-hover);
-        }
-
-        .preview-canvas {
-          padding: 36px 20px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 480px;
-          transition: background var(--transition-smooth);
-        }
-
-        .canvas-dark {
-          background: #0f0f11;
-          /* Subtle dot pattern */
-          background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-          background-size: 16px 16px;
-        }
-
-        .canvas-light {
-          background: #e4e4e7;
-          background-image: radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px);
-          background-size: 16px 16px;
-        }
-
-        .device-component-wrap {
-          width: 100%;
-          min-height: 100%;
-        }
-
-        .expanded-card-wrap {
-          max-width: 460px;
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      `}</style>
     </div>
   );
 }

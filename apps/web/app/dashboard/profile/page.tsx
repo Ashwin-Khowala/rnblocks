@@ -9,74 +9,74 @@ import { BLOCKS_DATA } from "@/data/blocks";
 
 export default function ProfilePage() {
   return (
-    <div className="profile-page">
-      <div className="profile-container">
+    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-24 md:pt-28 pb-24 flex-1">
+      <div className="container-main max-w-5xl mx-auto">
         {/* Header */}
-        <div className="profile-header">
-          <div className="header-info">
-            <h1 className="page-title">Author Profile</h1>
-            <p className="page-subtitle">
-              Maintainer and contributor identity in the RNBlocks open-source ecosystem.
-            </p>
-          </div>
+        <div className="pb-7 border-b border-white/[0.08]">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+            Author Profile
+          </h1>
+          <p className="text-xs sm:text-sm text-[#9ca3af] max-w-xl">
+            Maintainer and contributor identity in the RNBlocks open-source ecosystem.
+          </p>
         </div>
 
         {/* Dashboard Nav Tabs */}
         <DashboardTabs />
 
         {/* Profile Content Grid */}
-        <div className="profile-grid">
+        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6">
           {/* Left Column: Author Card */}
-          <div className="author-card">
-            <div className="author-avatar-large">AK</div>
-            <div className="author-identity">
-              <h2 className="author-name">Ashwin Khowala</h2>
-              <a
-                href="https://github.com/Ashwin-Khowala"
-                target="_blank"
-                rel="noreferrer"
-                className="github-handle"
-              >
-                <GitHubIcon size={14} />
-                <span>@Ashwin-Khowala</span>
-              </a>
+          <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 flex flex-col items-center text-center">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-[#32c798]/30 to-[#38bdf8]/30 border-2 border-[#32c798]/50 flex items-center justify-center font-mono text-2xl font-bold text-white mb-4 shadow-[0_0_24px_rgba(50,199,152,0.2)]">
+              AK
             </div>
-            <div className="author-role-wrap">
-              <span className="author-role-badge">Project Founder & Maintainer</span>
-            </div>
+            <h2 className="text-lg font-bold text-white mb-1">Ashwin Khowala</h2>
+            <a
+              href="https://github.com/Ashwin-Khowala"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 font-mono text-xs text-[#9ca3af] hover:text-white transition-colors mb-4"
+            >
+              <GitHubIcon size={14} />
+              <span>@Ashwin-Khowala</span>
+            </a>
+            <span className="font-mono text-[10.5px] font-semibold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 px-3 py-1 rounded-full uppercase tracking-wider">
+              Project Founder & Maintainer
+            </span>
           </div>
 
           {/* Right Column: Philosophy & Details */}
-          <div className="details-card">
-            <div className="section-block">
-              <h3 className="section-heading">Registry Ownership & Philosophy</h3>
-              <p className="section-text">
+          <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+            <div className="mb-6">
+              <h3 className="text-base font-bold text-white mb-2">Registry Ownership & Philosophy</h3>
+              <p className="text-xs sm:text-sm text-[#9ca3af] leading-relaxed">
                 RNBlocks components are authored directly in Git. All blocks are free and public. Every block includes full source code, platform compatibility tags, and zero proprietary lock-in.
               </p>
             </div>
 
-            <div className="stats-subgrid">
-              <div className="stat-box">
-                <span className="stat-label">Published Blocks</span>
-                <span className="stat-number">{BLOCKS_DATA.length}</span>
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="bg-[#040406] border border-white/[0.08] rounded-xl p-4">
+                <span className="text-xs font-mono text-[#71717a] block mb-1">Published Blocks</span>
+                <span className="text-2xl font-extrabold text-white font-mono">{BLOCKS_DATA.length}</span>
               </div>
-              <div className="stat-box">
-                <span className="stat-label">Registry License</span>
-                <span className="stat-number">MIT</span>
+              <div className="bg-[#040406] border border-white/[0.08] rounded-xl p-4">
+                <span className="text-xs font-mono text-[#71717a] block mb-1">Registry License</span>
+                <span className="text-2xl font-extrabold text-[#32c798] font-mono">MIT</span>
               </div>
             </div>
 
-            <div className="action-buttons-row">
+            <div className="flex flex-wrap items-center gap-3">
               <a
                 href="https://github.com/Ashwin-Khowala/rnblocks"
                 target="_blank"
                 rel="noreferrer"
-                className="btn-primary"
+                className="btn-primary inline-flex items-center gap-2 text-xs"
               >
                 <GitHubIcon size={14} />
                 <span>Visit GitHub Repository</span>
               </a>
-              <Link href="/docs" className="btn-secondary">
+              <Link href="/docs" className="btn-secondary inline-flex items-center gap-2 text-xs">
                 <BookOpen size={14} />
                 <span>CLI Documentation</span>
               </Link>
@@ -84,257 +84,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        .profile-page {
-          min-height: calc(100vh - 120px);
-          background: var(--bg-primary);
-          color: var(--text-primary);
-          padding: 48px 0 80px;
-          flex: 1;
-        }
-
-        .profile-container {
-          max-width: 1100px;
-          margin: 0 auto;
-          padding: 0 24px;
-        }
-
-        .profile-header {
-          display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
-          padding-bottom: 28px;
-          border-bottom: 1px solid var(--border);
-        }
-
-        .header-info {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-
-        .page-title {
-          font-size: 30px;
-          font-weight: 800;
-          letter-spacing: -0.02em;
-          color: var(--text-primary);
-          margin: 0;
-        }
-
-        .page-subtitle {
-          font-size: 14px;
-          color: var(--text-secondary);
-          margin: 0;
-          line-height: 20px;
-        }
-
-        .profile-grid {
-          display: grid;
-          grid-template-columns: 280px 1fr;
-          gap: 24px;
-        }
-
-        .author-card {
-          padding: 28px;
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          gap: 16px;
-          height: fit-content;
-        }
-
-        .author-avatar-large {
-          width: 72px;
-          height: 72px;
-          border-radius: 50%;
-          background: var(--bg-elevated);
-          border: 1px solid var(--border);
-          color: var(--text-primary);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 22px;
-          font-weight: 800;
-          letter-spacing: -0.02em;
-        }
-
-        .author-identity {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 4px;
-        }
-
-        .author-name {
-          font-size: 18px;
-          font-weight: 700;
-          color: var(--text-primary);
-          margin: 0;
-        }
-
-        .github-handle {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 12.5px;
-          color: var(--text-secondary);
-          text-decoration: none;
-          transition: color var(--transition-fast);
-        }
-
-        .github-handle:hover {
-          color: #ffffff;
-        }
-
-        .author-role-wrap {
-          padding-top: 14px;
-          border-top: 1px solid var(--border);
-          width: 100%;
-        }
-
-        .author-role-badge {
-          display: inline-block;
-          font-size: 11px;
-          font-weight: 500;
-          font-family: var(--font-mono);
-          color: var(--text-secondary);
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid var(--border);
-          padding: 4px 10px;
-          border-radius: var(--radius-full);
-        }
-
-        .details-card {
-          padding: 28px;
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          display: flex;
-          flex-direction: column;
-          gap: 24px;
-        }
-
-        .section-block {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-
-        .section-heading {
-          font-size: 16px;
-          font-weight: 700;
-          color: var(--text-primary);
-          margin: 0;
-        }
-
-        .section-text {
-          font-size: 13.5px;
-          color: var(--text-secondary);
-          line-height: 22px;
-          margin: 0;
-        }
-
-        .stats-subgrid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 16px;
-        }
-
-        .stat-box {
-          padding: 16px;
-          background: var(--bg-elevated);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-md);
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-
-        .stat-label {
-          font-size: 11.5px;
-          color: var(--text-muted);
-        }
-
-        .stat-number {
-          font-size: 24px;
-          font-weight: 800;
-          font-family: var(--font-mono);
-          color: var(--text-primary);
-        }
-
-        .action-buttons-row {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          flex-wrap: wrap;
-          padding-top: 6px;
-        }
-
-        .btn-primary {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 8px 16px;
-          background: #ffffff;
-          color: #000000;
-          font-size: 12.5px;
-          font-weight: 600;
-          border-radius: var(--radius-md);
-          text-decoration: none;
-          transition: background var(--transition-fast), transform var(--transition-fast);
-        }
-
-        .btn-primary:hover {
-          background: #e4e4e7;
-          transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 8px 16px;
-          background: var(--bg-elevated);
-          color: var(--text-primary);
-          font-size: 12.5px;
-          font-weight: 500;
-          border: 1px solid var(--border);
-          border-radius: var(--radius-md);
-          text-decoration: none;
-          transition: background var(--transition-fast), border-color var(--transition-fast);
-        }
-
-        .btn-secondary:hover {
-          background: var(--bg-card-hover);
-          border-color: var(--border-hover);
-        }
-
-        @media (max-width: 768px) {
-          .profile-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .stats-subgrid {
-            grid-template-columns: 1fr;
-          }
-
-          .action-buttons-row {
-            flex-direction: column;
-            width: 100%;
-          }
-
-          .btn-primary,
-          .btn-secondary {
-            width: 100%;
-            justify-content: center;
-          }
-        }
-      `}</style>
     </div>
   );
 }

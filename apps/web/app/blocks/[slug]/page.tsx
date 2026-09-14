@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { notFound, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { BLOCKS_DATA } from "@/data/blocks";
 import { LiveBlockPreview } from "@/components/LiveBlockPreview";
 import { CodeViewer } from "@/components/CodeViewer";
@@ -13,99 +13,116 @@ import {
   Terminal,
   FileCode,
   Package,
-  Layers,
   ExternalLink,
   Code2,
   Smartphone,
+  AlertCircle,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function BlockDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
   const block = BLOCKS_DATA.find((b) => b.slug === slug);
 
+  const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
+
   if (!block) {
     return (
-      <div className="container-main not-found-wrap">
-        <h2>Block Not Found</h2>
-        <p>The requested block "{slug}" does not exist in the registry.</p>
-        <Link href="/blocks" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-          <BackIcon size={16} />
-          <span>Back to Blocks</span>
-        </Link>
-        <style jsx>{`
-          .not-found-wrap {
-            padding: 100px 24px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-          }
-        `}</style>
+      <div className="min-h-screen bg-[#030305] text-[#ededed] pt-24 pb-20 flex items-center justify-center">
+        <div className="container-main flex flex-col items-center justify-center text-center gap-4 py-20">
+          <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#ef4444] mb-2">
+            <AlertCircle size={28} />
+          </div>
+          <h2 className="text-2xl font-bold text-white">Block Not Found</h2>
+          <p className="text-[#9ca3af] text-sm max-w-md">
+            The requested block &ldquo;{slug}&rdquo; does not exist in the registry.
+          </p>
+          <Link href="/blocks" className="btn-primary inline-flex items-center gap-2 mt-2">
+            <BackIcon size={16} />
+            <span>Back to Blocks</span>
+          </Link>
+        </div>
       </div>
     );
   }
 
-  const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
+  const stylingLabel = Array.isArray(block.styling) ? block.styling.join(", ") : block.styling;
 
   return (
-    <div className="detail-page-root">
+    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-24 md:pt-28 pb-24 flex-1">
       <div className="container-main">
         {/* Breadcrumb Back Link */}
-        <div className="breadcrumb-bar">
-          <Link href="/blocks" className="back-link">
-            <BackIcon size={15} />
+        <div className="flex items-center gap-2 text-xs font-mono text-[#71717a] mb-6">
+          <Link
+            href="/blocks"
+            className="inline-flex items-center gap-1.5 text-[#9ca3af] hover:text-white transition-colors"
+          >
+            <BackIcon size={14} />
             <span>Back to Blocks</span>
           </Link>
-          <span className="breadcrumb-divider">/</span>
-          <span className="breadcrumb-current">{block.title}</span>
+          <span>/</span>
+          <span className="text-[#32c798] truncate max-w-[200px] sm:max-w-none">{block.title}</span>
         </div>
 
         {/* Title Header */}
-        <div className="detail-header">
-          <div className="header-left">
-            <div className="category-tag">{block.category}</div>
-            <h1 className="block-title">{block.title}</h1>
-            <div className="author-line">
-              <span className="by-label">by</span>
-              <span className="author-name">{block.author}</span>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8 pb-6 border-b border-white/[0.08]">
+          <div>
+            <div className="inline-flex items-center gap-2 mb-2">
+              <span className="font-mono text-[10.5px] font-bold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                {block.category}
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+              {block.title}
+            </h1>
+            <div className="flex items-center gap-2 text-xs text-[#9ca3af]">
+              <span>by</span>
+              <span className="font-medium text-white">{block.author}</span>
             </div>
           </div>
 
-          <div className="header-right">
-            <div className="cli-quick-install">
-              <span className="cli-prompt">$</span>
-              <span className="cli-text">npx rnblocks add {block.slug}</span>
-              <CopyButton text={`npx rnblocks add ${block.slug}`} label="Copy" />
-            </div>
+          <div className="inline-flex items-center gap-2.5 bg-[#0a0a0e] border border-white/10 rounded-xl px-3.5 py-2 self-start md:self-auto shadow-inner">
+            <span className="text-[#32c798] font-mono text-xs font-bold">$</span>
+            <span className="font-mono text-xs text-[#e4e4e7] select-all">npx rnblocks add {block.slug}</span>
+            <CopyButton text={`npx rnblocks add ${block.slug}`} label="Copy" />
           </div>
         </div>
 
         {/* Main Content Layout */}
-        <div className="detail-layout">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8 items-start">
           {/* Left Column: Preview & Code Tabs */}
-          <div className="detail-main-col">
+          <div className="w-full min-w-0">
             {/* View Switcher Tabs */}
-            <div className="tabs-header">
+            <div className="flex items-center gap-2 mb-4 bg-white/[0.03] border border-white/[0.08] p-1 rounded-xl w-fit">
               <button
                 onClick={() => setActiveTab("preview")}
-                className={`tab-btn ${activeTab === "preview" ? "tab-btn-active" : ""}`}
+                className={cn(
+                  "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
+                  activeTab === "preview"
+                    ? "bg-white/[0.1] text-white font-semibold shadow-sm"
+                    : "text-[#71717a] hover:text-white"
+                )}
               >
-                <Smartphone size={15} />
+                <Smartphone size={14} />
                 <span>Live Preview</span>
               </button>
               <button
                 onClick={() => setActiveTab("code")}
-                className={`tab-btn ${activeTab === "code" ? "tab-btn-active" : ""}`}
+                className={cn(
+                  "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
+                  activeTab === "code"
+                    ? "bg-white/[0.1] text-white font-semibold shadow-sm"
+                    : "text-[#71717a] hover:text-white"
+                )}
               >
-                <Code2 size={15} />
+                <Code2 size={14} />
                 <span>Source Code</span>
               </button>
             </div>
 
             {/* Tab Contents */}
-            <div className="tab-body">
+            <div className="mb-8">
               {activeTab === "preview" ? (
                 <LiveBlockPreview Component={block.Component} title={block.title} type={block.type} />
               ) : (
@@ -118,443 +135,133 @@ export default function BlockDetailPage() {
             </div>
 
             {/* About / Implementation Guide */}
-            <div className="about-section">
-              <h3 className="section-title">About this block</h3>
-              <p className="about-text">{block.description}</p>
+            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 md:p-8">
+              <h3 className="text-lg font-bold text-white mb-2">About this block</h3>
+              <p className="text-sm text-[#9ca3af] leading-relaxed mb-6">
+                {block.description}
+              </p>
 
-              <div className="usage-notes">
-                <h4 className="notes-title">Integration details</h4>
-                <ul className="notes-list">
-                  <li>Drop-in ready for Expo Router, React Navigation, and Bare React Native.</li>
-                  <li>Formatted with strict TypeScript types and zero third-party lock-in.</li>
-                  <li>Styled with standard {Array.isArray(block.styling) ? block.styling.join(", ") : block.styling} patterns for straightforward customization.</li>
+              <div className="border-t border-white/[0.08] pt-6">
+                <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#32c798] mb-3">
+                  Integration Details
+                </h4>
+                <ul className="space-y-2 text-xs sm:text-sm text-[#d1d5db]">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
+                    <span>Drop-in ready for Expo Router, React Navigation, and Bare React Native.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
+                    <span>Formatted with strict TypeScript types and zero third-party lock-in.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
+                    <span>Styled with standard {stylingLabel} patterns for straightforward customization.</span>
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
 
           {/* Right Column: Metadata Sidebar */}
-          <div className="detail-sidebar-col">
+          <div className="flex flex-col gap-4 w-full">
             {/* Installation Box */}
-            <div className="sidebar-card">
-              <h4 className="card-heading">
-                <Terminal size={15} />
+            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-5">
+              <h4 className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-white mb-2">
+                <Terminal size={14} className="text-[#32c798]" />
                 <span>Installation</span>
               </h4>
-              <p className="sidebar-subtext">Add this block directly into your project:</p>
-              <div className="sidebar-cli-box">
-                <code>npx rnblocks add {block.slug}</code>
+              <p className="text-xs text-[#9ca3af] mb-3">Add this block directly into your project:</p>
+              <div className="flex items-center justify-between bg-[#040406] border border-white/[0.08] rounded-xl px-3 py-2">
+                <code className="font-mono text-xs text-[#e4e4e7] select-all truncate mr-2">
+                  npx rnblocks add {block.slug}
+                </code>
                 <CopyButton text={`npx rnblocks add ${block.slug}`} />
               </div>
             </div>
 
             {/* Compatibility Checklist */}
-            <div className="sidebar-card">
-              <h4 className="card-heading">
-                <CheckCircle2 size={15} />
+            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-5">
+              <h4 className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-white mb-3">
+                <CheckCircle2 size={14} className="text-[#32c798]" />
                 <span>Compatibility</span>
               </h4>
-              <div className="compat-checklist">
-                <div className="check-item">
-                  <CheckCircle2 size={13} className="check-icon-svg" />
-                  <span className="check-name">Expo SDK</span>
-                  <span className="check-val">Supported</span>
+              <div className="space-y-2.5 text-xs font-mono">
+                <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+                  <span className="text-[#9ca3af]">Expo SDK</span>
+                  <span className="text-[#32c798] font-semibold">Supported</span>
                 </div>
-                <div className="check-item">
-                  <CheckCircle2 size={13} className="check-icon-svg" />
-                  <span className="check-name">React Native</span>
-                  <span className="check-val">Bare & Managed</span>
+                <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+                  <span className="text-[#9ca3af]">React Native</span>
+                  <span className="text-white font-medium">Bare & Managed</span>
                 </div>
-                <div className="check-item">
-                  <CheckCircle2 size={13} className="check-icon-svg" />
-                  <span className="check-name">iOS & Android</span>
-                  <span className="check-val">Native Tested</span>
+                <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+                  <span className="text-[#9ca3af]">Platforms</span>
+                  <span className="text-white font-medium">iOS & Android</span>
                 </div>
-                <div className="check-item">
-                  <CheckCircle2 size={13} className="check-icon-svg" />
-                  <span className="check-name">React Native Web</span>
-                  <span className="check-val">Live In-Browser</span>
+                <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+                  <span className="text-[#9ca3af]">React Native Web</span>
+                  <span className="text-[#32c798] font-semibold">Live In-Browser</span>
                 </div>
-                <div className="check-item">
-                  <CheckCircle2 size={13} className="check-icon-svg" />
-                  <span className="check-name">Styling</span>
-                  <span className="check-val">{Array.isArray(block.styling) ? block.styling.join(", ") : block.styling}</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#9ca3af]">Styling</span>
+                  <span className="text-white font-medium">{stylingLabel}</span>
                 </div>
               </div>
             </div>
 
             {/* Files Included */}
-            <div className="sidebar-card">
-              <h4 className="card-heading">
-                <FileCode size={15} />
+            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-5">
+              <h4 className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-white mb-3">
+                <FileCode size={14} className="text-[#32c798]" />
                 <span>Files Included</span>
               </h4>
-              <div className="files-list">
-                <div className="file-item">
-                  <span className="file-tree-symbol">components/</span>
-                </div>
-                <div className="file-item indent-file">
-                  <span className="file-name-tag">{block.slug}.tsx</span>
-                </div>
+              <div className="font-mono text-xs bg-[#040406] border border-white/[0.08] rounded-xl p-3 space-y-1">
+                <div className="text-[#71717a]">components/</div>
+                <div className="pl-4 text-[#32c798] font-semibold">{block.slug}.tsx</div>
               </div>
             </div>
 
             {/* Dependencies */}
-            <div className="sidebar-card">
-              <h4 className="card-heading">
-                <Package size={15} />
+            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-5">
+              <h4 className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-white mb-3">
+                <Package size={14} className="text-[#32c798]" />
                 <span>Dependencies</span>
               </h4>
-              {block.dependencies.length > 0 ? (
-                <div className="deps-tags-wrap">
+              {block.dependencies && block.dependencies.length > 0 ? (
+                <div className="flex flex-wrap gap-1.5">
                   {block.dependencies.map((dep, idx) => (
-                    <span key={idx} className="dep-badge">
+                    <span
+                      key={idx}
+                      className="font-mono text-[11px] bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded text-[#d1d5db]"
+                    >
                       {dep}
                     </span>
                   ))}
                 </div>
               ) : (
-                <p className="no-deps-text">Zero external dependencies required.</p>
+                <p className="text-xs text-[#71717a]">Zero external dependencies required.</p>
               )}
             </div>
 
             {/* GitHub Source CTA */}
-            <div className="sidebar-card github-card">
+            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-4">
               <a
                 href={`https://github.com/Ashwin-Khowala/rnblocks/tree/master/registry/blocks/${block.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary"
-                style={{ width: "100%", justifyContent: "center" }}
+                className="w-full btn-secondary !py-2.5 !text-xs !justify-center group"
               >
                 <span>View on GitHub</span>
-                <ExternalLink size={13} />
+                <ExternalLink
+                  size={13}
+                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
               </a>
             </div>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        .detail-page-root {
-          padding: 40px 0 80px;
-          background: var(--bg-primary);
-          flex: 1;
-        }
-
-        .breadcrumb-bar {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-size: 13px;
-          color: var(--text-muted);
-          margin-bottom: 24px;
-        }
-
-        .back-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          color: var(--text-secondary);
-          transition: color var(--transition-fast);
-        }
-
-        .back-link:hover {
-          color: var(--text-primary);
-        }
-
-        .breadcrumb-divider {
-          color: var(--border-hover);
-        }
-
-        .breadcrumb-current {
-          color: var(--text-primary);
-        }
-
-        .detail-header {
-          display: flex;
-          align-items: flex-end;
-          justify-content: space-between;
-          margin-bottom: 32px;
-          padding-bottom: 24px;
-          border-bottom: 1px solid var(--border);
-        }
-
-        .category-tag {
-          display: inline-flex;
-          align-items: center;
-          font-size: 11px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: #a1a1aa;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 3px 10px;
-          border-radius: 9999px;
-          margin-bottom: 10px;
-        }
-
-        .block-title {
-          font-size: 34px;
-          font-weight: 800;
-          letter-spacing: -0.02em;
-          color: var(--text-primary);
-          margin-bottom: 8px;
-        }
-
-        .author-line {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 13px;
-        }
-
-        .by-label {
-          color: var(--text-muted);
-        }
-
-        .author-name {
-          color: var(--text-primary);
-          font-weight: 600;
-        }
-
-        .author-handle {
-          color: var(--text-muted);
-        }
-
-        .cli-quick-install {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-md);
-          padding: 8px 12px;
-          font-family: var(--font-mono);
-          font-size: 13px;
-        }
-
-        .cli-prompt {
-          color: var(--text-muted);
-        }
-
-        .cli-text {
-          color: var(--text-primary);
-        }
-
-        .detail-layout {
-          display: grid;
-          grid-template-columns: 1fr 340px;
-          gap: 32px;
-        }
-
-        .tabs-header {
-          display: flex;
-          gap: 8px;
-          margin-bottom: 16px;
-        }
-
-        .tab-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 8px 16px;
-          border-radius: var(--radius-md);
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          font-size: 13px;
-          font-weight: 500;
-          color: var(--text-secondary);
-          transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
-        }
-
-        .tab-btn:hover {
-          background: var(--bg-card-hover);
-          color: var(--text-primary);
-        }
-
-        .tab-btn-active {
-          background: var(--accent);
-          color: var(--accent-foreground);
-          border-color: transparent;
-          font-weight: 600;
-        }
-
-        .tab-body {
-          margin-bottom: 40px;
-          text-align: left !important;
-        }
-
-        .about-section {
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          padding: 28px;
-        }
-
-        .section-title {
-          font-size: 18px;
-          font-weight: 700;
-          color: var(--text-primary);
-          margin-bottom: 12px;
-        }
-
-        .about-text {
-          font-size: 14px;
-          line-height: 22px;
-          color: var(--text-secondary);
-          margin-bottom: 24px;
-        }
-
-        .usage-notes {
-          border-top: 1px solid var(--border);
-          padding-top: 20px;
-        }
-
-        .notes-title {
-          font-size: 13px;
-          font-weight: 600;
-          color: var(--text-primary);
-          margin-bottom: 10px;
-          text-transform: uppercase;
-          letter-spacing: 0.04em;
-        }
-
-        .notes-list {
-          padding-left: 18px;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          font-size: 13px;
-          color: var(--text-secondary);
-          line-height: 20px;
-        }
-
-        /* Sidebar Styles */
-        .detail-sidebar-col {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-
-        .sidebar-card {
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-md);
-          padding: 18px;
-        }
-
-        .card-heading {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 13px;
-          font-weight: 600;
-          color: var(--text-primary);
-          margin-bottom: 12px;
-        }
-
-        .sidebar-subtext {
-          font-size: 12px;
-          color: var(--text-muted);
-          margin-bottom: 10px;
-        }
-
-        .sidebar-cli-box {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          background: var(--code-bg);
-          border: 1px solid var(--code-border);
-          border-radius: var(--radius-sm);
-          padding: 8px 10px;
-          font-family: var(--font-mono);
-          font-size: 11px;
-          color: var(--text-primary);
-        }
-
-        .compat-checklist {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-
-        .check-item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          font-size: 12.5px;
-        }
-
-        .check-icon {
-          color: var(--success);
-          font-weight: 700;
-          margin-right: 6px;
-        }
-
-        .check-name {
-          flex: 1;
-          color: var(--text-secondary);
-        }
-
-        .check-val {
-          color: var(--text-primary);
-          font-weight: 500;
-          font-size: 12px;
-        }
-
-        .files-list {
-          font-family: var(--font-mono);
-          font-size: 12px;
-        }
-
-        .file-item {
-          color: var(--text-muted);
-          margin-bottom: 4px;
-        }
-
-        .indent-file {
-          padding-left: 14px;
-        }
-
-        .file-name-tag {
-          color: var(--text-primary);
-        }
-
-        .deps-tags-wrap {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
-
-        .dep-badge {
-          font-family: var(--font-mono);
-          font-size: 11px;
-          padding: 3px 8px;
-          border-radius: var(--radius-sm);
-          background: var(--bg-elevated);
-          border: 1px solid var(--border);
-          color: var(--text-secondary);
-        }
-
-        .no-deps-text {
-          font-size: 12px;
-          color: var(--text-muted);
-        }
-
-        @media (max-width: 900px) {
-          .detail-layout {
-            grid-template-columns: 1fr;
-          }
-
-          .detail-header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 16px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

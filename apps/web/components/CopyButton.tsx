@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Copy, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface CopyButtonProps {
   text: string;
@@ -9,7 +10,7 @@ interface CopyButtonProps {
   label?: string;
 }
 
-export function CopyButton({ text, className = "", label }: CopyButtonProps) {
+export function CopyButton({ text, className, label }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -25,51 +26,24 @@ export function CopyButton({ text, className = "", label }: CopyButtonProps) {
   return (
     <button
       onClick={handleCopy}
-      className={`copy-btn ${copied ? "copied" : ""} ${className}`}
+      className={cn(
+        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-[#111115] border border-white/10 text-[#9ca3af] hover:text-white hover:bg-white/[0.06] hover:border-white/20 transition-all cursor-pointer select-none",
+        copied && "border-[#32c798]/40 text-[#32c798]",
+        className
+      )}
       title="Copy to clipboard"
     >
       {copied ? (
         <>
-          <Check size={14} className="copy-icon" color="var(--success)" />
-          {label && <span style={{ color: "var(--success)" }}>Copied!</span>}
+          <Check size={14} className="shrink-0 text-[#32c798]" />
+          {label && <span className="text-[#32c798]">Copied!</span>}
         </>
       ) : (
         <>
-          <Copy size={14} className="copy-icon" />
+          <Copy size={14} className="shrink-0" />
           {label && <span>{label}</span>}
         </>
       )}
-
-      <style jsx>{`
-        .copy-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 6px 10px;
-          border-radius: var(--radius-sm);
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          color: var(--text-secondary);
-          font-size: 12px;
-          font-family: var(--font-sans);
-          font-weight: 500;
-          transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
-        }
-
-        .copy-btn:hover {
-          background: var(--bg-card-hover);
-          border-color: var(--border-hover);
-          color: var(--text-primary);
-        }
-
-        .copy-btn.copied {
-          border-color: rgba(34, 197, 94, 0.3);
-        }
-
-        .copy-icon {
-          flex-shrink: 0;
-        }
-      `}</style>
     </button>
   );
 }

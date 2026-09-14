@@ -2,12 +2,14 @@
 
 import React from "react";
 import { Wifi, BatteryMedium, Signal } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DeviceFrameProps {
   children: React.ReactNode;
   width?: number | string;
   maxHeight?: number | string;
   theme?: "dark" | "light";
+  className?: string;
 }
 
 export function DeviceFrame({
@@ -15,16 +17,17 @@ export function DeviceFrame({
   width = 340,
   maxHeight = 540,
   theme = "dark",
+  className,
 }: DeviceFrameProps) {
   return (
-    <div className="device-outer" style={{ maxWidth: width }}>
+    <div className={cn("w-full mx-auto flex justify-center", className)} style={{ maxWidth: width }}>
       {/* Device Bezel */}
-      <div className="device-bezel">
+      <div className="w-full bg-black border-[6px] border-[#262626] rounded-[42px] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)] overflow-hidden relative flex flex-col select-none">
         {/* Status Bar */}
-        <div className="status-bar">
-          <span className="status-time">9:41</span>
-          <div className="dynamic-island" />
-          <div className="status-icons">
+        <div className="flex items-center justify-between px-4 pt-2.5 pb-1.5 bg-black text-[#f5f5f5] text-[11px] font-semibold z-10">
+          <span className="font-mono tracking-tight w-8 text-center">9:41</span>
+          <div className="w-20 h-[18px] bg-black rounded-[10px] border border-[#1f1f1f]" />
+          <div className="flex items-center gap-1.5 w-12 justify-end text-[#f5f5f5]">
             <Signal size={12} strokeWidth={2.5} />
             <Wifi size={12} strokeWidth={2.5} />
             <BatteryMedium size={14} strokeWidth={2.5} />
@@ -33,109 +36,20 @@ export function DeviceFrame({
 
         {/* Screen Canvas */}
         <div
-          className={`screen-canvas ${theme === "light" ? "screen-light" : "screen-dark"}`}
+          className={cn(
+            "overflow-y-auto overflow-x-hidden flex-1 flex flex-col transition-colors duration-200",
+            theme === "light" ? "bg-[#f8fafc] text-[#0f172a]" : "bg-[#09090b] text-[#f5f5f5]"
+          )}
           style={{ maxHeight }}
         >
           {children}
         </div>
 
         {/* Home Indicator */}
-        <div className="home-bar-wrapper">
-          <div className="home-bar" />
+        <div className="pt-2 pb-2.5 bg-black flex justify-center items-center z-10">
+          <div className="w-28 h-1 bg-white/30 rounded-full" />
         </div>
       </div>
-
-      <style jsx>{`
-        .device-outer {
-          width: 100%;
-          margin: 0 auto;
-          display: flex;
-          justify-content: center;
-        }
-
-        .device-bezel {
-          width: 100%;
-          background: #000000;
-          border: 6px solid #262626;
-          border-radius: 42px;
-          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
-          overflow: hidden;
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          user-select: none;
-        }
-
-        .status-bar {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 10px 18px 6px;
-          background: #000000;
-          color: #f5f5f5;
-          font-size: 11px;
-          font-weight: 600;
-          z-index: 10;
-        }
-
-        .status-time {
-          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-          letter-spacing: -0.01em;
-          width: 32px;
-        }
-
-        .dynamic-island {
-          width: 80px;
-          height: 18px;
-          background: #000000;
-          border-radius: 10px;
-          border: 1px solid #1f1f1f;
-        }
-
-        .status-icons {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          width: 48px;
-          justify-content: flex-end;
-          color: #f5f5f5;
-        }
-
-        .screen-canvas {
-          overflow-y: auto;
-          overflow-x: hidden;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          background: #09090b;
-        }
-
-        .screen-dark {
-          background: #09090b;
-          color: #f5f5f5;
-        }
-
-        .screen-light {
-          background: #f8fafc;
-          color: #0f172a;
-        }
-
-        .home-bar-wrapper {
-          padding: 8px 0 10px;
-          background: #000000;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          z-index: 10;
-        }
-
-        .home-bar {
-          width: 110px;
-          height: 4px;
-          background: rgba(255, 255, 255, 0.3);
-          border-radius: 2px;
-        }
-      `}</style>
     </div>
   );
 }
