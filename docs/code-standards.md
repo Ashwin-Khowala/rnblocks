@@ -1,6 +1,6 @@
 # RNBlocks Code & Engineering Standards
 
-This document establishes the official engineering and code standards for **RNBlocks**, informed by modern developer-product registries (such as [Bklit UI](https://github.com/bklit/bklit-ui) and [shadcn/ui]) and the core RNBlocks design philosophy: **copy → own → customize**.
+This document establishes the official engineering and code standards for **RNBlocks**, informed by production-grade developer registries (such as [shadcn/ui]) and the core RNBlocks design philosophy: **copy → own → customize**.
 
 Every component, screen, and web interface authored for or contributed to RNBlocks must adhere to these standards.
 
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 
 ---
 
-## 3. Detailed Standards by Layer (The 5 Bklit Criteria)
+## 3. Detailed Standards by Layer (Core Quality Criteria)
 
 ### 3.1. Props & Public API
 - **Strict Naming**: Use explicit, descriptive prop names:
