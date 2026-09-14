@@ -8,7 +8,7 @@ RNBlocks is an open-source UI component registry designed for React Native and E
 
 - **Source Code Ownership**: When you add a block, the complete TypeScript source code is written directly to your project. You own the code, inspect every line, and customize styles or behavior without waiting for upstream library updates.
 - **Zero Runtime Baggage**: RNBlocks does not require a root `ThemeProvider`, context wrapper, or runtime CSS-in-JS engine. Components render immediately with standard React Native primitives.
-- **Universal Mobile Compatibility**: All blocks are built with standard `StyleSheet.create` and tested across Expo (SDK 52+) and bare React Native CLI projects (0.78+).
+- **Universal Mobile Compatibility**: All blocks are built with standard `StyleSheet.create` and tested across Expo (SDK 52+) and bare React Native CLI projects (0.76+ with New Architecture).
 - **Easy Customization**: Semantic color palettes are exposed as top-level constants at the start of each component file, making brand customization straightforward.
 
 ---

@@ -5,7 +5,7 @@ Production-ready React Native and Expo UI components, delivered as source code y
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![Turborepo](https://img.shields.io/badge/Turborepo-Monorepo-000000?logo=turborepo)](https://turbo.build/)
-[![React Native](https://img.shields.io/badge/React%20Native-0.78+-61DAFB?logo=react&logoColor=black)](https://reactnative.dev/)
+[![React Native](https://img.shields.io/badge/React%20Native-0.76+-61DAFB?logo=react&logoColor=black)](https://reactnative.dev/)
 [![Expo](https://img.shields.io/badge/Expo-SDK%2052+-000020?logo=expo)](https://expo.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8+-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
@@ -18,7 +18,7 @@ Production-ready React Native and Expo UI components, delivered as source code y
 - **Source Code Ownership**: You copy the component code into your repository. Modify styles, behavior, and layout directly.
 - **Zero Runtime Dependencies**: No wrapper contexts, no mandatory `ThemeProvider`, no design-token dependencies.
 - **React Native Primitives**: Authored using standard `StyleSheet.create` for universal compatibility. Adaptable to NativeWind or any styling library.
-- **Universal Compatibility**: Tested across Expo (SDK 52+) and React Native CLI (0.78+).
+- **Universal Compatibility**: Tested across Expo (SDK 52+) and React Native CLI (0.76+ with New Architecture).
 - **CLI Workflow**: Add components with a single command: `npx rnblocks add <block>`.
 
 ---
