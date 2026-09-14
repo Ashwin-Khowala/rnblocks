@@ -73,6 +73,7 @@ pnpm dev
 - [CLI Reference](docs/cli.md)
 - [Styling & Customization Guide](docs/styling-guide.md)
 - [Creating a Block Guide](docs/creating-a-block.md)
+- [Code & Engineering Standards](docs/code-standards.md)
 - [Quality Standards Checklist](docs/quality-standards.md)
 - [Registry Schema Reference](docs/registry-format.md)
 - [Architecture Overview](docs/architecture.md)

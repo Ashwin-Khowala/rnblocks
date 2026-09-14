@@ -238,10 +238,17 @@ node dist/index.js add floating-docker
 
 ---
 
-## Pull Request Guidelines
+## Branching & Pull Request Guidelines
 
-1. **Create a branch:**
+RNBlocks follows a 3-tier promotion model:
+- **Feature branch** (`feat/*`, `fix/*`, `polish/*`) → merged into **`develop`**
+- **`develop`** → used for integration, live previews, and testing
+- **`master`** → production branch (promoted from `develop` once approved)
+
+1. **Create a branch from `develop`:**
    ```bash
+   git checkout develop
+   git pull origin develop
    git checkout -b feat/add-custom-bottom-sheet
    ```
 
@@ -258,8 +265,8 @@ node dist/index.js add floating-docker
    pnpm run build
    ```
 
-4. **Submit your Pull Request:**
-   - Use the provided PR template.
+4. **Submit your Pull Request targeting `develop`:**
+   - Base branch: `develop`
    - Complete the quality checklist.
    - Attach screenshots or screen recordings.
    - Confirm licensing agreement.
