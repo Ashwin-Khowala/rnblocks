@@ -27,7 +27,17 @@ export function BlockCard({ block }: BlockCardProps) {
 
   return (
     <div className="card-root">
-      {/* Top Interactive Mini-Preview Canvas */}
+      {/* Top Interactive Mini-Preview Canvas with Window Bar */}
+      <div className="card-window-bar">
+        <div className="window-dots">
+          <span className="dot dot-red" />
+          <span className="dot dot-yellow" />
+          <span className="dot dot-green" />
+          <span className="card-filename">{slug}.tsx</span>
+        </div>
+        <span className="card-status-pill">Interactive</span>
+      </div>
+
       <Link href={`/blocks/${slug}`} className="preview-link" title={`View ${title}`}>
         <div className="preview-canvas-box">
           <div
@@ -84,19 +94,65 @@ export function BlockCard({ block }: BlockCardProps) {
 
       <style jsx>{`
         .card-root {
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
+          background: #0d0d12;
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          border-radius: 16px;
           overflow: hidden;
           display: flex;
           flex-direction: column;
-          transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+          transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .card-root:hover {
-          background: var(--bg-card-hover);
-          border-color: var(--border-hover);
+          background: #101017;
+          border-color: rgba(50, 199, 152, 0.35);
           transform: translateY(-2px);
+          box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(50, 199, 152, 0.15);
+        }
+
+        .card-window-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 8px 12px;
+          background: #08080b;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .window-dots {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .card-filename {
+          font-family: var(--font-mono);
+          font-size: 11px;
+          color: #71717a;
+          margin-left: 6px;
+          font-weight: 500;
+        }
+
+        .card-status-pill {
+          font-family: var(--font-mono);
+          font-size: 9.5px;
+          color: #32c798;
+          background: rgba(50, 199, 152, 0.08);
+          border: 1px solid rgba(50, 199, 152, 0.2);
+          padding: 1px 6px;
+          border-radius: 9999px;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
         }
 
         .preview-link {
@@ -106,11 +162,11 @@ export function BlockCard({ block }: BlockCardProps) {
         }
 
         .preview-canvas-box {
-          height: 190px;
+          height: 220px;
           background: #09090b;
           background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
           background-size: 14px 14px;
-          border-bottom: 1px solid var(--border);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.07);
           position: relative;
           overflow: hidden;
           display: flex;
@@ -131,12 +187,13 @@ export function BlockCard({ block }: BlockCardProps) {
         .preview-overlay {
           position: absolute;
           inset: 0;
-          background: rgba(10, 10, 10, 0.4);
+          background: linear-gradient(to top, rgba(7, 7, 9, 0.75) 0%, rgba(7, 7, 9, 0.2) 40%, transparent 80%);
           opacity: 0;
           display: flex;
-          align-items: center;
+          align-items: flex-end;
           justify-content: center;
-          transition: opacity var(--transition-fast);
+          padding-bottom: 14px;
+          transition: opacity 0.2s ease;
         }
 
         .card-root:hover .preview-overlay {
@@ -146,13 +203,20 @@ export function BlockCard({ block }: BlockCardProps) {
         .view-details-tag {
           display: inline-flex;
           align-items: center;
-          gap: 5px;
-          background: var(--accent);
-          color: var(--accent-foreground);
-          font-weight: 600;
+          gap: 6px;
+          background: #32c798;
+          color: #070709;
+          font-weight: 700;
           font-size: 11.5px;
-          padding: 5px 12px;
-          border-radius: var(--radius-full);
+          padding: 6px 14px;
+          border-radius: 9999px;
+          box-shadow: 0 4px 14px rgba(50, 199, 152, 0.35);
+          transform: translateY(4px);
+          transition: transform 0.2s ease;
+        }
+
+        .card-root:hover .view-details-tag {
+          transform: translateY(0);
         }
 
         .card-info {
