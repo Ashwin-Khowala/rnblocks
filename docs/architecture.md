@@ -11,8 +11,7 @@ RNBlocks is structured as a Turborepo monorepo powered by pnpm workspaces:
 ```
 rnblocks/
 ├── apps/
-│   ├── web/                     # Showcase web registry, live preview studio, API endpoints
-│   └── docs/                    # Full documentation and specification site
+│   └── web/                     # Showcase web registry, live preview studio, dynamic /docs site
 ├── packages/
 │   ├── cli/                     # 'rnblocks' CLI tool (Commander + tsup + zod)
 │   ├── registry/                # Core Zod schema, types, and registry loader
@@ -27,7 +26,7 @@ rnblocks/
 │   │   └── trend-chart/
 │   ├── screens/                 # Full-screen template flows (future)
 │   └── registry.json            # Generated registry manifest
-├── docs/                        # Architecture and reference documentation
+├── docs/                        # Canonical Markdown documentation source
 └── scripts/
     ├── generate-registry.ts     # Generates registry.json & blocks.tsx
     └── validate-registry.ts     # Validates schema, files, tags, and security
@@ -49,15 +48,11 @@ The command-line distribution tool invoked via `npx rnblocks`:
 - **`init`**: Guides initial project setup and component destination preferences.
 
 ### 3. `@rnblocks/web` (`apps/web`)
-The public-facing registry website at [rnblocks.vercel.app](https://rnblocks.vercel.app):
+The public-facing registry and documentation website at [rnblocks.vercel.app](https://rnblocks.vercel.app):
 - Next.js 16 App Router application.
 - Renders live component previews, interactive theme toggling, source code syntax highlighting, and copy buttons.
+- Dynamically loads and renders canonical Markdown documentation from root `docs/` at `/docs/[slug]`.
 - Consumes generated registry metadata from `apps/web/data/blocks.tsx`.
-
-### 4. `@rnblocks/docs` (`apps/docs`)
-The documentation portal for the project:
-- Detailed guides on styling philosophy, component standards, and CLI usage.
-- Next.js 16 App Router application.
 
 ---
 

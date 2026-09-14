@@ -31,6 +31,12 @@ export const DOC_CATEGORIES: DocCategory[] = [
         category: "Using RNBlocks",
         description: "Complete command guide for npx rnblocks add, list, and init.",
       },
+      {
+        slug: "styling-guide",
+        title: "Styling & Customization",
+        category: "Using RNBlocks",
+        description: "StyleSheet philosophy, theme palettes, NativeWind adaptation, and fluid layout rules.",
+      },
     ],
   },
   {
