@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, ArrowUpRight, Layers, Search } from "lucide-react";
 import { GitHubIcon } from "./icons/GitHubIcon";
+import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -82,7 +83,7 @@ export function Navbar() {
     router.push("/blocks");
   };
 
-  // RNBlocks navigation items (preserved per requirements)
+  // RNBlocks navigation items
   const navLinks = [
     { label: "Blocks", href: "/blocks" },
     { label: "Dashboard", href: "/dashboard" },
@@ -92,21 +93,28 @@ export function Navbar() {
   ];
 
   return (
-    <header className="navbar-fixed-wrapper">
-      <div className={`navbar-dock ${isScrolled ? "is-scrolled" : ""}`}>
+    <header className="fixed top-0 left-0 right-0 w-full z-50 pointer-events-none p-0">
+      <div
+        className={cn(
+          "pointer-events-auto w-full mx-auto flex items-center justify-between transition-all duration-300",
+          isScrolled
+            ? "max-w-[calc(100%-16px)] sm:max-w-[calc(100%-24px)] lg:max-w-[1140px] h-12 md:h-[52px] mt-2 md:mt-3.5 px-3 md:px-4.5 bg-[#060609]/95 backdrop-blur-xl border border-white/[0.09] rounded-xl md:rounded-[14px] shadow-[0_16px_40px_-6px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.05)]"
+            : "max-w-[1280px] h-[58px] px-4 md:px-6 bg-transparent border border-transparent shadow-none"
+        )}
+      >
         {/* Left Section: Brand Logo + Desktop Nav Links */}
-        <div className="navbar-left">
-          <Link href="/" className="brand-logo" aria-label="RNBlocks Registry Homepage">
-            <div className="brand-icon">
+        <div className="flex items-center gap-3.5">
+          <Link href="/" className="group inline-flex items-center gap-2.5 select-none" aria-label="RNBlocks Registry Homepage">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#1f1f27] to-[#101014] border border-white/[0.12] inline-flex items-center justify-center text-white shrink-0 shadow-[0_0_10px_rgba(50,199,152,0.12)] transition-all duration-200 group-hover:-translate-y-0.5 group-hover:scale-105 group-hover:border-[#32c798]/40 group-hover:shadow-[0_0_14px_rgba(50,199,152,0.25)]">
               <Layers size={16} />
             </div>
-            <span className="brand-name">
-              RN<span className="brand-name-sub">Blocks</span>
+            <span className="font-bold text-[15px] sm:text-[15.5px] tracking-[-0.025em] text-white whitespace-nowrap">
+              RN<span className="text-[#d4d4d8] font-semibold">Blocks</span>
             </span>
           </Link>
 
-          {/* Inline Desktop Nav (directly next to logo, clean typography) */}
-          <nav className="desktop-nav" aria-label="Main Navigation">
+          {/* Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-0.5 ml-3" aria-label="Main Navigation">
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.href ||
@@ -115,10 +123,17 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`nav-link ${isActive ? "nav-link-active" : ""}`}
+                  className={cn(
+                    "inline-flex items-center gap-1.5 text-[13.5px] font-medium px-3 py-1.5 rounded-lg transition-colors duration-150 whitespace-nowrap",
+                    isActive
+                      ? "text-white font-semibold bg-white/[0.08]"
+                      : "text-[#a1a1aa] hover:text-white hover:bg-white/[0.05]"
+                  )}
                 >
                   <span>{link.label}</span>
-                  {isActive && <span className="nav-link-dot" />}
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#32c798] shadow-[0_0_6px_rgba(50,199,152,0.9)]" />
+                  )}
                 </Link>
               );
             })}
@@ -126,37 +141,41 @@ export function Navbar() {
         </div>
 
         {/* Right Section: Search Trigger, Divider, GitHub Stars, Mobile Toggle */}
-        <div className="navbar-right">
+        <div className="flex items-center gap-2">
           {/* Search Trigger Button */}
           <button
             type="button"
-            className="search-trigger-btn"
+            className="hidden lg:inline-flex items-center gap-2 h-8 px-2.5 bg-white/[0.035] hover:bg-white/[0.07] border border-white/[0.09] hover:border-white/[0.18] rounded-lg text-[#9ca3af] hover:text-white text-[12.5px] cursor-pointer transition-all duration-150 select-none"
             onClick={handleSearchClick}
             aria-label="Search blocks (Ctrl+K)"
           >
-            <Search size={13} className="search-icon" />
-            <span className="search-placeholder">Search...</span>
-            <kbd className="search-kbd">{isMac ? "⌘K" : "Ctrl K"}</kbd>
+            <Search size={13} className="text-[#9ca3af]" />
+            <span className="font-normal">Search...</span>
+            <kbd className="font-mono text-[10px] font-semibold text-[#71717a] bg-white/[0.06] border border-white/10 rounded px-1.5 py-0.5 leading-tight">
+              {isMac ? "⌘K" : "Ctrl K"}
+            </kbd>
           </button>
 
-          <span className="action-divider" />
+          <span className="hidden lg:block w-px h-4 bg-white/[0.12] mx-1" />
 
           {/* GitHub Star Pill Button */}
           <a
             href="https://github.com/Ashwin-Khowala/rnblocks"
             target="_blank"
             rel="noopener noreferrer"
-            className="github-star-link"
+            className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-[#d1d5db] hover:text-white hover:bg-white/[0.06] transition-colors duration-150 select-none"
             title="RNBlocks on GitHub"
             aria-label={`GitHub repository - ${starCount} stars`}
           >
             <GitHubIcon size={15} />
-            <span className="github-star-count">{starCount}</span>
+            <span className="font-mono text-[12.5px] font-medium text-[#d1d5db]">
+              {starCount}
+            </span>
           </a>
 
           {/* Mobile Menu Toggle Button */}
           <button
-            className="mobile-toggle"
+            className="lg:hidden inline-flex items-center justify-center w-[34px] h-[34px] text-[#d1d5db] hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/[0.22] rounded-lg cursor-pointer transition-colors duration-150 p-0"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
@@ -168,27 +187,34 @@ export function Navbar() {
 
       {/* Mobile Menu Drawer Overlay */}
       {mobileMenuOpen && (
-        <div className="mobile-overlay" onClick={() => setMobileMenuOpen(false)}>
+        <div className="fixed inset-0 bg-black/65 backdrop-blur-md z-[999] animate-fade-in pointer-events-auto flex justify-center px-3.5" onClick={() => setMobileMenuOpen(false)}>
           <div
-            className={`mobile-drawer ${isScrolled ? "is-scrolled" : ""}`}
+            className={cn(
+              "w-full max-w-[480px] bg-[#060609]/98 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-[0_20px_48px_rgba(0,0,0,0.92)] animate-slide-down h-fit",
+              isScrolled ? "mt-[72px]" : "mt-[68px]"
+            )}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Quick Search Button in Mobile Drawer */}
             <button
               type="button"
-              className="mobile-search-bar"
+              className="flex items-center justify-between w-full h-[38px] px-3 bg-white/[0.04] border border-white/[0.09] rounded-xl text-[#9ca3af] text-[13px] mb-3 cursor-pointer"
               onClick={() => {
                 setMobileMenuOpen(false);
                 handleSearchClick();
               }}
             >
-              <Search size={15} className="mobile-search-icon" />
-              <span>Search blocks & components...</span>
-              <kbd className="search-kbd">{isMac ? "⌘K" : "Ctrl K"}</kbd>
+              <div className="flex items-center gap-2">
+                <Search size={15} className="text-[#71717a]" />
+                <span>Search blocks & components...</span>
+              </div>
+              <kbd className="font-mono text-[10px] font-semibold text-[#71717a] bg-white/[0.06] border border-white/10 rounded px-1.5 py-0.5 leading-tight">
+                {isMac ? "⌘K" : "Ctrl K"}
+              </kbd>
             </button>
 
             {/* Mobile Nav Links */}
-            <div className="mobile-nav-list">
+            <div className="flex flex-col gap-1">
               {navLinks.map((link) => {
                 const isActive =
                   pathname === link.href ||
@@ -198,28 +224,35 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`mobile-nav-link ${isActive ? "mobile-nav-link-active" : ""}`}
+                    className={cn(
+                      "flex items-center justify-between p-2.5 px-3.5 rounded-xl text-[14.5px] font-medium transition-colors duration-150",
+                      isActive
+                        ? "bg-white/10 text-white font-semibold"
+                        : "text-[#d1d5db] hover:bg-white/[0.06] hover:text-white"
+                    )}
                   >
                     <span>{link.label}</span>
-                    {isActive && <span className="mobile-active-dot" />}
+                    {isActive && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#32c798] shadow-[0_0_8px_rgba(50,199,152,0.9)]" />
+                    )}
                   </Link>
                 );
               })}
 
-              <div className="mobile-menu-divider" />
+              <div className="h-px bg-white/[0.08] my-2" />
 
               {/* Mobile GitHub Row with Star Count */}
               <a
                 href="https://github.com/Ashwin-Khowala/rnblocks"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mobile-github-row"
+                className="flex items-center justify-between p-2.5 px-3.5 rounded-xl text-sm text-[#d1d5db] hover:text-white bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.15] mb-2.5 transition-colors duration-150"
               >
-                <div className="mobile-gh-left">
+                <div className="flex items-center gap-2.5">
                   <GitHubIcon size={16} />
                   <span>GitHub Repository</span>
                 </div>
-                <span className="mobile-stars-badge">
+                <span className="font-mono text-xs font-semibold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/25 px-2 py-0.5 rounded-full">
                   ★ {starCount}
                 </span>
               </a>
@@ -228,508 +261,15 @@ export function Navbar() {
               <Link
                 href="/blocks"
                 onClick={() => setMobileMenuOpen(false)}
-                className="mobile-explore-cta"
+                className="flex items-center justify-center gap-1.5 w-full h-10 text-sm font-semibold rounded-xl bg-white text-zinc-950 shadow-[0_4px_16px_rgba(255,255,255,0.18)] hover:bg-[#f4f4f5] transition-colors duration-150"
               >
-                <span>Explore All Blocks</span>
-                <ArrowUpRight size={15} />
+                <span className="text-zinc-950 font-bold">Explore All Blocks</span>
+                <ArrowUpRight size={15} className="text-zinc-950" />
               </Link>
             </div>
           </div>
         </div>
       )}
-
-      <style jsx>{`
-        /* ─── Outer Fixed Shell (Zero click-blocking on sides) ─────────────── */
-        .navbar-fixed-wrapper {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          width: 100%;
-          z-index: 1000;
-          pointer-events: none;
-          padding: 0;
-          box-sizing: border-box;
-        }
-
-        /* ─── Inner Floating Dock Container ────────────────────────────────── */
-        .navbar-dock {
-          pointer-events: auto;
-          width: 100%;
-          max-width: 1280px;
-          margin: 0 auto;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          height: 58px;
-          padding: 0 24px;
-          box-sizing: border-box;
-          background: transparent;
-          border: 1px solid transparent;
-          border-radius: 0;
-          box-shadow: none;
-          backdrop-filter: none;
-          -webkit-backdrop-filter: none;
-          transform: translateY(0);
-          transition:
-            max-width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-            transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-            background 0.3s ease,
-            border-color 0.3s ease,
-            border-radius 0.3s ease,
-            box-shadow 0.3s ease,
-            backdrop-filter 0.3s ease,
-            height 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-            padding 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* Scrolled state: Morph into a detached floating island dock */
-        .navbar-dock.is-scrolled {
-          max-width: 1140px;
-          height: 52px;
-          margin-top: 14px;
-          padding: 0 18px;
-          background: rgba(6, 6, 9, 0.94);
-          backdrop-filter: blur(24px) saturate(180%);
-          -webkit-backdrop-filter: blur(24px) saturate(180%);
-          border: 1px solid rgba(255, 255, 255, 0.09);
-          border-radius: 14px;
-          box-shadow:
-            0 16px 40px -6px rgba(0, 0, 0, 0.85),
-            0 0 0 1px rgba(255, 255, 255, 0.05);
-        }
-
-        /* ─── Left Section ─────────────────────────────────────────────────── */
-        .navbar-left {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-        }
-
-        :global(.brand-logo),
-        .brand-logo {
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 9px !important;
-          text-decoration: none !important;
-          cursor: pointer !important;
-          user-select: none;
-        }
-
-        :global(.brand-icon),
-        .brand-icon {
-          width: 28px;
-          height: 28px;
-          border-radius: 8px;
-          background: linear-gradient(135deg, #1f1f27 0%, #101014 100%);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          color: #ffffff;
-          flex-shrink: 0;
-          box-shadow: 0 0 10px rgba(50, 199, 152, 0.12);
-          transition: all 0.2s ease;
-        }
-
-        .brand-logo:hover :global(.brand-icon),
-        .brand-logo:hover .brand-icon {
-          transform: translateY(-1px) scale(1.02);
-          border-color: rgba(50, 199, 152, 0.4);
-          box-shadow: 0 0 14px rgba(50, 199, 152, 0.25);
-        }
-
-        :global(.brand-name),
-        .brand-name {
-          font-weight: 700;
-          font-size: 15.5px;
-          letter-spacing: -0.025em;
-          color: #ffffff;
-          white-space: nowrap;
-        }
-
-        :global(.brand-name-sub),
-        .brand-name-sub {
-          color: #d4d4d8;
-          font-weight: 600;
-        }
-
-        /* Desktop Nav: Clean typography links aligned inline next to logo */
-        .desktop-nav {
-          display: flex;
-          align-items: center;
-          gap: 2px;
-          margin-left: 12px;
-        }
-
-        .desktop-nav :global(.nav-link),
-        .nav-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          font-size: 13.5px;
-          font-weight: 500;
-          color: #a1a1aa;
-          padding: 6px 12px;
-          border-radius: 8px;
-          text-decoration: none;
-          white-space: nowrap;
-          transition: all 0.16s ease;
-        }
-
-        .desktop-nav :global(.nav-link:hover),
-        .nav-link:hover {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.05);
-        }
-
-        .desktop-nav :global(.nav-link.nav-link-active),
-        .nav-link-active {
-          color: #ffffff;
-          font-weight: 600;
-          background: rgba(255, 255, 255, 0.08);
-        }
-
-        .nav-link-dot {
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: #32c798;
-          box-shadow: 0 0 6px rgba(50, 199, 152, 0.9);
-        }
-
-        /* ─── Right Section ────────────────────────────────────────────────── */
-        .navbar-right {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        /* Search Trigger Button */
-        .search-trigger-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          height: 32px;
-          padding: 0 10px;
-          background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(255, 255, 255, 0.09);
-          border-radius: 8px;
-          color: #9ca3af;
-          font-size: 12.5px;
-          cursor: pointer;
-          transition: all 0.18s ease;
-          user-select: none;
-        }
-
-        .search-trigger-btn:hover {
-          background: rgba(255, 255, 255, 0.07);
-          border-color: rgba(255, 255, 255, 0.18);
-          color: #ffffff;
-        }
-
-        .search-trigger-btn :global(.search-icon) {
-          color: #9ca3af;
-          transition: color 0.18s ease;
-        }
-
-        .search-trigger-btn:hover :global(.search-icon) {
-          color: #ffffff;
-        }
-
-        .search-placeholder {
-          font-weight: 400;
-        }
-
-        .search-kbd {
-          font-family: var(--font-mono, monospace);
-          font-size: 10px;
-          font-weight: 600;
-          color: #71717a;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
-          padding: 1px 5px;
-          line-height: 1.2;
-        }
-
-        /* Subtle Vertical Action Divider */
-        .action-divider {
-          width: 1px;
-          height: 16px;
-          background: rgba(255, 255, 255, 0.12);
-          margin: 0 3px;
-        }
-
-        /* GitHub Star Action Button */
-        .github-star-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          height: 32px;
-          padding: 0 9px;
-          border-radius: 8px;
-          color: #d1d5db;
-          text-decoration: none;
-          transition: all 0.18s ease;
-          user-select: none;
-        }
-
-        .github-star-link:hover {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.06);
-        }
-
-        .github-star-count {
-          font-family: var(--font-mono, monospace);
-          font-size: 12.5px;
-          font-weight: 500;
-          color: #d1d5db;
-        }
-
-        /* Mobile Hamburger Toggle */
-        .mobile-toggle {
-          display: none;
-          align-items: center;
-          justify-content: center;
-          width: 34px;
-          height: 34px;
-          color: #d1d5db;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 8px;
-          cursor: pointer;
-          padding: 0;
-          transition: all 0.18s ease;
-        }
-
-        .mobile-toggle:hover {
-          color: #ffffff;
-          border-color: rgba(255, 255, 255, 0.22);
-          background: rgba(255, 255, 255, 0.08);
-        }
-
-        /* ─── Mobile Drawer Overlay ────────────────────────────────────────── */
-        .mobile-overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.65);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
-          z-index: 999;
-          animation: fadeIn 0.2s ease-out;
-          pointer-events: auto;
-          display: flex;
-          justify-content: center;
-          padding: 0 14px;
-          box-sizing: border-box;
-        }
-
-        .mobile-drawer {
-          width: 100%;
-          max-width: 480px;
-          margin-top: 68px;
-          background: rgba(6, 6, 9, 0.98);
-          backdrop-filter: blur(28px);
-          -webkit-backdrop-filter: blur(28px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 16px;
-          padding: 16px;
-          box-shadow: 0 20px 48px rgba(0, 0, 0, 0.92);
-          animation: slideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-          height: fit-content;
-          box-sizing: border-box;
-        }
-
-        .mobile-drawer.is-scrolled {
-          margin-top: 72px;
-        }
-
-        .mobile-search-bar {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-          height: 38px;
-          padding: 0 12px;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.09);
-          border-radius: 10px;
-          color: #9ca3af;
-          font-size: 13px;
-          margin-bottom: 12px;
-          cursor: pointer;
-        }
-
-        .mobile-search-bar :global(.mobile-search-icon) {
-          color: #71717a;
-          margin-right: 8px;
-        }
-
-        .mobile-nav-list {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-
-        .mobile-nav-list :global(.mobile-nav-link),
-        .mobile-nav-link {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 11px 14px;
-          border-radius: 10px;
-          font-size: 14.5px;
-          font-weight: 500;
-          color: #d1d5db;
-          text-decoration: none;
-          transition: all 0.16s ease;
-        }
-
-        .mobile-nav-list :global(.mobile-nav-link:hover),
-        .mobile-nav-link:hover {
-          background: rgba(255, 255, 255, 0.06);
-          color: #ffffff;
-        }
-
-        .mobile-nav-list :global(.mobile-nav-link.mobile-nav-link-active),
-        .mobile-nav-link-active {
-          background: rgba(255, 255, 255, 0.1);
-          color: #ffffff;
-          font-weight: 600;
-        }
-
-        .mobile-active-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #32c798;
-          box-shadow: 0 0 8px rgba(50, 199, 152, 0.9);
-        }
-
-        .mobile-menu-divider {
-          height: 1px;
-          background: rgba(255, 255, 255, 0.08);
-          margin: 8px 0;
-        }
-
-        .mobile-github-row {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 11px 14px;
-          border-radius: 10px;
-          font-size: 14px;
-          color: #d1d5db;
-          text-decoration: none;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          margin-bottom: 10px;
-          transition: all 0.16s ease;
-        }
-
-        .mobile-github-row:hover {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.06);
-          border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .mobile-gh-left {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .mobile-stars-badge {
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 600;
-          color: #32c798;
-          background: rgba(50, 199, 152, 0.1);
-          border: 1px solid rgba(50, 199, 152, 0.25);
-          padding: 2px 8px;
-          border-radius: 9999px;
-        }
-
-        .mobile-explore-cta {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 6px;
-          width: 100%;
-          height: 40px;
-          font-size: 14px;
-          font-weight: 600;
-          border-radius: 10px;
-          background: #ffffff;
-          color: #09090b;
-          text-decoration: none;
-          box-shadow: 0 4px 16px rgba(255, 255, 255, 0.18);
-          transition: all 0.18s ease;
-        }
-
-        .mobile-explore-cta:hover {
-          background: #f4f4f5;
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-8px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* ─── Responsive Media Queries ─────────────────────────────────────── */
-        @media (max-width: 880px) {
-          .desktop-nav,
-          .search-trigger-btn,
-          .action-divider {
-            display: none !important;
-          }
-
-          .mobile-toggle {
-            display: inline-flex;
-          }
-
-          .navbar-dock {
-            padding: 0 16px;
-            height: 54px;
-          }
-
-          .navbar-dock.is-scrolled {
-            max-width: calc(100% - 24px);
-            margin-top: 10px;
-            height: 48px;
-            padding: 0 14px;
-            border-radius: 12px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .navbar-dock {
-            padding: 0 12px;
-          }
-
-          .navbar-dock.is-scrolled {
-            max-width: calc(100% - 16px);
-            margin-top: 8px;
-            padding: 0 12px;
-          }
-
-          .brand-name {
-            font-size: 15px;
-          }
-        }
-      `}</style>
     </header>
   );
 }

@@ -1,36 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #070709;
+  --color-bg-secondary: #09090c;
+  --color-bg-card: #0d0d12;
+  --color-bg-card-hover: #14141c;
+  --color-bg-elevated: #1a1a24;
+
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #71717a;
+
+  --color-accent-green: #32c798;
+  --color-accent-green-hover: #4ade80;
+
+  --font-sans: var(--font-sans), 'Nunito Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono), 'JetBrains Mono', monospace;
+  --font-brand: var(--font-brand), 'TimesNewRomanMT-Italic', 'Times New Roman', Georgia, serif;
+  --font-editorial: var(--font-brand), 'TimesNewRomanMT-Italic', 'Times New Roman', Georgia, serif;
+}
 
 :root {
   /* Backgrounds */
-  --bg-primary: #0A0A0A;
-  --bg-secondary: #111111;
-  --bg-card: #181818;
-  --bg-card-hover: #1F1F1F;
-  --bg-elevated: #262626;
+  --bg-primary: #070709;
+  --bg-secondary: #09090c;
+  --bg-card: #0d0d12;
+  --bg-card-hover: #14141c;
+  --bg-elevated: #1a1a24;
 
   /* Text */
-  --text-primary: #F5F5F5;
-  --text-secondary: #A3A3A3;
-  --text-muted: #737373;
+  --text-primary: #f5f5f5;
+  --text-secondary: #9ca3af;
+  --text-muted: #71717a;
+
+  /* Accent */
+  --accent-green: #32c798;
+  --accent: #f5f5f5;
+  --accent-hover: #ffffff;
+  --accent-foreground: #0a0a0a;
 
   /* Borders */
   --border: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.15);
-
-  /* Primary interaction */
-  --accent: #F5F5F5;
-  --accent-hover: #FFFFFF;
-  --accent-foreground: #0A0A0A;
-
-  /* Status colors (strictly reserved for semantic states) */
-  --success: #22C55E;
-  --warning: #F59E0B;
-  --error: #EF4444;
-  --info: #60A5FA;
-
-  /* Code */
-  --code-bg: #0D0D0D;
-  --code-border: rgba(255, 255, 255, 0.08);
 
   /* Typography */
   --font-sans: var(--font-sans), 'Nunito Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -49,20 +61,14 @@
   --transition-smooth: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.font-brand {
-  font-family: var(--font-brand);
-  font-style: italic;
-}
-
+.font-brand,
 .font-editorial {
-  font-family: var(--font-brand);
+  font-family: var(--font-brand), 'TimesNewRomanMT-Italic', 'Times New Roman', Georgia, serif;
   font-style: italic;
 }
 
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 html, body {
@@ -111,24 +117,42 @@ main:not(:has(.landing-root)) {
   background: var(--border-hover);
 }
 
-/* Button Component Utilities */
+/* Container Utility */
+.container-main {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (max-width: 768px) {
+  .container-main {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* Standard Button Component Utilities */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: #ffffff;
+  color: #09090b;
   font-weight: 600;
   font-size: 14px;
   padding: 10px 18px;
-  border-radius: var(--radius-md);
-  transition: background var(--transition-fast), transform var(--transition-fast);
+  border-radius: 8px;
+  transition: background 0.15s ease, transform 0.15s ease;
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .btn-primary:hover {
-  background: var(--accent-hover);
+  background: #f4f4f5;
 }
 
 .btn-primary:active {
@@ -140,20 +164,21 @@ main:not(:has(.landing-root)) {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f3f4f6;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   font-weight: 500;
   font-size: 14px;
   padding: 10px 18px;
-  border-radius: var(--radius-md);
-  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+  border-radius: 8px;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .btn-secondary:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:active {
@@ -166,260 +191,56 @@ main:not(:has(.landing-root)) {
   justify-content: center;
   gap: 8px;
   background: transparent;
-  color: var(--text-secondary);
+  color: #9ca3af;
   font-weight: 500;
   font-size: 14px;
   padding: 8px 14px;
-  border-radius: var(--radius-md);
-  transition: color var(--transition-fast), background var(--transition-fast);
+  border-radius: 8px;
+  transition: color 0.15s ease, background 0.15s ease;
+  text-decoration: none;
 }
 
 .btn-ghost:hover {
-  color: var(--text-primary);
-  background: var(--bg-card-hover);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* Badges */
-.badge-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 500;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
+/* Keyframes for smooth animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.badge-tech {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Registry Section Eyebrow & Pill utilities */
-.section-eyebrow-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
+.card-preview-scaler {
+  transform: scale(var(--scale-d, 1));
 }
 
-.section-counter-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 22px;
-  padding: 0 8px;
-  border-radius: 9999px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1;
-  color: #32c798;
-  background: rgba(50, 199, 152, 0.1);
-  border: 1px solid rgba(50, 199, 152, 0.28);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
+@media (max-width: 860px) {
+  .card-preview-scaler {
+    transform: scale(var(--scale-m, 0.82));
+  }
 }
 
-.section-eyebrow-text {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #32c798;
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
-  margin: 0;
-  white-space: nowrap;
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
 }
 
-/* View all components pill button */
-.view-all-pill-btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  line-height: 1 !important;
-  color: #f3f4f6 !important;
-  background: rgba(255, 255, 255, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  padding: 8px 16px !important;
-  border-radius: 9999px !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  white-space: nowrap !important;
-  text-decoration: none !important;
+.animate-slide-down {
+  animation: slideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.view-all-pill-btn span {
-  display: inline-block;
-  line-height: 1;
-}
-
-.view-all-pill-btn svg {
-  display: block;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-.view-all-pill-btn:hover {
-  color: #32c798 !important;
-  border-color: rgba(50, 199, 152, 0.35) !important;
-  background: rgba(50, 199, 152, 0.08) !important;
-  transform: translateY(-1px);
-}
-
-.view-all-pill-btn:hover svg {
-  transform: translateX(2px);
-}
-
-
-/* Containers */
-.container-main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Layout Utilities */
-.section-surface {
-  background-color: var(--bg-secondary);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-/* Documentation Pages */
-.docs-page {
-  padding: 96px 0 90px;
-  background: var(--bg-primary);
-  flex: 1;
-}
-
-.docs-container {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 64px;
-}
-
-.docs-sidebar {
-  position: sticky;
-  top: 80px;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.sidebar-group-title {
-  font-size: 11px;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  letter-spacing: 0.05em;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.sidebar-links {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.sidebar-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 7px 10px;
-  border-radius: var(--radius-sm);
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  transition: background var(--transition-fast), color var(--transition-fast);
-}
-
-.sidebar-link:hover {
-  background: var(--bg-card);
-  color: var(--text-primary);
-}
-
-.sidebar-link.active {
-  background: var(--bg-card-hover);
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.sidebar-cta-box {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  margin-top: 8px;
-}
-
-.cta-box-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-  display: block;
-  margin-bottom: 4px;
-}
-
-.cta-box-desc {
-  font-size: 12px;
-  color: var(--text-muted);
-  line-height: 16px;
-  margin-bottom: 12px;
-}
-
-.cta-box-desc code {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 1px 4px;
-  border-radius: 4px;
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
-}
-
-.docs-content {
-  max-width: 800px;
-  min-width: 0;
-}
-
-.doc-article {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.doc-breadcrumbs {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-
-.breadcrumb-link:hover {
-  color: var(--text-primary);
-}
-
-.breadcrumb-current {
-  color: var(--text-secondary);
-}
-
+/* Markdown Documentation Styles */
 .markdown-body {
   color: var(--text-secondary);
   font-size: 15px;
@@ -545,80 +366,3 @@ main:not(:has(.landing-root)) {
 .markdown-body a:hover {
   color: #ffffff;
 }
-
-.doc-meta-footer {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
-}
-
-.github-source-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--text-muted);
-  transition: color var(--transition-fast);
-}
-
-.github-source-link:hover {
-  color: var(--text-primary);
-}
-
-.doc-pagination {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 20px;
-  padding-top: 20px;
-}
-
-.pagination-card {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  transition: border-color var(--transition-fast), background var(--transition-fast);
-}
-
-.pagination-card.next {
-  text-align: right;
-  align-items: flex-end;
-}
-
-.pagination-card:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-hover);
-}
-
-.pagination-label {
-  font-size: 11px;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.pagination-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-@media (max-width: 900px) {
-  .docs-container {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-
-  .docs-sidebar {
-    position: relative;
-    top: 0;
-  }
-}
-

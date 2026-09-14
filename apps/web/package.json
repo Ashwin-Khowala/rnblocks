@@ -24,6 +24,7 @@
     "tailwind-merge": "^3.0.2"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/marked": "^6.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -33,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "react-native": "^0.87.1",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5.8.2"
   }
 }
