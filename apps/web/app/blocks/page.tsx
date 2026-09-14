@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { BLOCKS_DATA, BlockItem } from "@/data/blocks";
+import { BLOCKS_DATA } from "@/data/blocks";
 import { BlockCard } from "@/components/BlockCard";
-import { Search, Filter, Layers, X, ChevronDown } from "lucide-react";
+import { Search, Layers, X, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function BlocksGalleryPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,7 +59,10 @@ export default function BlocksGalleryPage() {
   }, [searchQuery, selectedCategory, stylingFilter, frameworkFilter]);
 
   const hasActiveFilters =
-    selectedCategory !== "all" || stylingFilter !== "all" || frameworkFilter !== "all" || searchQuery !== "";
+    selectedCategory !== "all" ||
+    stylingFilter !== "all" ||
+    frameworkFilter !== "all" ||
+    searchQuery !== "";
 
   const resetFilters = () => {
     setSearchQuery("");
@@ -68,39 +72,52 @@ export default function BlocksGalleryPage() {
   };
 
   return (
-    <div className="gallery-page">
+    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-24 md:pt-28 pb-24 flex-1">
       <div className="container-main">
         {/* Gallery Header */}
-        <div className="gallery-header">
-          <div className="gallery-title-row">
+        <div className="mb-8">
+          {/* Title and Count Row */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-7">
             <div>
-              <h1 className="page-title">Explore Blocks</h1>
-              <p className="page-subtitle">
-                Browse production ready React Native components with live previews and copy-paste source code.
+              <div className="inline-flex items-center gap-2 mb-2">
+                <span className="inline-flex items-center justify-center h-[20px] px-2 rounded-full font-mono text-[10.5px] font-bold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 uppercase tracking-[0.04em]">
+                  Component Registry
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-1.5">
+                Explore Blocks
+              </h1>
+              <p className="text-xs sm:text-sm text-[#9ca3af] max-w-xl">
+                Browse production-ready React Native components with live interactive previews and copy-paste source code.
               </p>
             </div>
-            <div className="blocks-count-pill">
-              <span className="count-num">{filteredBlocks.length}</span>
-              <span className="count-label">{filteredBlocks.length === 1 ? "block" : "blocks"}</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full font-mono text-xs font-semibold bg-white/[0.04] border border-white/[0.1] text-[#9ca3af] self-start sm:self-auto shrink-0">
+              <span className="text-[#32c798] font-bold">{filteredBlocks.length}</span>
+              <span>{filteredBlocks.length === 1 ? "block" : "blocks"}</span>
             </div>
           </div>
 
-          {/* Search & Quick Controls */}
-          <div className="search-control-bar">
-            <div className="search-input-wrap">
-              <Search size={16} className="search-icon" />
+          {/* Search & Filter Controls Bar */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 mb-5">
+            {/* Search Input */}
+            <div className="relative flex-1">
+              <Search
+                size={16}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
+              />
               <input
                 type="text"
-                className="search-input"
-                placeholder="Search blocks (pricing, login, paywall, chat, profile)..."
+                className="w-full bg-[#07070a] border border-white/10 rounded-xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-[#71717a] focus:border-[#32c798]/50 focus:outline-none focus:ring-1 focus:ring-[#32c798]/30 transition-all duration-150"
+                placeholder="Search blocks (pricing, dock, calendar, auth, profile)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               {searchQuery && (
                 <button
-                  className="clear-search-btn"
                   onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#71717a] hover:text-white rounded-md hover:bg-white/[0.08] transition-colors"
                   title="Clear search"
+                  aria-label="Clear search"
                 >
                   <X size={14} />
                 </button>
@@ -108,51 +125,70 @@ export default function BlocksGalleryPage() {
             </div>
 
             {/* Dropdown Filters */}
-            <div className="dropdown-filters">
-              <div className="filter-select-wrap">
+            <div className="flex items-center gap-2.5 shrink-0">
+              {/* Styling Filter */}
+              <div className="relative flex-1 sm:flex-initial">
                 <select
-                  className="filter-select"
                   value={stylingFilter}
                   onChange={(e) => setStylingFilter(e.target.value)}
                   aria-label="Filter by styling"
+                  className="w-full sm:w-auto appearance-none bg-[#07070a] border border-white/10 rounded-xl pl-3.5 pr-8 py-2.5 text-xs font-mono font-medium text-[#d1d5db] focus:border-[#32c798]/50 focus:outline-none cursor-pointer hover:border-white/20 transition-colors"
                 >
                   <option value="all">Styling: All</option>
                   <option value="NativeWind">NativeWind</option>
                   <option value="StyleSheet">StyleSheet</option>
                 </select>
-                <ChevronDown size={14} className="select-chevron" />
+                <ChevronDown
+                  size={13}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
+                />
               </div>
 
-              <div className="filter-select-wrap">
+              {/* Framework Filter */}
+              <div className="relative flex-1 sm:flex-initial">
                 <select
-                  className="filter-select"
                   value={frameworkFilter}
                   onChange={(e) => setFrameworkFilter(e.target.value)}
                   aria-label="Filter by framework"
+                  className="w-full sm:w-auto appearance-none bg-[#07070a] border border-white/10 rounded-xl pl-3.5 pr-8 py-2.5 text-xs font-mono font-medium text-[#d1d5db] focus:border-[#32c798]/50 focus:outline-none cursor-pointer hover:border-white/20 transition-colors"
                 >
                   <option value="all">Framework: All</option>
                   <option value="expo">Expo</option>
                   <option value="react-native">Bare React Native</option>
                 </select>
-                <ChevronDown size={14} className="select-chevron" />
+                <ChevronDown
+                  size={13}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
+                />
               </div>
             </div>
           </div>
 
           {/* Category Filter Pills */}
-          <div className="category-pills-row">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`category-pill-btn ${selectedCategory === cat.id ? "pill-active" : ""}`}
-              >
-                {cat.label}
-              </button>
-            ))}
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+            {categories.map((cat) => {
+              const isActive = selectedCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={cn(
+                    "px-3.5 py-1.5 rounded-full text-xs font-medium font-mono whitespace-nowrap transition-all duration-150 cursor-pointer",
+                    isActive
+                      ? "bg-[#32c798]/15 border border-[#32c798]/40 text-[#32c798] shadow-[0_0_12px_rgba(50,199,152,0.15)] font-semibold"
+                      : "bg-white/[0.03] border border-white/[0.08] text-[#9ca3af] hover:text-white hover:bg-white/[0.06] hover:border-white/[0.15]"
+                  )}
+                >
+                  {cat.label}
+                </button>
+              );
+            })}
 
             {hasActiveFilters && (
-              <button onClick={resetFilters} className="reset-filter-btn">
+              <button
+                onClick={resetFilters}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono text-[#ef4444] bg-[#ef4444]/10 border border-[#ef4444]/25 hover:bg-[#ef4444]/20 transition-all cursor-pointer whitespace-nowrap ml-auto"
+              >
                 <span>Reset filters</span>
                 <X size={12} />
               </button>
@@ -160,361 +196,31 @@ export default function BlocksGalleryPage() {
           </div>
         </div>
 
-        {/* Blocks Grid or Empty State */}
+        {/* 2-Column Grid Enforced: Max 2 components per row on desktop/tablet, 1 on mobile */}
         {filteredBlocks.length > 0 ? (
-          <div className={`gallery-grid ${filteredBlocks.length === 1 ? "gallery-grid-single" : ""}`}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredBlocks.map((block) => (
               <BlockCard key={block.slug} block={block} />
             ))}
           </div>
         ) : (
-          <div className="empty-state">
-            <div className="empty-icon">
-              <Layers size={28} />
+          <div className="flex flex-col items-center justify-center py-20 px-4 text-center border border-white/[0.08] bg-[#07070a]/60 rounded-2xl max-w-lg mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#71717a] mb-4">
+              <Layers size={24} />
             </div>
-            <h3 className="empty-title">No blocks found</h3>
-            <p className="empty-desc">
-              We couldn't find any blocks matching "{searchQuery}". Try adjusting your filters or search query.
+            <h3 className="text-base font-semibold text-white mb-1.5">No blocks found</h3>
+            <p className="text-xs sm:text-sm text-[#9ca3af] max-w-sm mb-6 leading-relaxed">
+              We couldn&apos;t find any blocks matching &ldquo;{searchQuery || selectedCategory}&rdquo;. Try adjusting your filters or search query.
             </p>
-            <button onClick={resetFilters} className="btn-secondary">
+            <button
+              onClick={resetFilters}
+              className="btn-secondary !text-xs !py-2 !px-4"
+            >
               Clear all filters
             </button>
           </div>
         )}
       </div>
-
-      <style jsx>{`
-        .gallery-page {
-          padding: 96px 0 80px;
-          background: var(--bg-primary);
-          flex: 1;
-        }
-
-        .gallery-header {
-          margin-bottom: 36px;
-        }
-
-        .gallery-title-row {
-          display: flex;
-          align-items: flex-end;
-          justify-content: space-between;
-          margin-bottom: 24px;
-        }
-
-        .page-title {
-          font-size: 32px;
-          font-weight: 800;
-          letter-spacing: -0.02em;
-          color: var(--text-primary);
-          margin-bottom: 6px;
-        }
-
-        .page-subtitle {
-          font-size: 14px;
-          color: var(--text-secondary);
-        }
-
-        .blocks-count-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 4px 12px;
-          border-radius: var(--radius-full);
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-        }
-
-        .count-num {
-          font-family: var(--font-mono);
-          font-size: 13px;
-          font-weight: 700;
-          color: var(--text-primary);
-        }
-
-        .count-label {
-          font-size: 12px;
-          color: var(--text-muted);
-        }
-
-        .search-control-bar {
-          display: flex;
-          gap: 12px;
-          align-items: center;
-          margin-bottom: 20px;
-        }
-
-        .search-input-wrap {
-          flex: 1;
-          position: relative;
-          display: flex;
-          align-items: center;
-          width: 100%;
-        }
-
-        .search-input-wrap :global(.search-icon) {
-          position: absolute;
-          left: 14px;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #71717a;
-          pointer-events: none;
-          z-index: 2;
-        }
-
-        .search-input {
-          width: 100%;
-          height: 42px;
-          background: #111114;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 10px;
-          padding: 0 38px 0 42px;
-          font-family: var(--font-sans);
-          font-size: 13.5px;
-          color: #ffffff;
-          outline: none;
-          box-sizing: border-box;
-          transition: border-color var(--transition-fast), background var(--transition-fast);
-        }
-
-        .search-input:focus {
-          border-color: rgba(255, 255, 255, 0.25);
-          background: #141418;
-        }
-
-        .search-input::placeholder {
-          color: #71717a;
-        }
-
-        .clear-search-btn {
-          position: absolute;
-          right: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #71717a;
-          background: none;
-          border: none;
-          padding: 4px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          border-radius: 4px;
-          z-index: 2;
-        }
-
-        .clear-search-btn:hover {
-          color: #ffffff;
-        }
-
-        .dropdown-filters {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-        }
-
-        .filter-select-wrap {
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-        }
-
-        .filter-select {
-          height: 42px;
-          background: #111114;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 10px;
-          padding: 0 36px 0 14px;
-          color: #d1d5db;
-          font-family: var(--font-sans);
-          font-size: 13px;
-          outline: none;
-          cursor: pointer;
-          appearance: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          white-space: nowrap;
-          box-sizing: border-box;
-          transition: border-color var(--transition-fast), color var(--transition-fast);
-        }
-
-        .filter-select:hover {
-          border-color: rgba(255, 255, 255, 0.2);
-          color: #ffffff;
-        }
-
-        .filter-select:focus {
-          border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .filter-select-wrap :global(.select-chevron) {
-          position: absolute;
-          right: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          pointer-events: none;
-          color: #71717a;
-          z-index: 2;
-        }
-
-        .category-pills-row {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          overflow-x: auto;
-          padding-bottom: 6px;
-          -webkit-overflow-scrolling: touch;
-        }
-
-        .category-pill-btn {
-          padding: 6px 14px;
-          border-radius: var(--radius-full);
-          background: var(--bg-card);
-          border: 1px solid var(--border);
-          font-size: 13px;
-          font-weight: 500;
-          color: var(--text-secondary);
-          transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
-          white-space: nowrap;
-        }
-
-        .category-pill-btn:hover {
-          background: var(--bg-card-hover);
-          color: var(--text-primary);
-        }
-
-        .category-pill-btn.pill-active {
-          background: var(--accent);
-          color: var(--accent-foreground);
-          border-color: transparent;
-          font-weight: 600;
-        }
-
-        .reset-filter-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 12px;
-          color: var(--text-muted);
-          padding: 4px 10px;
-          border-radius: var(--radius-sm);
-          transition: color var(--transition-fast);
-        }
-
-        .reset-filter-btn:hover {
-          color: var(--text-primary);
-        }
-
-        .gallery-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 330px));
-          gap: 20px;
-        }
-
-        .gallery-grid.gallery-grid-single {
-          grid-template-columns: minmax(280px, 330px);
-          max-width: 330px;
-        }
-
-        .empty-state {
-          text-align: center;
-          padding: 80px 24px;
-          background: var(--bg-card);
-          border: 1px dashed var(--border);
-          border-radius: var(--radius-lg);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .empty-icon {
-          width: 54px;
-          height: 54px;
-          border-radius: 50%;
-          background: var(--bg-elevated);
-          border: 1px solid var(--border);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--text-muted);
-          margin-bottom: 16px;
-        }
-
-        .empty-title {
-          font-size: 18px;
-          font-weight: 700;
-          color: var(--text-primary);
-          margin-bottom: 6px;
-        }
-
-        .empty-desc {
-          font-size: 14px;
-          color: var(--text-secondary);
-          max-width: 420px;
-          margin-bottom: 20px;
-          line-height: 20px;
-        }
-
-        @media (max-width: 1024px) {
-          .gallery-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 860px) {
-          .gallery-page {
-            padding: 86px 0 60px;
-          }
-
-          .gallery-header {
-            margin-bottom: 24px;
-          }
-
-          .gallery-title-row {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 12px;
-          }
-
-          .page-title {
-            font-size: 26px;
-          }
-
-          .search-control-bar {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 10px;
-          }
-
-          .dropdown-filters {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            width: 100%;
-            gap: 8px;
-          }
-
-          .filter-select-wrap {
-            width: 100%;
-          }
-
-          .filter-select {
-            width: 100%;
-          }
-
-          .category-pills-row {
-            margin-right: -16px;
-            padding-right: 16px;
-          }
-
-          .gallery-grid {
-            grid-template-columns: 1fr !important;
-            max-width: 100% !important;
-          }
-
-          .gallery-grid.gallery-grid-single {
-            max-width: 100% !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

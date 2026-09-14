@@ -4,18 +4,20 @@ import React from "react";
 import Link from "next/link";
 import { BlockItem } from "@/data/blocks";
 import { CopyButton } from "./CopyButton";
+import { cn } from "@/lib/utils";
 
 interface BlockCardProps {
   block: BlockItem;
   index?: number;
   total?: number;
+  className?: string;
 }
 
-export function BlockCard({ block }: BlockCardProps) {
+export function BlockCard({ block, className }: BlockCardProps) {
   const { slug, title, category, styling, framework, Component } = block;
   const stylingLabel = Array.isArray(styling) ? styling.join(", ") : styling;
 
-  // Tailored scaling for each block in desktop bento layout
+  // Tailored scaling for each block in desktop layout
   const previewScale =
     slug === "floating-docker"
       ? 1.0
@@ -36,13 +38,18 @@ export function BlockCard({ block }: BlockCardProps) {
 
   const canvasMaxWidth =
     slug === "floating-docker"
-      ? "400px"
+      ? "440px"
       : slug === "trend-chart"
-      ? "360px"
-      : "360px";
+      ? "400px"
+      : "380px";
 
   return (
-    <div className="group relative bg-[#050508] hover:bg-[#07070c] flex flex-col overflow-hidden transition-colors duration-200 h-full">
+    <div
+      className={cn(
+        "group relative bg-[#050508] hover:bg-[#07070c] flex flex-col overflow-hidden transition-colors duration-200 h-full border border-white/10 rounded-2xl",
+        className
+      )}
+    >
       {/* Top Left Sleek Floating Control: Docs & Redirect to Component */}
       <div className="hidden md:flex absolute top-3.5 left-3.5 z-20 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
         <div className="inline-flex items-center bg-[#0c0c10]/90 backdrop-blur-md border border-white/[0.12] rounded-full p-[3px] shadow-[0_4px_18px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.04)]">

@@ -86,6 +86,7 @@ export function ShowcaseGrid() {
                       block={block}
                       index={index}
                       total={featuredBlocks.length}
+                      className="border-0 rounded-none"
                     />
                   </div>
                 );
