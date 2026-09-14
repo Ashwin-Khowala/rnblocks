@@ -67,10 +67,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   for (const slug of blockSlugs) {
     routes.push({
-      url: `${baseUrl}/blocks?name=${slug}`,
+      url: `${baseUrl}/blocks/${slug}`,
       lastModified,
       changeFrequency: "weekly",
-      priority: 0.75,
+      priority: 0.8,
     });
   }
 

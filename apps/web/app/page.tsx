@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BLOCKS_DATA } from "@/data/blocks";
 import { CopyButton } from "@/components/CopyButton";
 import { CodeViewer } from "@/components/CodeViewer";
+import { BlockCard } from "@/components/BlockCard";
 import {
   ArrowRight,
   Sparkles,
@@ -19,6 +20,11 @@ import {
   ExternalLink,
   ShieldCheck,
   Smartphone,
+  GitPullRequest,
+  Users,
+  Eye,
+  Sliders,
+  Maximize2,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -35,13 +41,15 @@ export default function HomePage() {
     bun: "bunx rnblocks add floating-docker",
   };
 
+  const featuredBlocks = BLOCKS_DATA.filter((b) => b.type === "block").slice(0, 4);
+
   return (
     <div className="landing-root">
       {/* =====================================================================
           SECTION 1: HERO
           ===================================================================== */}
       <section className="hero-section">
-        {/* Subtle Ambient Background Gradients */}
+        {/* Ambient Glows */}
         <div className="hero-ambient-glow" />
         <div className="hero-ambient-glow-secondary" />
 
@@ -49,33 +57,32 @@ export default function HomePage() {
           {/* Top Pill Eyebrow */}
           <div className="hero-badge">
             <span className="badge-pulse" />
-            <span className="badge-text">React Native UI Registry • Open Source</span>
+            <span className="badge-text">React Native UI Registry • Open Source • 100% Free</span>
           </div>
 
           {/* Main Title */}
           <h1 className="hero-title">
-            Crafted for React Native.
+            Production-ready UI for
             <br />
-            <span className="title-highlight">Installed into your code.</span>
+            <span className="title-highlight">React Native & Expo.</span>
           </h1>
 
           {/* Subtitle */}
           <p className="hero-description">
-            Production-tested mobile UI blocks and navigation primitives for Expo and React Native.
-            Inspect interactive live previews, copy clean source code, or install directly with
-            zero runtime dependencies.
+            Explore live previews, copy clean source code, or install directly into your codebase.
+            Zero runtime dependencies, standard StyleSheet primitives, and full New Architecture support.
           </p>
 
           {/* Actions */}
           <div className="hero-actions">
             <Link href="/blocks" className="btn-primary hero-btn-lg">
-              <span>Browse Registry</span>
+              <span>Explore Registry</span>
               <ArrowRight size={16} />
             </Link>
 
             <Link href="/docs" className="btn-secondary hero-btn-lg">
               <Terminal size={15} />
-              <span>CLI Documentation</span>
+              <span>Documentation</span>
             </Link>
           </div>
 
@@ -101,87 +108,183 @@ export default function HomePage() {
               <CopyButton text={cliCommands[pm]} label="Copy" />
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* =====================================================================
-              HERO CENTERPIECE: THE FLOATING DOCKER STUDIO
-              ===================================================================== */}
-          <div className="hero-studio-stage">
-            {/* Studio Header HUD */}
-            <div className="studio-hud-header">
-              <div className="window-dots">
-                <span className="dot" />
-                <span className="dot" />
-                <span className="dot" />
-                <span className="window-file-name">floating-docker.tsx</span>
-              </div>
+      {/* =====================================================================
+          SECTION 2: FEATURED REGISTRY BLOCKS (SHOWCASE THE PRODUCT)
+          ===================================================================== */}
+      <section className="registry-preview-section">
+        <div className="container-main">
+          <div className="section-header-row">
+            <div>
+              <span className="section-eyebrow">Available in Registry</span>
+              <h2 className="section-title">Components you copy and own</h2>
+              <p className="section-subtitle">
+                No third-party runtime wrappers or mandatory theme providers. Every block is standalone TypeScript.
+              </p>
+            </div>
+            <Link href="/blocks" className="view-all-link">
+              <span>View all components</span>
+              <ArrowRight size={16} />
+            </Link>
+          </div>
 
-              <div className="studio-status-pill">
-                <span className="live-pulse-dot" />
-                <span>
-                  Active Tab: <strong className="status-tab-text">{spotlightTab.toUpperCase()}</strong>
-                </span>
-              </div>
+          <div className="blocks-grid">
+            {featuredBlocks.map((block) => (
+              <BlockCard key={block.slug} block={block} />
+            ))}
+          </div>
 
-              <div className="studio-mode-toggle">
-                <button
-                  onClick={() => setHeroViewMode("preview")}
-                  className={`toggle-btn ${heroViewMode === "preview" ? "active" : ""}`}
-                >
-                  <span>Interactive Preview</span>
-                </button>
-                <button
-                  onClick={() => setHeroViewMode("code")}
-                  className={`toggle-btn ${heroViewMode === "code" ? "active" : ""}`}
-                >
-                  <Code2 size={13} />
-                  <span>Code</span>
-                </button>
+          <div className="grid-footer-cta">
+            <Link href="/blocks" className="btn-secondary">
+              <span>Explore all {BLOCKS_DATA.length} components in registry</span>
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          SECTION 3: HOW IT WORKS (3 STEPS)
+          ===================================================================== */}
+      <section className="workflow-section">
+        <div className="container-main">
+          <div className="section-header-center">
+            <span className="section-eyebrow">Developer Workflow</span>
+            <h2 className="section-title">Three effortless steps to ship</h2>
+            <p className="section-subtitle">
+              From web discovery to production mobile screen in seconds.
+            </p>
+          </div>
+
+          <div className="steps-row">
+            <div className="workflow-step-card">
+              <div className="step-badge">01</div>
+              <h3 className="step-name">Inspect & Test Live</h3>
+              <p className="step-text">
+                Interact with components directly in your web browser. Test tabs, state toggles, and review
+                the exact TypeScript source code before adding anything.
+              </p>
+            </div>
+
+            <div className="workflow-step-card highlight">
+              <div className="step-badge">02</div>
+              <h3 className="step-name">Install with One Line</h3>
+              <p className="step-text">
+                Run the CLI command in your project root. The full component code is placed
+                directly into your <code>components/rnblocks</code> folder.
+              </p>
+              <div className="step-cli-preview">
+                <code>npx rnblocks add floating-docker</code>
+                <CopyButton text="npx rnblocks add floating-docker" />
               </div>
             </div>
 
-            {/* Studio Canvas Area */}
-            {heroViewMode === "preview" ? (
-              <div className="studio-canvas">
-                <div className="canvas-grid-bg" />
-                <div className="canvas-spotlight-glow" />
+            <div className="workflow-step-card">
+              <div className="step-badge">03</div>
+              <h3 className="step-name">Customize & Ship</h3>
+              <p className="step-text">
+                It's your source code. Adjust palette constants, hook into your app navigation, adapt
+                to NativeWind if you choose, and ship without library lock-in.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                <div className="docker-interactive-container">
-                  <DockerComponent
-                    {...({
-                      initialTab: spotlightTab,
-                      onTabChange: (tab: string) => setSpotlightTab(tab),
-                    } as any)}
-                  />
+      {/* =====================================================================
+          SECTION 4: INTERACTIVE COMPONENT STUDIO
+          ===================================================================== */}
+      <section className="studio-section">
+        <div className="container-main">
+          <div className="section-header-center">
+            <span className="section-eyebrow">Interactive Studio</span>
+            <h2 className="section-title">Test animations before installing</h2>
+            <p className="section-subtitle">
+              Test the Floating Glassmorphic Docker below to experience fluid sliding pill physics and inspect its code.
+            </p>
+          </div>
+
+          <div className="studio-wrapper">
+            <div className="hero-studio-stage">
+              {/* Studio Header HUD */}
+              <div className="studio-hud-header">
+                <div className="window-dots">
+                  <span className="dot" />
+                  <span className="dot" />
+                  <span className="dot" />
+                  <span className="window-file-name">floating-docker.tsx</span>
                 </div>
 
-                <div className="canvas-hint">
-                  <span className="hint-pill">
-                    Tap any tab above to test smooth sliding pill animation
+                <div className="studio-status-pill">
+                  <span className="live-pulse-dot" />
+                  <span>
+                    Active Tab: <strong className="status-tab-text">{spotlightTab.toUpperCase()}</strong>
                   </span>
                 </div>
-              </div>
-            ) : (
-              <div className="studio-code-view">
-                <CodeViewer
-                  code={dockerItem?.code || "// Loading component code..."}
-                  filename="floating-docker.tsx"
-                  language="tsx"
-                />
-              </div>
-            )}
 
-            {/* Studio Footer Info */}
-            <div className="studio-footer">
-              <div className="studio-tags">
-                <span className="studio-tag">Zero Dependencies</span>
-                <span className="studio-tag">StyleSheet Primitives</span>
-                <span className="studio-tag">Vector SVGs</span>
-                <span className="studio-tag">Expo & Bare RN</span>
+                <div className="studio-mode-toggle">
+                  <button
+                    onClick={() => setHeroViewMode("preview")}
+                    className={`toggle-btn ${heroViewMode === "preview" ? "active" : ""}`}
+                  >
+                    <span>Interactive Preview</span>
+                  </button>
+                  <button
+                    onClick={() => setHeroViewMode("code")}
+                    className={`toggle-btn ${heroViewMode === "code" ? "active" : ""}`}
+                  >
+                    <Code2 size={13} />
+                    <span>Code</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="studio-cli-pill">
-                <code>npx rnblocks add floating-docker</code>
-                <CopyButton text="npx rnblocks add floating-docker" label="Copy CLI" />
+              {/* Studio Canvas Area */}
+              {heroViewMode === "preview" ? (
+                <div className="studio-canvas">
+                  <div className="canvas-grid-bg" />
+                  <div className="canvas-spotlight-glow" />
+
+                  <div className="docker-interactive-container">
+                    <DockerComponent
+                      {...({
+                        initialTab: spotlightTab,
+                        onTabChange: (tab: string) => setSpotlightTab(tab),
+                      } as any)}
+                    />
+                  </div>
+
+                  <div className="canvas-hint">
+                    <span className="hint-pill">
+                      Tap any tab above to test smooth sliding pill animation
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="studio-code-view">
+                  <CodeViewer
+                    code={dockerItem?.code || "// Loading component code..."}
+                    filename="floating-docker.tsx"
+                    language="tsx"
+                  />
+                </div>
+              )}
+
+              {/* Studio Footer Info */}
+              <div className="studio-footer">
+                <div className="studio-tags">
+                  <span className="studio-tag">Zero Dependencies</span>
+                  <span className="studio-tag">StyleSheet Primitives</span>
+                  <span className="studio-tag">Vector SVGs</span>
+                  <span className="studio-tag">Expo & Bare RN</span>
+                </div>
+
+                <div className="studio-cli-pill">
+                  <code>npx rnblocks add floating-docker</code>
+                  <CopyButton text="npx rnblocks add floating-docker" label="Copy CLI" />
+                </div>
               </div>
             </div>
           </div>
@@ -189,41 +292,19 @@ export default function HomePage() {
       </section>
 
       {/* =====================================================================
-          SECTION 2: ARCHITECTURAL HIGHLIGHTS (4 PILLARS)
+          SECTION 5: ENGINEERING PHILOSOPHY (4 PILLARS)
           ===================================================================== */}
       <section className="features-section">
         <div className="container-main">
           <div className="section-header-center">
             <span className="section-eyebrow">Engineering Philosophy</span>
-            <h2 className="section-title">Why developers choose RNBlocks</h2>
+            <h2 className="section-title">Built for developer ownership</h2>
             <p className="section-subtitle">
-              Built from scratch to eliminate the pain of bloated npm dependencies and fragile styling wrappers.
+              Eliminate the frustration of bloated npm dependencies, rigid wrappers, and abandoned UI libraries.
             </p>
           </div>
 
           <div className="pillars-grid">
-            <div className="pillar-card">
-              <div className="pillar-icon-box">
-                <Sparkles size={20} />
-              </div>
-              <h3 className="pillar-title">Continuous Curve Capsule</h3>
-              <p className="pillar-desc">
-                Fluid animated indicator with cubic-bezier physics. Seamlessly glides between
-                destinations with pixel-perfect alignment.
-              </p>
-            </div>
-
-            <div className="pillar-card">
-              <div className="pillar-icon-box">
-                <Box size={20} />
-              </div>
-              <h3 className="pillar-title">Handcrafted Vector SVGs</h3>
-              <p className="pillar-desc">
-                Crisp, resolution-independent vector paths with responsive fill and outline states.
-                No fuzzy bitmaps or third-party icon bundle bloat.
-              </p>
-            </div>
-
             <div className="pillar-card">
               <div className="pillar-icon-box">
                 <Code2 size={20} />
@@ -239,58 +320,32 @@ export default function HomePage() {
               <div className="pillar-icon-box">
                 <Zap size={20} />
               </div>
-              <h3 className="pillar-title">Zero Dependency Overhead</h3>
+              <h3 className="pillar-title">Zero Runtime Baggage</h3>
               <p className="pillar-desc">
-                Engineered with standard React Native primitives. Runs smoothly on iOS, Android,
-                and Web without complex native linking.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          SECTION 3: HOW IT WORKS (3 STEPS)
-          ===================================================================== */}
-      <section className="workflow-section">
-        <div className="container-main">
-          <div className="section-header-center">
-            <span className="section-eyebrow">Developer Workflow</span>
-            <h2 className="section-title">Three effortless steps to ship</h2>
-            <p className="section-subtitle">
-              From discovery in your browser to production mobile deployment in seconds.
-            </p>
-          </div>
-
-          <div className="steps-row">
-            <div className="workflow-step-card">
-              <div className="step-badge">01</div>
-              <h3 className="step-name">Inspect & Test Live</h3>
-              <p className="step-text">
-                Explore interactive components right in your web browser. Test tabs, state changes,
-                and inspect the exact TypeScript source code before installing.
+                Engineered with standard React Native primitives. No mandatory root ThemeProvider or
+                CSS-in-JS runtime engine required.
               </p>
             </div>
 
-            <div className="workflow-step-card highlight">
-              <div className="step-badge">02</div>
-              <h3 className="step-name">Install with One Line</h3>
-              <p className="step-text">
-                Run the CLI command in your project root. The full component code is placed
-                directly into your <code>components/</code> folder.
-              </p>
-              <div className="step-cli-preview">
-                <code>npx rnblocks add floating-docker</code>
-                <CopyButton text="npx rnblocks add floating-docker" />
+            <div className="pillar-card">
+              <div className="pillar-icon-box">
+                <Box size={20} />
               </div>
+              <h3 className="pillar-title">Fluid & Adaptive Layouts</h3>
+              <p className="pillar-desc">
+                Designed with container-relative dimensions and standard spacing tokens. Never breaks
+                due to arbitrary hardcoded screen width assumptions.
+              </p>
             </div>
 
-            <div className="workflow-step-card">
-              <div className="step-badge">03</div>
-              <h3 className="step-name">Customize & Ship</h3>
-              <p className="step-text">
-                It's your code. Adjust colors, integrate your app routing, connect your API state,
-                and ship with zero vendor lock-in.
+            <div className="pillar-card">
+              <div className="pillar-icon-box">
+                <Sparkles size={20} />
+              </div>
+              <h3 className="pillar-title">Native 60–120 FPS Physics</h3>
+              <p className="pillar-desc">
+                Smooth cubic-bezier animations using React Native's native driver for butter-smooth
+                performance across iOS, Android, and Web.
               </p>
             </div>
           </div>
@@ -298,7 +353,7 @@ export default function HomePage() {
       </section>
 
       {/* =====================================================================
-          SECTION 4: ECOSYSTEM COMPATIBILITY
+          SECTION 6: ECOSYSTEM COMPATIBILITY
           ===================================================================== */}
       <section className="compat-section">
         <div className="container-main">
@@ -313,7 +368,7 @@ export default function HomePage() {
           <div className="compat-grid">
             {[
               { name: "Expo SDK 52+", desc: "Managed & Bare workflows", tag: "Latest SDK" },
-              { name: "React Native 0.76+", desc: "New Architecture ready", tag: "TurboModules" },
+              { name: "React Native 0.76+", desc: "New Architecture baseline", tag: "TurboModules" },
               { name: "iOS 15+", desc: "Fluid 60-120 FPS native feel", tag: "Liquid UI" },
               { name: "Android API 24+", desc: "Material & edge-to-edge ready", tag: "Optimized" },
               { name: "NativeWind v4", desc: "Tailwind CSS v4 for mobile", tag: "Utility First" },
@@ -334,7 +389,59 @@ export default function HomePage() {
       </section>
 
       {/* =====================================================================
-          SECTION 5: FINAL CTA
+          SECTION 7: OPEN SOURCE & COMMUNITY PITCH
+          ===================================================================== */}
+      <section className="community-section">
+        <div className="container-main">
+          <div className="community-card">
+            <div className="community-content">
+              <span className="section-eyebrow">Open Source Community</span>
+              <h2 className="community-title">Contribute your production UI blocks</h2>
+              <p className="community-text">
+                RNBlocks is fully open-source and community driven. If you've built a refined card, sheet,
+                navigation pattern, or flow, submit it to the registry. Submitting takes less than 30 minutes.
+              </p>
+
+              <div className="community-perks">
+                <div className="perk-item">
+                  <CheckCircle2 size={16} className="perk-icon" />
+                  <span>Strict schema validation ensures high code quality</span>
+                </div>
+                <div className="perk-item">
+                  <CheckCircle2 size={16} className="perk-icon" />
+                  <span>Interactive web previews automatically rendered</span>
+                </div>
+                <div className="perk-item">
+                  <CheckCircle2 size={16} className="perk-icon" />
+                  <span>Full author credit and direct links to your GitHub profile</span>
+                </div>
+              </div>
+
+              <div className="community-actions">
+                <Link href="/contribute" className="btn-primary">
+                  <GitPullRequest size={15} />
+                  <span>Contribution Guide</span>
+                </Link>
+                <Link href="/submit" className="btn-secondary">
+                  <span>Submit a Component</span>
+                </Link>
+                <a
+                  href="https://github.com/Ashwin-Khowala/rnblocks"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-ghost"
+                >
+                  <span>View on GitHub</span>
+                  <ExternalLink size={14} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          SECTION 8: FINAL CTA
           ===================================================================== */}
       <section className="cta-section">
         <div className="container-main">
@@ -365,7 +472,7 @@ export default function HomePage() {
 
         /* ─── Hero Section ─────────────────────────────────────────────────── */
         .hero-section {
-          padding: 72px 0 96px;
+          padding: 80px 0 64px;
           position: relative;
           overflow: hidden;
           background: #070709;
@@ -476,9 +583,9 @@ export default function HomePage() {
           border-radius: 14px;
           overflow: hidden;
           width: 100%;
-          max-width: 500px;
+          max-width: 480px;
           box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.6);
-          margin-bottom: 56px;
+          margin-bottom: 12px;
         }
 
         .pm-tabs {
@@ -534,7 +641,123 @@ export default function HomePage() {
           color: #f3f4f6;
         }
 
-        /* ─── Hero Studio Stage ────────────────────────────────────────────── */
+        /* ─── Registry Preview Grid Section ────────────────────────────────── */
+        .registry-preview-section {
+          padding: 64px 0 80px;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          background: #09090c;
+        }
+
+        .section-header-row {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          margin-bottom: 36px;
+          gap: 20px;
+        }
+
+        .view-all-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 14px;
+          font-weight: 600;
+          color: #32c798;
+          transition: color 0.15s ease;
+          white-space: nowrap;
+        }
+
+        .view-all-link:hover {
+          color: #4ade80;
+        }
+
+        .blocks-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 24px;
+          margin-bottom: 40px;
+        }
+
+        .grid-footer-cta {
+          display: flex;
+          justify-content: center;
+        }
+
+        /* ─── Workflow Steps Section ───────────────────────────────────────── */
+        .workflow-section {
+          padding: 96px 0;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          background: #070709;
+        }
+
+        .steps-row {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+        }
+
+        .workflow-step-card {
+          background: #0d0d12;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 18px;
+          padding: 32px 28px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .workflow-step-card.highlight {
+          border-color: rgba(50, 199, 152, 0.35);
+          background: radial-gradient(circle at top, rgba(50, 199, 152, 0.04), #0d0d12 70%);
+        }
+
+        .step-badge {
+          font-size: 13px;
+          font-family: var(--font-mono);
+          font-weight: 700;
+          color: #32c798;
+          margin-bottom: 16px;
+        }
+
+        .step-name {
+          font-size: 19px;
+          font-weight: 700;
+          color: #ffffff;
+          margin-bottom: 10px;
+          letter-spacing: -0.2px;
+        }
+
+        .step-text {
+          font-size: 14px;
+          color: #9ca3af;
+          line-height: 1.6;
+        }
+
+        .step-cli-preview {
+          margin-top: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #08080a;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+          padding: 8px 12px;
+          font-family: var(--font-mono);
+          font-size: 12px;
+          color: #f3f4f6;
+        }
+
+        /* ─── Studio Showcase Section ──────────────────────────────────────── */
+        .studio-section {
+          padding: 96px 0;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          background: #09090c;
+        }
+
+        .studio-wrapper {
+          display: flex;
+          justify-content: center;
+        }
+
         .hero-studio-stage {
           width: 100%;
           max-width: 920px;
@@ -633,7 +856,6 @@ export default function HomePage() {
           color: #ffffff;
         }
 
-        /* Studio Canvas */
         .studio-canvas {
           padding: 64px 24px;
           min-height: 260px;
@@ -696,7 +918,6 @@ export default function HomePage() {
           text-align: left !important;
         }
 
-        /* Studio Footer */
         .studio-footer {
           display: flex;
           align-items: center;
@@ -820,74 +1041,11 @@ export default function HomePage() {
           color: #9ca3af;
         }
 
-        /* ─── Workflow Steps Section ───────────────────────────────────────── */
-        .workflow-section {
-          padding: 96px 0;
-          border-top: 1px solid rgba(255, 255, 255, 0.06);
-          background: #09090c;
-        }
-
-        .steps-row {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 24px;
-        }
-
-        .workflow-step-card {
-          background: #0d0d12;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 18px;
-          padding: 32px 28px;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .workflow-step-card.highlight {
-          border-color: rgba(50, 199, 152, 0.35);
-          background: radial-gradient(circle at top, rgba(50, 199, 152, 0.04), #0d0d12 70%);
-        }
-
-        .step-badge {
-          font-size: 13px;
-          font-family: var(--font-mono);
-          font-weight: 700;
-          color: #32c798;
-          margin-bottom: 16px;
-        }
-
-        .step-name {
-          font-size: 19px;
-          font-weight: 700;
-          color: #ffffff;
-          margin-bottom: 10px;
-          letter-spacing: -0.2px;
-        }
-
-        .step-text {
-          font-size: 14px;
-          color: #9ca3af;
-          line-height: 1.6;
-        }
-
-        .step-cli-preview {
-          margin-top: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          background: #08080a;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 8px;
-          padding: 8px 12px;
-          font-family: var(--font-mono);
-          font-size: 12px;
-          color: #f3f4f6;
-        }
-
         /* ─── Ecosystem Compatibility Grid ─────────────────────────────────── */
         .compat-section {
           padding: 96px 0;
           border-top: 1px solid rgba(255, 255, 255, 0.06);
-          background: #070709;
+          background: #09090c;
         }
 
         .compat-grid {
@@ -935,6 +1093,66 @@ export default function HomePage() {
         .compat-desc {
           font-size: 12.5px;
           color: #9ca3af;
+        }
+
+        /* ─── Community Contribution Pitch ─────────────────────────────────── */
+        .community-section {
+          padding: 80px 0 96px;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          background: #070709;
+        }
+
+        .community-card {
+          background: radial-gradient(circle at top left, rgba(50, 199, 152, 0.06), #0d0d12 60%);
+          border: 1px solid rgba(50, 199, 152, 0.25);
+          border-radius: 24px;
+          padding: 56px 48px;
+        }
+
+        .community-content {
+          max-width: 720px;
+        }
+
+        .community-title {
+          font-size: 34px;
+          font-weight: 800;
+          letter-spacing: -0.6px;
+          color: #ffffff;
+          margin-bottom: 12px;
+        }
+
+        .community-text {
+          font-size: 16px;
+          color: #9ca3af;
+          line-height: 1.6;
+          margin-bottom: 28px;
+        }
+
+        .community-perks {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 36px;
+        }
+
+        .perk-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 14.5px;
+          color: #d1d5db;
+        }
+
+        .perk-icon {
+          color: #32c798;
+          flex-shrink: 0;
+        }
+
+        .community-actions {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          flex-wrap: wrap;
         }
 
         /* ─── Final CTA ─────────────────────────────────────────────────────── */
@@ -986,6 +1204,10 @@ export default function HomePage() {
             letter-spacing: -1.2px;
           }
 
+          .blocks-grid {
+            grid-template-columns: 1fr;
+          }
+
           .pillars-grid {
             grid-template-columns: repeat(2, 1fr);
           }
@@ -993,11 +1215,15 @@ export default function HomePage() {
           .compat-grid {
             grid-template-columns: repeat(2, 1fr);
           }
+
+          .community-card {
+            padding: 40px 32px;
+          }
         }
 
         @media (max-width: 768px) {
           .hero-section {
-            padding: 48px 0 64px;
+            padding: 48px 0 56px;
           }
 
           .hero-title {
@@ -1017,6 +1243,11 @@ export default function HomePage() {
           .hero-btn-lg {
             width: 100%;
             justify-content: center;
+          }
+
+          .section-header-row {
+            flex-direction: column;
+            align-items: flex-start;
           }
 
           .studio-hud-header {
@@ -1040,6 +1271,24 @@ export default function HomePage() {
 
           .compat-grid {
             grid-template-columns: 1fr;
+          }
+
+          .community-card {
+            padding: 32px 20px;
+          }
+
+          .community-title {
+            font-size: 26px;
+          }
+
+          .community-actions {
+            flex-direction: column;
+            width: 100%;
+          }
+
+          .community-actions > * {
+            width: 100%;
+            justify-content: center;
           }
 
           .cta-box {
