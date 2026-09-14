@@ -69,8 +69,7 @@ RNBlocks is managed as a high-performance **Turborepo** monorepo:
 ```
 rnblocks/
 ├── apps/
-│   ├── web/           # Next.js 16 web registry, showcase, and component studio
-│   └── docs/          # Next.js 16 documentation and API reference
+│   └── web/           # Next.js 16 web registry, live studio, and dynamic /docs site
 ├── packages/
 │   ├── cli/           # 'rnblocks' CLI tool (Commander + tsup + zod)
 │   ├── registry/      # Shared registry types and schema definitions
@@ -81,7 +80,7 @@ rnblocks/
 │   ├── blocks/        # Individual UI component blocks (e.g. floating-docker)
 │   ├── screens/       # Full-screen template flows
 │   └── registry.json  # Auto-generated registry bundle
-├── docs/              # In-depth architectural & reference documentation
+├── docs/              # Canonical Markdown documentation source
 └── scripts/           # Registry generation and validation scripts
 ```
 
@@ -89,9 +88,15 @@ For complete architecture details, see [docs/architecture.md](docs/architecture.
 
 ---
 
-## Adding a New Block or Screen to the Registry
+## Adding a New Block or Screen (Quick 5-Step Guide)
 
-Every block in RNBlocks lives under `registry/` and is validated against strict schemas before inclusion.
+Every block in RNBlocks lives under `registry/` and is validated against strict schemas before inclusion:
+
+1. **Author component**: Write your component in `registry/blocks/<slug>/files/<slug>.tsx` using standard `StyleSheet.create`.
+2. **Add metadata**: Create `registry/blocks/<slug>/registry.json` specifying title, category, tags, and dependencies.
+3. **Validate schema**: Run `pnpm run validate:registry` to ensure compliance with schema, a11y, and security rules.
+4. **Generate registry**: Run `pnpm run generate:registry` to update `registry.json` and sync with the web preview.
+5. **Verify locally**: Start `pnpm dev` and view your block live at `http://localhost:3000/blocks`.
 
 ### Step 1: Create the Block Directory
 

@@ -1,6 +1,6 @@
 # RNBlocks
 
-Production-ready React Native and Expo UI components, delivered as source code you own. Every block is standalone, responsive, and customizable without forcing a styling framework or runtime dependency.
+Production-ready React Native and Expo UI components, delivered as clean source code you own. Every block is standalone, responsive, and customizable without forcing a styling framework or runtime dependency.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
@@ -9,17 +9,28 @@ Production-ready React Native and Expo UI components, delivered as source code y
 [![Expo](https://img.shields.io/badge/Expo-SDK%2052+-000020?logo=expo)](https://expo.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8+-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-[Explore Registry](https://rnblocks.vercel.app/blocks) · [Documentation](https://rnblocks.vercel.app/docs) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+[Explore Registry](https://rnblocks.vercel.app/blocks) · [Live Preview](https://rnblocks.vercel.app) · [Documentation](https://rnblocks.vercel.app/docs) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+
+---
+
+## Featured Components
+
+| Component | Category | Preview | CLI Install Command |
+|---|---|---|---|
+| **[Floating Glassmorphic Docker](https://rnblocks.vercel.app/blocks/floating-docker)** | Navigation & Docks | [Inspect](https://rnblocks.vercel.app/blocks/floating-docker) | `npx rnblocks add floating-docker` |
+| **[Interactive Calendar](https://rnblocks.vercel.app/blocks/interactive-calendar)** | Data Display & Scheduling | [Inspect](https://rnblocks.vercel.app/blocks/interactive-calendar) | `npx rnblocks add interactive-calendar` |
+| **[Social OAuth Buttons](https://rnblocks.vercel.app/blocks/social-auth-buttons)** | Authentication | [Inspect](https://rnblocks.vercel.app/blocks/social-auth-buttons) | `npx rnblocks add social-auth-buttons` |
+| **[SVG Gradient Trend Chart](https://rnblocks.vercel.app/blocks/trend-chart)** | Analytics & Data Viz | [Inspect](https://rnblocks.vercel.app/blocks/trend-chart) | `npx rnblocks add trend-chart` |
 
 ---
 
 ## Why RNBlocks?
 
-- **Source Code Ownership**: You copy the component code into your repository. Modify styles, behavior, and layout directly.
-- **Zero Runtime Dependencies**: No wrapper contexts, no mandatory `ThemeProvider`, no design-token dependencies.
-- **React Native Primitives**: Authored using standard `StyleSheet.create` for universal compatibility. Adaptable to NativeWind or any styling library.
-- **Universal Compatibility**: Tested across Expo (SDK 52+) and React Native CLI (0.76+ with New Architecture).
-- **CLI Workflow**: Add components with a single command: `npx rnblocks add <block>`.
+- **100% Source Code Ownership**: You copy the component code into your repository. Modify styles, behavior, and layout directly in your codebase.
+- **Zero Runtime Dependencies**: No wrapper contexts, no mandatory `ThemeProvider`, no CSS-in-JS runtime engine.
+- **Universal StyleSheet Primitives**: Authored using standard `StyleSheet.create` for universal compatibility. Easily adaptable to NativeWind v4, Tamagui, or any styling solution.
+- **Universal Mobile Compatibility**: Tested across Expo (SDK 52+) and React Native CLI (0.76+ with New Architecture & TurboModules).
+- **One-Command CLI**: Add components with a single command: `npx rnblocks add <block>`.
 
 ---
 
@@ -58,9 +69,13 @@ pnpm dev
 
 ## Documentation
 
-- [Architecture Overview](docs/architecture.md)
-- [Registry Schema Reference](docs/registry-format.md)
+- [Getting Started & Philosophy](docs/getting-started.md)
+- [CLI Reference](docs/cli.md)
+- [Styling & Customization Guide](docs/styling-guide.md)
 - [Creating a Block Guide](docs/creating-a-block.md)
+- [Quality Standards Checklist](docs/quality-standards.md)
+- [Registry Schema Reference](docs/registry-format.md)
+- [Architecture Overview](docs/architecture.md)
 - [Contributing Guidelines](CONTRIBUTING.md)
 - [Security Policy](SECURITY.md)
 
