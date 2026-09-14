@@ -225,13 +225,13 @@ function FundIconSvg({ color, filled, size = 22 }: { color: string; filled: bool
 
 // ─── Floating Docker Component ────────────────────────────────────────────────
 
-interface TabItem {
+export interface TabItem {
   id: string;
   label: string;
   renderIcon: (color: string, filled: boolean) => React.ReactNode;
 }
 
-const TABS: TabItem[] = [
+export const DEFAULT_TABS: TabItem[] = [
   {
     id: "home",
     label: "Home",
@@ -259,6 +259,8 @@ const TABS: TabItem[] = [
   },
 ];
 
+export const TABS = DEFAULT_TABS;
+
 export type Theme = "dark" | "light";
 
 const COLORS_DARK = {
@@ -285,14 +287,17 @@ export interface FloatingDockerProps {
   initialTab?: string;
   onTabChange?: (tabId: string) => void;
   theme?: Theme;
+  tabs?: TabItem[];
 }
 
 export function FloatingDocker({
   initialTab = "team",
   onTabChange,
   theme = "dark",
+  tabs = DEFAULT_TABS,
 }: FloatingDockerProps) {
-  const [activeTab, setActiveTab] = useState<string>(initialTab);
+  const items = tabs && tabs.length > 0 ? tabs : DEFAULT_TABS;
+  const [activeTab, setActiveTab] = useState<string>(initialTab || items[0]?.id || "home");
   const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
 
   const handleSelectTab = (id: string) => {
@@ -300,8 +305,8 @@ export function FloatingDocker({
     onTabChange?.(id);
   };
 
-  const activeIndex = TABS.findIndex((t) => t.id === activeTab);
-  const tabPercent = 100 / TABS.length;
+  const activeIndex = Math.max(0, items.findIndex((t) => t.id === activeTab));
+  const tabPercent = 100 / items.length;
 
   return (
     <View style={styles.outerCanvas}>
@@ -341,7 +346,7 @@ export function FloatingDocker({
           </View>
 
           {/* Tab Buttons */}
-          {TABS.map((tab) => {
+          {items.map((tab) => {
             const isFocused = tab.id === activeTab;
             const iconColor = isFocused ? colors.activeText : colors.inactiveText;
 
