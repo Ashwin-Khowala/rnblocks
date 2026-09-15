@@ -9,15 +9,14 @@ import { BLOCKS_DATA } from "@/data/blocks";
 
 export function Hero() {
   const [pm, setPm] = useState<"npx" | "pnpm" | "bun">("npx");
-  const [spotlightTab, setSpotlightTab] = useState("team");
 
-  const dockerItem = BLOCKS_DATA.find((b) => b.slug === "floating-docker");
-  const DockerComponent = dockerItem?.Component || (() => null);
+  const trendChartItem = BLOCKS_DATA.find((b) => b.slug === "trend-chart");
+  const TrendChartComponent = trendChartItem?.Component || (() => null);
 
   const cliCommands = {
-    npx: "npx rnblocks add floating-docker",
-    pnpm: "pnpm dlx rnblocks add floating-docker",
-    bun: "bunx rnblocks add floating-docker",
+    npx: "npx rnblocks add trend-chart",
+    pnpm: "pnpm dlx rnblocks add trend-chart",
+    bun: "bunx rnblocks add trend-chart",
   };
 
   return (
@@ -106,20 +105,20 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Right Column: Free-Floating Live Docker Component */}
+        {/* Right Column: Live Interactive Line Chart Showcase */}
         <div className="flex items-center justify-center w-full">
-          <div className="relative w-full max-w-[440px] md:max-w-[540px] flex items-center justify-center">
-            {/* Ambient blur glow under docker */}
+          <div className="relative w-full max-w-[460px] md:max-w-[540px] flex items-center justify-center">
+            {/* Ambient blur glow under chart */}
             <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] md:w-[360px] h-[90px] md:h-[140px] bg-[radial-gradient(ellipse_at_center,rgba(50,199,152,0.16)_0%,rgba(99,102,241,0.08)_50%,transparent_75%)] blur-[20px] md:blur-[28px] pointer-events-none z-0"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] md:w-[400px] h-[160px] md:h-[220px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.18)_0%,rgba(99,102,241,0.08)_50%,transparent_75%)] blur-[24px] md:blur-[34px] pointer-events-none z-0"
               aria-hidden="true"
             />
-            {/* Live Docker container with responsive scaling */}
-            <div className="relative z-10 w-full flex items-center justify-center scale-[0.86] sm:scale-[0.94] md:scale-100 origin-center">
-              <DockerComponent
+            {/* Live Chart container with subtle floating shadow */}
+            <div className="relative z-10 w-full shadow-[0_24px_48px_-12px_rgba(0,0,0,0.8)] rounded-[20px]">
+              <TrendChartComponent
                 {...({
-                  initialTab: spotlightTab,
-                  onTabChange: (tab: string) => setSpotlightTab(tab),
+                  theme: "dark",
+                  accentColor: "#10B981",
                 } as any)}
               />
             </div>
