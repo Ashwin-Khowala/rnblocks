@@ -21,8 +21,6 @@ import Svg, {
   LinearGradient,
   Stop,
   Line,
-  G,
-  Circle,
 } from "react-native-svg";
 
 // ─── Types & Interfaces ────────────────────────────────────────────────────────
@@ -572,7 +570,59 @@ export function TrendChart({
     [theme]
   );
 
-  const activeCoord = activeIndex !== null ? pointCoords[activeIndex] : null;
+  const padTopPx = (PAD_T / SVG_VB_H) * height;
+  const drawHPx = (drawH / SVG_VB_H) * height;
+
+  // ── Smooth animated indicator coordinates ──
+  // Using React Native Animated on absolute Views prevents SVG aspect-ratio distortion on iPhone SE / small screens
+  const animIndicatorX = useRef(new Animated.Value(0)).current;
+  const animIndicatorY = useRef(new Animated.Value(0)).current;
+  const animIndicatorOpacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (activeIndex !== null && overlayWidth > 0 && pointCoords[activeIndex]) {
+      const colW = overlayWidth / safeData.length;
+      const targetX = colW * (activeIndex + 0.5);
+      const targetY = (pointCoords[activeIndex].y / SVG_VB_H) * height;
+
+      Animated.parallel([
+        Animated.spring(animIndicatorX, {
+          toValue: targetX,
+          stiffness: 280,
+          damping: 24,
+          mass: 0.8,
+          useNativeDriver: false,
+        }),
+        Animated.spring(animIndicatorY, {
+          toValue: targetY,
+          stiffness: 280,
+          damping: 24,
+          mass: 0.8,
+          useNativeDriver: false,
+        }),
+        Animated.timing(animIndicatorOpacity, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    } else {
+      Animated.timing(animIndicatorOpacity, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [
+    activeIndex,
+    overlayWidth,
+    safeData.length,
+    pointCoords,
+    height,
+    animIndicatorX,
+    animIndicatorY,
+    animIndicatorOpacity,
+  ]);
 
   // ── Native PanResponder for Rock-Solid Touch & Drag Scrubbing on Mobile ──
   const overlayRef = useRef<any>(null);
@@ -813,53 +863,59 @@ export function TrendChart({
               strokeLinejoin="round"
             />
 
-            {/* Active Indicator on Touch/Scrub: Dashed Guideline + Glowing Circle Node */}
-            {activeCoord && (
-              <G>
-                {/* Vertical dashed guideline */}
-                <Line
-                  x1={activeCoord.x}
-                  x2={activeCoord.x}
-                  y1={PAD_T}
-                  y2={PAD_T + drawH}
-                  stroke={accentColor}
-                  strokeWidth={1.5}
-                  strokeDasharray="3, 3"
-                  strokeOpacity={0.8}
-                />
-                {/* Outer halo */}
-                <Circle
-                  cx={activeCoord.x}
-                  cy={activeCoord.y}
-                  r={12}
-                  fill={accentColor}
-                  fillOpacity={0.2}
-                />
-                {/* Mid ring */}
-                <Circle
-                  cx={activeCoord.x}
-                  cy={activeCoord.y}
-                  r={7}
-                  fill={accentColor}
-                  fillOpacity={0.4}
-                />
-                {/* Center core */}
-                <Circle
-                  cx={activeCoord.x}
-                  cy={activeCoord.y}
-                  r={4}
-                  fill="#FFFFFF"
-                />
-                {/* Inner accent dot */}
-                <Circle
-                  cx={activeCoord.x}
-                  cy={activeCoord.y}
-                  r={2.5}
-                  fill={accentColor}
-                />
-              </G>
-            )}
           </Svg>
+
+          {/* ── Smooth Animated Guideline (immune to SVG aspect-ratio distortion) ── */}
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.guideLine,
+              {
+                left: animIndicatorX,
+                top: padTopPx,
+                height: drawHPx,
+                borderColor: accentColor,
+                opacity: animIndicatorOpacity,
+              },
+            ]}
+          />
+
+          {/* ── Smooth Animated Glowing Node (true circle Views that never distort on iPhone SE) ── */}
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.indicatorDotContainer,
+              {
+                left: animIndicatorX,
+                top: animIndicatorY,
+                opacity: animIndicatorOpacity,
+              },
+            ]}
+          >
+            {/* Outer aura ring (24x24, r=12) */}
+            <View
+              style={[
+                styles.indicatorGlowOuter,
+                { backgroundColor: accentColor, opacity: 0.2 },
+              ]}
+            />
+            {/* Mid ring (14x14, r=7) */}
+            <View
+              style={[
+                styles.indicatorGlowMid,
+                { backgroundColor: accentColor, opacity: 0.4 },
+              ]}
+            />
+            {/* White core (8x8, r=4) */}
+            <View style={styles.indicatorCoreWhite} />
+            {/* Center pip (5x5, r=2.5) */}
+            <View
+              style={[
+                styles.indicatorInnerPip,
+                { backgroundColor: accentColor },
+              ]}
+            />
+          </Animated.View>
 
           {/* Per-column accessible labels (read-only — not interactive) */}
           <View style={[StyleSheet.absoluteFill, styles.columnTapRow]} pointerEvents="none">
@@ -1097,6 +1153,49 @@ const styles = StyleSheet.create({
   },
   xAxisTextActive: {
     fontWeight: "700",
+  },
+  guideLine: {
+    position: "absolute",
+    width: 0,
+    borderLeftWidth: 1.5,
+    borderStyle: "dashed",
+    marginLeft: -0.75,
+    zIndex: 3,
+  },
+  indicatorDotContainer: {
+    position: "absolute",
+    width: 24,
+    height: 24,
+    marginLeft: -12,
+    marginTop: -12,
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 4,
+  },
+  indicatorGlowOuter: {
+    position: "absolute",
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+  },
+  indicatorGlowMid: {
+    position: "absolute",
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+  },
+  indicatorCoreWhite: {
+    position: "absolute",
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#FFFFFF",
+  },
+  indicatorInnerPip: {
+    position: "absolute",
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
   },
 });
 
