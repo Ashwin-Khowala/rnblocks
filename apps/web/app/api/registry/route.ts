@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { REGISTRY_ITEMS } from "@/data/blocks";
+import { REGISTRY_DATA } from "@/data/registry-data";
 
 export async function GET() {
   try {
-    const items = REGISTRY_ITEMS.map(({ Component, code, ...item }) => item);
+    const items = REGISTRY_DATA.map(({ code, ...item }) => item);
     return NextResponse.json({
       version: "1.0.0",
       generatedAt: new Date().toISOString(),

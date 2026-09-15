@@ -1,250 +1,1093 @@
-"use client";
+import React, {
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+  useCallback,
+  memo,
+} from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+  Animated,
+  PanResponder,
+} from "react-native";
+import Svg, {
+  Path,
+  Defs,
+  LinearGradient,
+  Stop,
+  Line,
+} from "react-native-svg";
 
-import React, { useMemo } from "react";
-import { View, Text, StyleSheet } from "react-native";
+// ─── Types & Interfaces ────────────────────────────────────────────────────────
+
+export interface TrendDataPoint {
+  value: number;
+  label: string;
+}
 
 export type Theme = "dark" | "light";
 
-export interface DataPoint {
-  label: string;
-  value: number;
-}
-
 export interface TrendChartProps {
-  data?: DataPoint[];
-  title?: string;
-  subtitle?: string;
-  primaryColor?: string;
-  strokeWidth?: number;
+  /**
+   * Array of data points to plot. Each item has a `value` (number) and a `label` (x-axis string).
+   * Minimum 2 points required for a meaningful chart.
+   */
+  data?: TrendDataPoint[];
+  /** Height of the SVG chart canvas in pixels. Defaults to 150. */
   height?: number;
+  /** Color theme. Defaults to "dark". */
   theme?: Theme;
+  /** Accent color for the chart line, gradient, and indicator. Defaults to "#10B981". */
+  accentColor?: string;
+  /** Title displayed above the metrics. Defaults to "7-Day Activity Trend". */
+  title?: string;
+  /** Subtitle note displayed beside the metrics. Defaults to "growth vs last week". */
+  subtitle?: string;
+  /** Metric unit label displayed beside the rolling number. Defaults to "". */
+  unit?: string;
+  /** Callback fired when a data point is hovered or tapped. */
+  onPointSelect?: (point: TrendDataPoint, index: number) => void;
 }
 
-// SVG viewBox coordinate space (not fixed pixel layout -- the SVG scales
-// responsively to fill its container via width="100%" and preserveAspectRatio="none").
-const SVG_VIEWBOX_WIDTH = 400;
-const SVG_VIEWBOX_HEIGHT = 120;
+// ─── Default Sample Data ───────────────────────────────────────────────────────
+
+export const DEMO_CHART_DATA: TrendDataPoint[] = [
+  { value: 1200, label: "Mon" },
+  { value: 2400, label: "Tue" },
+  { value: 1800, label: "Wed" },
+  { value: 3600, label: "Thu" },
+  { value: 2900, label: "Fri" },
+  { value: 4800, label: "Sat" },
+  { value: 4100, label: "Sun" },
+];
+
+// ─── Theme Color Palettes ──────────────────────────────────────────────────────
 
 const COLORS_DARK = {
-  background: "#111116",
-  border: "rgba(255, 255, 255, 0.1)",
-  title: "#FFFFFF",
-  gridline: "rgba(255, 255, 255, 0.08)",
-  gridlineBase: "rgba(255, 255, 255, 0.12)",
-  axisText: "#71717A",
-  xLabelText: "#A1A1AA",
-  defaultPrimary: "#10B981",
-  badgeBg: "rgba(16, 185, 129, 0.12)",
-  badgeBorder: "rgba(16, 185, 129, 0.25)",
+  bg: "#0B0C10",
+  surface: "#13151D",
+  border: "rgba(255, 255, 255, 0.08)",
+  textPrimary: "#FFFFFF",
+  textSecondary: "#94A3B8",
+  axisText: "#94A3B8",
+  gridLine: "rgba(255, 255, 255, 0.07)",
+  badgeBg: "rgba(16, 185, 129, 0.08)",
+  badgeBorder: "rgba(16, 185, 129, 0.35)",
+  pillBg: "rgba(16, 185, 129, 0.16)",
+  pillBorder: "rgba(16, 185, 129, 0.35)",
+  positiveChange: "#10B981",
+  negativeChange: "#EF4444",
 };
 
 const COLORS_LIGHT = {
-  background: "#FFFFFF",
+  bg: "#FFFFFF",
+  surface: "#F8FAFC",
   border: "rgba(0, 0, 0, 0.08)",
-  title: "#0F172A",
-  gridline: "rgba(0, 0, 0, 0.06)",
-  gridlineBase: "rgba(0, 0, 0, 0.12)",
+  textPrimary: "#0F172A",
+  textSecondary: "#64748B",
   axisText: "#64748B",
-  xLabelText: "#475569",
-  defaultPrimary: "#059669",
-  badgeBg: "rgba(5, 150, 105, 0.10)",
-  badgeBorder: "rgba(5, 150, 105, 0.22)",
+  gridLine: "rgba(0, 0, 0, 0.06)",
+  badgeBg: "rgba(5, 150, 105, 0.08)",
+  badgeBorder: "rgba(5, 150, 105, 0.30)",
+  pillBg: "rgba(5, 150, 105, 0.12)",
+  pillBorder: "rgba(5, 150, 105, 0.28)",
+  positiveChange: "#059669",
+  negativeChange: "#DC2626",
 };
 
-const DEFAULT_DATA: DataPoint[] = [
-  { label: "Mon", value: 1200 },
-  { label: "Tue", value: 2400 },
-  { label: "Wed", value: 1800 },
-  { label: "Thu", value: 3600 },
-  { label: "Fri", value: 2900 },
-  { label: "Sat", value: 4800 },
-  { label: "Sun", value: 4100 },
-];
+// ─── SVG Layout Constants ──────────────────────────────────────────────────────
 
-export function TrendChart({
-  data = DEFAULT_DATA,
-  title = "7-Day Activity Trend",
-  subtitle = "+18.4% growth vs last week",
-  primaryColor,
-  strokeWidth = 2.5,
-  height = 140,
-  theme = "dark",
-}: TrendChartProps) {
-  const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
-  const accentColor = primaryColor || colors.defaultPrimary;
+const SVG_VB_W = 400;
+const SVG_VB_H = 150;
+const PAD_T = 16;
+const PAD_B = 16;
 
-  const points = useMemo(() => data.map((d) => Math.max(d.value, 0)), [data]);
-  const maxVal = useMemo(() => Math.max(...points, 1), [points]);
-  const midVal = useMemo(() => Math.round(maxVal / 2), [maxVal]);
+// ─── Number Formatter ──────────────────────────────────────────────────────────
 
-  const formatLabel = (val: number) => {
-    if (val >= 1000000) return (val / 1000000).toFixed(1) + "M";
-    if (val >= 1000) return (val / 1000).toFixed(1) + "K";
-    return val.toString();
-  };
+function formatYValue(num: number): string {
+  if (num === 0) return "0";
+  if (Math.abs(num) >= 1000000) return `${(num / 1000000).toFixed(1).replace(/\.0$/, "")}M`;
+  if (Math.abs(num) >= 1000) return `${(num / 1000).toFixed(1).replace(/\.0$/, "")}K`;
+  return String(Math.round(num));
+}
 
-  const stepX = SVG_VIEWBOX_WIDTH / Math.max(data.length - 1, 1);
+/** Locale-safe thousands-grouped number. Always uses ',' as separator. */
+function formatGrouped(num: number): string {
+  return Math.round(num).toLocaleString("en-US");
+}
 
-  // Generate SVG path for line and area fill
-  const { linePath, fillPath } = useMemo(() => {
-    if (!points.length) {
-      return {
-        linePath: `M0 ${SVG_VIEWBOX_HEIGHT} L ${SVG_VIEWBOX_WIDTH} ${SVG_VIEWBOX_HEIGHT}`,
-        fillPath: `M0 ${SVG_VIEWBOX_HEIGHT} L ${SVG_VIEWBOX_WIDTH} ${SVG_VIEWBOX_HEIGHT} Z`,
-      };
-    }
+// ─── Rolling Digit ─────────────────────────────────────────────────────────────
 
-    let lPath = `M0 ${SVG_VIEWBOX_HEIGHT - (points[0] / maxVal) * (SVG_VIEWBOX_HEIGHT - 20) - 10}`;
-    for (let i = 1; i < points.length; i++) {
-      const x = i * stepX;
-      const y = SVG_VIEWBOX_HEIGHT - (points[i] / maxVal) * (SVG_VIEWBOX_HEIGHT - 20) - 10;
-      lPath += ` L ${x} ${y}`;
-    }
+const DIGIT_CHARS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    const fPath = `${lPath} V ${SVG_VIEWBOX_HEIGHT} H 0 Z`;
-    return { linePath: lPath, fillPath: fPath };
-  }, [points, maxVal, stepX]);
+interface RollingDigitProps {
+  digit: number;
+  color: string;
+  delay?: number;
+  height?: number;
+  fontSize?: number;
+  slotWidth?: number;
+}
 
-  const summaryLabel = `${title}: ${subtitle}. Current: ${data[data.length - 1]?.value ?? 0}`;
+const RollingDigit = memo(function RollingDigit({
+  digit,
+  color,
+  delay = 0,
+  height = 28,
+  fontSize = 24,
+  slotWidth = 15,
+}: RollingDigitProps) {
+  const animY = useRef(new Animated.Value(-digit * height)).current;
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      Animated.spring(animY, {
+        toValue: -digit * height,
+        useNativeDriver: true,
+        stiffness: 180,
+        damping: 22,
+        mass: 1,
+      }).start();
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [digit, delay, height, animY]);
+
+  return (
+    <View style={{ width: slotWidth, height, overflow: "hidden", alignItems: "center" }}>
+      <Animated.View
+        style={[
+          styles.digitStrip,
+          { transform: [{ translateY: animY }] },
+        ]}
+      >
+        {DIGIT_CHARS.map((d) => (
+          <View
+            key={d}
+            style={{
+              height,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              allowFontScaling={false}
+              style={{
+                fontSize,
+                fontWeight: "700",
+                lineHeight: height,
+                letterSpacing: -0.4,
+                color,
+              }}
+            >
+              {d}
+            </Text>
+          </View>
+        ))}
+      </Animated.View>
+    </View>
+  );
+});
+
+// ─── Rolling Number Display (with Comma Support) ───────────────────────────────
+
+const NUM_DIGIT_H = 32;
+const NUM_FONT_SIZE = 26;
+const NUM_SLOT_W = 16;
+
+interface RollingNumberProps {
+  value: number;
+  color: string;
+}
+
+function RollingNumber({ value, color }: RollingNumberProps) {
+  // formatGrouped always uses ',' so we can split on it safely
+  const formatted = formatGrouped(value);
+  const chars = formatted.split("");
+
+  return (
+    <View style={styles.rollingNumber}>
+      {chars.map((char, i) => {
+        if (char === ",") {
+          return (
+            <Text
+              key={`comma-${i}`}
+              allowFontScaling={false}
+              style={[
+                styles.commaChar,
+                {
+                  color,
+                  fontSize: NUM_FONT_SIZE - 2,
+                  lineHeight: NUM_DIGIT_H,
+                },
+              ]}
+            >
+              ,
+            </Text>
+          );
+        }
+        const digit = Number(char);
+        if (isNaN(digit)) return null; // skip any unexpected non-numeric chars
+        return (
+          <RollingDigit
+            key={i}
+            digit={digit}
+            color={color}
+            delay={i * 20}
+            height={NUM_DIGIT_H}
+            fontSize={NUM_FONT_SIZE}
+            slotWidth={NUM_SLOT_W}
+          />
+        );
+      })}
+    </View>
+  );
+}
+
+// ─── Rolling Day Badge ────────────────────────────────────────────────────────
+
+const DAY_BADGE_H = 22;
+
+interface RollingDayBadgeProps {
+  data: TrendDataPoint[];
+  activeIndex: number;
+  accentColor: string;
+  badgeBg: string;
+  badgeBorder: string;
+}
+
+function RollingDayBadge({
+  data,
+  activeIndex,
+  accentColor,
+  badgeBg,
+  badgeBorder,
+}: RollingDayBadgeProps) {
+  const animY = useRef(new Animated.Value(-activeIndex * DAY_BADGE_H)).current;
+
+  useEffect(() => {
+    Animated.spring(animY, {
+      toValue: -activeIndex * DAY_BADGE_H,
+      useNativeDriver: true,
+      stiffness: 200,
+      damping: 24,
+      mass: 1,
+    }).start();
+  }, [activeIndex, animY]);
 
   return (
     <View
       style={[
-        styles.cardContainer,
-        {
-          backgroundColor: colors.background,
-          borderColor: colors.border,
-        },
+        styles.dayBadgeWindow,
+        { backgroundColor: badgeBg, borderColor: badgeBorder },
       ]}
-      accessibilityRole="summary"
-      accessibilityLabel={summaryLabel}
     >
-      {/* Header */}
-      <View style={styles.headerRow}>
-        <View>
-          <Text style={[styles.chartTitle, { color: colors.title }]}>{title}</Text>
-          <Text style={[styles.chartSubtitle, { color: accentColor }]}>{subtitle}</Text>
-        </View>
-        <View
+      <Animated.View
+        style={[
+          styles.dayBadgeStrip,
+          { transform: [{ translateY: animY }] },
+        ]}
+      >
+        {data.map((item, i) => (
+          <View key={i} style={styles.dayBadgeItem}>
+            <Text
+              allowFontScaling={false}
+              numberOfLines={1}
+              style={[styles.dayBadgeText, { color: accentColor }]}
+            >
+              {item.label.toUpperCase()}
+            </Text>
+          </View>
+        ))}
+      </Animated.View>
+    </View>
+  );
+}
+
+// ─── Rolling Percent Display ──────────────────────────────────────────────────
+
+const PCT_DIGIT_H = 20;
+const PCT_FONT_SIZE = 13.5;
+const PCT_SLOT_W = 9;
+
+interface RollingPercentProps {
+  pct: number;
+  isPositive: boolean;
+  positiveColor: string;
+  negativeColor: string;
+}
+
+function RollingPercent({
+  pct,
+  isPositive,
+  positiveColor,
+  negativeColor,
+}: RollingPercentProps) {
+  const color = isPositive ? positiveColor : negativeColor;
+  const absVal = Math.abs(pct);
+  const formatted = absVal.toFixed(1);
+  const [intPart, decPart] = formatted.split(".");
+  const intDigits = intPart.split("").map(Number);
+  const decDigit = decPart ? Number(decPart) : null;
+
+  return (
+    <View style={styles.rollingPct}>
+      <Text allowFontScaling={false} style={[styles.pctSign, { color }]}>
+        {isPositive ? "+" : "−"}
+      </Text>
+      {intDigits.map((d, i) => (
+        <RollingDigit
+          key={`int-${i}`}
+          digit={isNaN(d) ? 0 : d}
+          color={color}
+          delay={i * 20}
+          height={PCT_DIGIT_H}
+          fontSize={PCT_FONT_SIZE}
+          slotWidth={PCT_SLOT_W}
+        />
+      ))}
+      {decDigit !== null && (
+        <>
+          <Text allowFontScaling={false} style={[styles.pctDot, { color }]}>.</Text>
+          <RollingDigit
+            key="dec"
+            digit={isNaN(decDigit) ? 0 : decDigit}
+            color={color}
+            delay={intDigits.length * 20}
+            height={PCT_DIGIT_H}
+            fontSize={PCT_FONT_SIZE}
+            slotWidth={PCT_SLOT_W}
+          />
+        </>
+      )}
+      <Text allowFontScaling={false} style={[styles.pctUnit, { color }]}>%</Text>
+    </View>
+  );
+}
+
+// ─── X-Axis Sliding Pill with Single-Letter Labels ─────────────────────────────
+
+interface XAxisPillProps {
+  data: TrendDataPoint[];
+  activeIndex: number | null;
+  accentColor: string;
+  axisTextColor: string;
+  badgeBg: string;
+  badgeBorder: string;
+  onSelectIndex?: (index: number) => void;
+}
+
+function XAxisPill({
+  data,
+  activeIndex,
+  accentColor,
+  axisTextColor,
+  badgeBg,
+  badgeBorder,
+  onSelectIndex,
+}: XAxisPillProps) {
+  const [containerW, setContainerW] = useState(0);
+
+  const pillWidth = containerW > 0 ? containerW / data.length : 0;
+  const inspectedIdx = activeIndex !== null ? activeIndex : data.length - 1;
+
+  const pillLeft = useRef(new Animated.Value(inspectedIdx * pillWidth)).current;
+  const pillOpacity = useRef(new Animated.Value(activeIndex !== null ? 1 : 0)).current;
+
+  useEffect(() => {
+    if (containerW <= 0) return;
+    const targetLeft = inspectedIdx * pillWidth;
+    Animated.spring(pillLeft, {
+      toValue: targetLeft,
+      useNativeDriver: false,
+      stiffness: 200,
+      damping: 26,
+      mass: 1,
+    }).start();
+  }, [inspectedIdx, pillWidth, containerW, pillLeft]);
+
+  useEffect(() => {
+    Animated.timing(pillOpacity, {
+      toValue: activeIndex !== null ? 1 : 0,
+      duration: 180,
+      useNativeDriver: false,
+    }).start();
+  }, [activeIndex, pillOpacity]);
+
+  return (
+    <View
+      style={styles.xAxisTrack}
+      onLayout={(e) => setContainerW(e.nativeEvent.layout.width)}
+    >
+      {/* Sliding active pill indicator */}
+      {containerW > 0 && (
+        <Animated.View
           style={[
-            styles.growthBadge,
+            styles.xAxisActivePill,
             {
-              backgroundColor: colors.badgeBg,
-              borderColor: colors.badgeBorder,
+              width: pillWidth,
+              left: pillLeft,
+              opacity: pillOpacity,
+              backgroundColor: badgeBg,
+              borderColor: badgeBorder,
             },
           ]}
+        />
+      )}
+
+      {/* Day single-letter labels (M, T, W, T, F, S, S) */}
+      {data.map((item, idx) => {
+        const isActive = idx === activeIndex;
+        const letter = item.label.length === 1 ? item.label : item.label.charAt(0).toUpperCase();
+
+        return (
+          <TouchableOpacity
+            key={idx}
+            activeOpacity={0.7}
+            onPress={() => onSelectIndex?.(idx)}
+            {...(Platform.OS === "web" ? { onClick: () => onSelectIndex?.(idx) } : {})}
+            style={styles.xAxisLabel}
+            accessibilityRole="button"
+            accessibilityLabel={item.label}
+          >
+            <Text
+              numberOfLines={1}
+              style={[
+                styles.xAxisText,
+                { color: isActive ? accentColor : axisTextColor },
+                isActive && styles.xAxisTextActive,
+              ]}
+            >
+              {letter}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
+
+// ─── Main Chart Component ─────────────────────────────────────────────────────
+
+export function TrendChart({
+  data = DEMO_CHART_DATA,
+  height = 150,
+  theme = "dark",
+  accentColor = "#10B981",
+  title = "7-Day Activity Trend",
+  subtitle = "growth vs last week",
+  unit = "",
+  onPointSelect,
+}: TrendChartProps) {
+  const safeData = data && data.length >= 2 ? data : DEMO_CHART_DATA;
+  const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
+
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [overlayWidth, setOverlayWidth] = useState(0);
+
+  // SVG coordinate calculations — supports negative values by using actual data min
+  const { pointCoords, yTicks, minV, maxV, drawW, drawH } = useMemo(() => {
+    const values = safeData.map((d) => d.value);
+    const rawMax = Math.max(...values);
+    const rawMin = Math.min(...values, 0); // include 0 so baseline is always visible
+    const range = rawMax - rawMin || 1;
+    const maxVal = rawMax + range * 0.05; // 5% headroom above peak
+    const minVal = rawMin;
+    const midVal = Math.round((maxVal + minVal) / 2);
+
+    const dH = SVG_VB_H - PAD_T - PAD_B;
+    const colW = SVG_VB_W / safeData.length;
+
+    const coords = safeData.map((d, i) => ({
+      x: colW * (i + 0.5),
+      y: PAD_T + dH * (1 - (d.value - minVal) / (maxVal - minVal || 1)),
+    }));
+
+    return {
+      pointCoords: coords,
+      yTicks: [maxVal, midVal, minVal],
+      minV: minVal,
+      maxV: maxVal,
+      drawW: SVG_VB_W - colW,
+      drawH: dH,
+    };
+  }, [safeData]);
+
+  // Smooth cubic Bézier curve path
+  const linePath = useMemo(() => {
+    if (pointCoords.length < 2) return "";
+    let d = `M ${pointCoords[0].x} ${pointCoords[0].y}`;
+    for (let i = 0; i < pointCoords.length - 1; i++) {
+      const cp1x = pointCoords[i].x + (pointCoords[i + 1].x - pointCoords[i].x) * 0.45;
+      const cp2x = pointCoords[i + 1].x - (pointCoords[i + 1].x - pointCoords[i].x) * 0.45;
+      d += ` C ${cp1x} ${pointCoords[i].y} ${cp2x} ${pointCoords[i + 1].y} ${pointCoords[i + 1].x} ${pointCoords[i + 1].y}`;
+    }
+    return d;
+  }, [pointCoords]);
+
+  // Gradient-filled area path closing at the baseline
+  const areaPath = useMemo(() => {
+    if (!linePath || pointCoords.length < 2) return "";
+    const first = pointCoords[0];
+    const last = pointCoords[pointCoords.length - 1];
+    const baselineY = PAD_T + drawH;
+    return `${linePath} L ${last.x} ${baselineY} L ${first.x} ${baselineY} Z`;
+  }, [linePath, pointCoords, drawH]);
+
+  // Inspected index: the hovered/tapped point when active, last point when idle.
+  // Semantics: badge, number, and percent always describe the SAME point.
+  const inspectedIdx = activeIndex !== null ? activeIndex : safeData.length - 1;
+  const inspectedPoint = safeData[inspectedIdx];
+  const prevIdx = inspectedIdx > 0 ? inspectedIdx - 1 : null;
+  const prevValue = prevIdx !== null ? safeData[prevIdx].value : null;
+
+  /**
+   * % change relative to the previous point.
+   * Idle state → uses last-to-second-last change (real data, no magic constant).
+   * Active state → same formula applied to the currently hovered point.
+   */
+  const pctChange =
+    prevValue !== null && prevValue !== 0
+      ? ((inspectedPoint.value - prevValue) / prevValue) * 100
+      : prevValue === 0
+      ? inspectedPoint.value > 0 ? 100 : 0 // avoid ÷0; treat as +100% from zero
+      : 0;
+
+  const displayPct = pctChange; // always computed from real data
+  const displayIsPositive = displayPct >= 0;
+  const cleanSubtitle = subtitle.replace(/^[+-]?\d+(\.\d+)?%?\s*/, "") || subtitle;
+
+  // Both number and badge describe the same inspected point for semantic consistency.
+  const displayValue = inspectedPoint.value;
+
+  // Unique gradient id to prevent collisions across multiple charts or theme switches
+  const gradientId = useMemo(
+    () => `trendGrad-${theme}-${Math.random().toString(36).slice(2, 7)}`,
+    [theme]
+  );
+
+  const padTopPx = (PAD_T / SVG_VB_H) * height;
+  const drawHPx = (drawH / SVG_VB_H) * height;
+
+  // ── Smooth animated indicator coordinates ──
+  // Using React Native Animated on absolute Views prevents SVG aspect-ratio distortion on iPhone SE / small screens
+  const animIndicatorX = useRef(new Animated.Value(0)).current;
+  const animIndicatorY = useRef(new Animated.Value(0)).current;
+  const animIndicatorOpacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (activeIndex !== null && overlayWidth > 0 && pointCoords[activeIndex]) {
+      const colW = overlayWidth / safeData.length;
+      const targetX = colW * (activeIndex + 0.5);
+      const targetY = (pointCoords[activeIndex].y / SVG_VB_H) * height;
+
+      Animated.parallel([
+        Animated.spring(animIndicatorX, {
+          toValue: targetX,
+          stiffness: 280,
+          damping: 24,
+          mass: 0.8,
+          useNativeDriver: false,
+        }),
+        Animated.spring(animIndicatorY, {
+          toValue: targetY,
+          stiffness: 280,
+          damping: 24,
+          mass: 0.8,
+          useNativeDriver: false,
+        }),
+        Animated.timing(animIndicatorOpacity, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    } else {
+      Animated.timing(animIndicatorOpacity, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [
+    activeIndex,
+    overlayWidth,
+    safeData.length,
+    pointCoords,
+    height,
+    animIndicatorX,
+    animIndicatorY,
+    animIndicatorOpacity,
+  ]);
+
+  // ── Native PanResponder for Rock-Solid Touch & Drag Scrubbing on Mobile ──
+  const overlayRef = useRef<any>(null);
+  const chartLeftRef = useRef(0);
+  const chartWidthRef = useRef(0);
+
+  const measureOverlay = useCallback(() => {
+    overlayRef.current?.measure?.(
+      (_x: number, _y: number, width: number, _height: number, pageX: number) => {
+        if (pageX !== undefined && pageX > 0) {
+          chartLeftRef.current = pageX;
+        }
+        if (width > 0) {
+          chartWidthRef.current = width;
+        }
+      }
+    );
+  }, []);
+
+  const updatePointFromTouch = useCallback(
+    (evt: any, gestureState?: any) => {
+      const w = chartWidthRef.current || overlayWidth;
+      if (w <= 0) return;
+
+      let relX: number | undefined;
+
+      // 1. Try pageX relative to measured chart left (Android & iOS scroll-immune)
+      const pageX = evt?.nativeEvent?.pageX ?? gestureState?.moveX ?? gestureState?.x0;
+      if (pageX !== undefined && chartLeftRef.current > 0) {
+        relX = pageX - chartLeftRef.current;
+      }
+
+      // 2. Fallback to locationX
+      if (relX === undefined || isNaN(relX)) {
+        relX = evt?.nativeEvent?.locationX;
+      }
+
+      if (relX === undefined || isNaN(relX)) return;
+
+      const clampedX = Math.max(0, Math.min(w, relX));
+      const pct = clampedX / w;
+      const idx = Math.min(
+        safeData.length - 1,
+        Math.max(0, Math.floor(pct * safeData.length))
+      );
+
+      setActiveIndex(idx);
+      onPointSelect?.(safeData[idx], idx);
+    },
+    [overlayWidth, safeData, onPointSelect]
+  );
+
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponderCapture: () => true,
+        onMoveShouldSetPanResponderCapture: () => true,
+        // CRITICAL for mobile: prevents parent ScrollView/FlatList from hijacking the touch!
+        onPanResponderTerminationRequest: () => false,
+        onPanResponderGrant: (evt, gestureState) => {
+          measureOverlay();
+          updatePointFromTouch(evt, gestureState);
+        },
+        onPanResponderMove: (evt, gestureState) => {
+          updatePointFromTouch(evt, gestureState);
+        },
+        onPanResponderRelease: () => {
+          setActiveIndex(null);
+        },
+        onPanResponderTerminate: () => {
+          setActiveIndex(null);
+        },
+      }),
+    [measureOverlay, updatePointFromTouch]
+  );
+
+  // Web desktop mouse hover handlers (doesn't interfere with touch devices)
+  const webPointerProps = Platform.select({ web: {
+    onPointerMove: (e: any) => { // platform:web-safe
+      if (!e?.currentTarget) return;
+      const rect = (e.currentTarget as any)?.getBoundingClientRect?.(); // platform:web-safe
+      if (!rect || rect.width <= 0) return;
+      const relX = (e.clientX ?? 0) - rect.left;
+      const clampedX = Math.max(0, Math.min(rect.width, relX));
+      const pct = clampedX / rect.width;
+      const idx = Math.min(
+        safeData.length - 1,
+        Math.max(0, Math.floor(pct * safeData.length))
+      );
+      setActiveIndex(idx);
+      onPointSelect?.(safeData[idx], idx);
+    },
+    onPointerLeave: () => { // platform:web-safe
+      setActiveIndex(null);
+    },
+  }, default: {} }) as object;
+
+  return (
+    <View
+      style={[
+        styles.card,
+        { backgroundColor: colors.bg, borderColor: colors.border },
+      ]}
+    >
+      {/* ── Header: Title + Big Value Display + Supporting Metric Row (Top Left) ── */}
+      <View style={styles.headerRow}>
+        <View style={styles.headerLeft}>
+          {/* Title */}
+          <Text style={[styles.titleText, { color: colors.textSecondary }]}>
+            {title}
+          </Text>
+
+          {/* Big Number on its own line: Total when nothing selected, point value when scrubbing */}
+          <View style={styles.valueRow}>
+            <RollingNumber
+              value={displayValue}
+              color={colors.textPrimary}
+            />
+            {unit ? (
+              <Text style={[styles.unitLabel, { color: colors.textSecondary }]}>
+                {unit}
+              </Text>
+            ) : null}
+          </View>
+
+          {/* Supporting Metric Row on its own line: Day Badge + Rolling Percent + Subtitle */}
+          <View style={styles.badgeRow}>
+            {/* Rolling Day Badge Reel */}
+            <RollingDayBadge
+              data={safeData}
+              activeIndex={inspectedIdx}
+              accentColor={accentColor}
+              badgeBg={colors.badgeBg}
+              badgeBorder={colors.badgeBorder}
+            />
+
+            {/* Smooth Rolling Percentage Animation */}
+            <RollingPercent
+              pct={displayPct}
+              isPositive={displayIsPositive}
+              positiveColor={colors.positiveChange}
+              negativeColor={colors.negativeChange}
+            />
+
+            {/* Subtitle / Growth Text: 'vs prev day' when scrubbing, cleanSubtitle when idle */}
+            <Text style={[styles.vsLabel, { color: colors.textSecondary }]}>
+              {cleanSubtitle}
+            </Text>
+          </View>
+        </View>
+
+        {/* Top Right: Live Badge */}
+        <View
+          style={[
+            styles.liveBadge,
+            { backgroundColor: colors.badgeBg, borderColor: colors.badgeBorder },
+          ]}
         >
-          <Text style={[styles.growthBadgeText, { color: accentColor }]}>Live</Text>
+          <Text style={[styles.liveText, { color: accentColor }]}>LIVE</Text>
         </View>
       </View>
 
-      {/* Main Chart Area */}
-      <View style={[styles.chartMainArea, { height }]}>
-        {/* Y Axis Labels */}
-        <View style={styles.yAxisColumn} aria-hidden={true}>
-          <Text style={[styles.yLabelText, { color: colors.axisText }]}>{formatLabel(maxVal)}</Text>
-          <Text style={[styles.yLabelText, { color: colors.axisText }]}>{formatLabel(midVal)}</Text>
-          <Text style={[styles.yLabelText, { color: colors.axisText }]}>0</Text>
+      {/* ── Chart Main Area: Y-Axis Reference Numbers + SVG Canvas ────── */}
+      <View style={styles.chartMainArea}>
+        {/* Y-Axis Numbers Column (4.8K / 2.4K / 0) */}
+        <View style={[styles.yAxisColumn, { height }]}>
+          {yTicks.map((tick, i) => {
+            const yPos = PAD_T + drawH * (1 - (tick - minV) / (maxV - minV || 1));
+            const topPx = (yPos / SVG_VB_H) * height - 8;
+            return (
+              <Text
+                key={i}
+                style={[
+                  styles.yLabelText,
+                  {
+                    color: colors.axisText,
+                    top: topPx,
+                  },
+                ]}
+              >
+                {formatYValue(tick)}
+              </Text>
+            );
+          })}
         </View>
 
-        {/* Vector SVG Canvas */}
-        <View style={styles.svgCanvasWrap}>
-          <svg
+        {/* SVG Chart Canvas */}
+        <View style={[styles.svgWrap, { height }]}>
+          <Svg
             width="100%"
-            height={height - 20}
-            viewBox={`0 0 ${SVG_VIEWBOX_WIDTH} ${SVG_VIEWBOX_HEIGHT}`}
+            height={height}
+            viewBox={`0 0 ${SVG_VB_W} ${SVG_VB_H}`}
             preserveAspectRatio="none"
-            style={{ overflow: "visible" }}
-            aria-hidden={true}
           >
-            <defs>
-              <linearGradient id={`trendGradient-${theme}`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={accentColor} stopOpacity={0.35} />
-                <stop offset="100%" stopColor={accentColor} stopOpacity={0.0} />
-              </linearGradient>
-            </defs>
+            {/* SVG LinearGradient with percentage units for full cross-platform compatibility */}
+            <Defs>
+              <LinearGradient
+                id={gradientId}
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <Stop offset="0%" stopColor={accentColor} stopOpacity={0.35} />
+                <Stop offset="100%" stopColor={accentColor} stopOpacity={0} />
+              </LinearGradient>
+            </Defs>
 
-            {/* Dotted Reference Gridlines */}
-            <path
-              d={`M0 10 H${SVG_VIEWBOX_WIDTH}`}
-              stroke={colors.gridline}
-              strokeWidth="1"
-              strokeDasharray="4 4"
-            />
-            <path
-              d={`M0 ${SVG_VIEWBOX_HEIGHT / 2} H${SVG_VIEWBOX_WIDTH}`}
-              stroke={colors.gridline}
-              strokeWidth="1"
-              strokeDasharray="4 4"
-            />
-            <path
-              d={`M0 ${SVG_VIEWBOX_HEIGHT - 1} H${SVG_VIEWBOX_WIDTH}`}
-              stroke={colors.gridlineBase}
-              strokeWidth="1"
-            />
+            {/* Horizontal Dashed Grid Lines matching Y-Axis numbers */}
+            {yTicks.map((tick, i) => {
+              const yPos = PAD_T + drawH * (1 - (tick - minV) / (maxV - minV || 1));
+              return (
+                <Line
+                  key={i}
+                  x1={0}
+                  x2={SVG_VB_W}
+                  y1={yPos}
+                  y2={yPos}
+                  stroke={colors.gridLine}
+                  strokeWidth={1}
+                  strokeDasharray="4, 4"
+                />
+              );
+            })}
 
-            {/* Gradient Area Fill */}
-            <path d={fillPath} fill={`url(#trendGradient-${theme})`} />
+            {/* Area Fill under the Curve */}
+            <Path d={areaPath} fill={`url(#${gradientId})`} />
 
-            {/* Accent Line */}
-            <path
+            {/* Linear Curve Line matching screenshot */}
+            <Path
               d={linePath}
               fill="none"
               stroke={accentColor}
-              strokeWidth={strokeWidth}
+              strokeWidth={2.5}
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-          </svg>
+
+          </Svg>
+
+          {/* ── Smooth Animated Guideline (immune to SVG aspect-ratio distortion) ── */}
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.guideLine,
+              {
+                left: animIndicatorX,
+                top: padTopPx,
+                height: drawHPx,
+                borderColor: accentColor,
+                opacity: animIndicatorOpacity,
+              },
+            ]}
+          />
+
+          {/* ── Smooth Animated Glowing Node (true circle Views that never distort on iPhone SE) ── */}
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.indicatorDotContainer,
+              {
+                left: animIndicatorX,
+                top: animIndicatorY,
+                opacity: animIndicatorOpacity,
+              },
+            ]}
+          >
+            {/* Outer aura ring (24x24, r=12) */}
+            <View
+              style={[
+                styles.indicatorGlowOuter,
+                { backgroundColor: accentColor, opacity: 0.2 },
+              ]}
+            />
+            {/* Mid ring (14x14, r=7) */}
+            <View
+              style={[
+                styles.indicatorGlowMid,
+                { backgroundColor: accentColor, opacity: 0.4 },
+              ]}
+            />
+            {/* White core (8x8, r=4) */}
+            <View style={styles.indicatorCoreWhite} />
+            {/* Center pip (5x5, r=2.5) */}
+            <View
+              style={[
+                styles.indicatorInnerPip,
+                { backgroundColor: accentColor },
+              ]}
+            />
+          </Animated.View>
+
+          {/* Per-column accessible labels (read-only — not interactive) */}
+          <View style={[StyleSheet.absoluteFill, styles.columnTapRow]} pointerEvents="none">
+            {safeData.map((point, idx) => (
+              <View
+                key={idx}
+                style={styles.columnTap}
+                accessibilityLabel={`${point.label}: ${point.value}${unit}`}
+              />
+            ))}
+          </View>
+
+          {/* Interaction overlay — covers the full chart area for continuous touch & pointer scrubbing */}
+          <View
+            ref={overlayRef}
+            style={StyleSheet.absoluteFill}
+            onLayout={(e) => {
+              const w = e.nativeEvent.layout.width;
+              setOverlayWidth(w);
+              chartWidthRef.current = w;
+              measureOverlay();
+            }}
+            {...panResponder.panHandlers}
+            {...webPointerProps}
+          />
         </View>
       </View>
 
-      {/* X Axis Labels */}
-      <View style={styles.xAxisRow} aria-hidden={true}>
-        <View style={{ width: 34 }} />
-        {data.map((item, idx) => (
-          <Text key={idx} style={[styles.xLabelText, { color: colors.xLabelText }]}>
-            {item.label.charAt(0)}
-          </Text>
-        ))}
+      {/* ── X-Axis Labels Row: Aligned with the chart points ──────────── */}
+      <View style={styles.xAxisContainer}>
+        {/* Spacer aligning with Y-axis column width */}
+        <View style={styles.yAxisSpacer} />
+
+        {/* Sliding Pill Track with Single-Letter Day Labels */}
+        <XAxisPill
+          data={safeData}
+          activeIndex={activeIndex}
+          accentColor={accentColor}
+          axisTextColor={colors.textSecondary}
+          badgeBg={colors.pillBg}
+          badgeBorder={colors.pillBorder}
+          onSelectIndex={(idx) => {
+            const next = idx === activeIndex ? null : idx;
+            setActiveIndex(next);
+            if (next !== null) onPointSelect?.(safeData[next], next);
+          }}
+        />
       </View>
     </View>
   );
 }
 
+// ─── StyleSheet ─────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
-  cardContainer: {
+  card: {
     width: "100%",
     borderRadius: 20,
     borderWidth: 1,
-    padding: 20,
+    paddingTop: 20,
+    paddingBottom: 16,
+    paddingHorizontal: 20,
+    overflow: "hidden",
   },
   headerRow: {
     flexDirection: "row",
-    alignItems: "flex-start",
     justifyContent: "space-between",
-    marginBottom: 16,
+    alignItems: "flex-start",
+    marginBottom: 20,
   },
-  chartTitle: {
-    fontSize: 15,
-    fontWeight: "700",
+  headerLeft: {
+    flex: 1,
+    gap: 4,
+  },
+  titleText: {
+    fontSize: 14,
+    fontWeight: "600",
     letterSpacing: -0.2,
   },
-  chartSubtitle: {
-    fontSize: 12,
+  valueRow: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    gap: 6,
+    marginVertical: 2,
+  },
+  rollingNumber: {
+    flexDirection: "row",
+    height: NUM_DIGIT_H,
+    alignItems: "center",
+    overflow: "hidden",
+    flexShrink: 1,    // degrade gracefully on narrow screens / large values
+    maxWidth: "100%",
+  },
+  digitStrip: {
+    flexDirection: "column",
+  },
+  commaChar: {
+    fontSize: 22,
+    fontWeight: "700",
+    lineHeight: NUM_DIGIT_H,
+    marginHorizontal: 1,
+  },
+  unitLabel: {
+    fontSize: 14,
+    fontWeight: "500",
+    marginLeft: 2,
+  },
+  badgeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    flexWrap: "wrap",
     marginTop: 2,
+  },
+  dayBadgeWindow: {
+    height: DAY_BADGE_H,
+    borderRadius: 6,
+    borderWidth: 1,
+    overflow: "hidden",
+    paddingHorizontal: 7,
+    justifyContent: "flex-start",
+  },
+  dayBadgeStrip: {
+    flexDirection: "column",
+  },
+  dayBadgeItem: {
+    height: DAY_BADGE_H,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dayBadgeText: {
+    fontSize: 10.5,
+    fontWeight: "700",
+    letterSpacing: 0.6,
+  },
+  rollingPct: {
+    flexDirection: "row",
+    alignItems: "center",
+    height: PCT_DIGIT_H,
+    overflow: "hidden",
+  },
+  pctSign: {
+    fontSize: 13.5,
+    fontWeight: "700",
+    lineHeight: PCT_DIGIT_H,
+  },
+  pctDot: {
+    fontSize: 13.5,
+    fontWeight: "700",
+    lineHeight: PCT_DIGIT_H,
+  },
+  pctUnit: {
+    fontSize: 12.5,
+    fontWeight: "700",
+    lineHeight: PCT_DIGIT_H,
+  },
+  vsLabel: {
+    fontSize: 12.5,
     fontWeight: "500",
   },
-  growthBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+  liveBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: 12,
     borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  growthBadgeText: {
-    fontSize: 10,
+  liveText: {
+    fontSize: 11,
     fontWeight: "700",
-    textTransform: "uppercase",
+    letterSpacing: 0.8,
   },
   chartMainArea: {
     flexDirection: "row",
@@ -252,30 +1095,107 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   yAxisColumn: {
-    width: 34,
-    justifyContent: "space-between",
-    paddingBottom: 6,
+    width: 36,
+    position: "relative",
   },
   yLabelText: {
-    fontSize: 10.5,
-    fontFamily: "monospace",
+    position: "absolute",
+    left: 0,
+    fontSize: 12,
+    fontWeight: "500",
+    lineHeight: 16,
   },
-  svgCanvasWrap: {
+  svgWrap: {
+    flex: 1,
+    position: "relative",
+  },
+  columnTapRow: {
+    flexDirection: "row",
+  },
+  columnTap: {
     flex: 1,
     height: "100%",
-    justifyContent: "center",
   },
-  xAxisRow: {
+  xAxisContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 6,
-    paddingRight: 6,
+    alignItems: "center",
+    marginTop: 12,
+    width: "100%",
   },
-  xLabelText: {
+  yAxisSpacer: {
+    width: 36,
+  },
+  xAxisTrack: {
     flex: 1,
-    textAlign: "center",
-    fontSize: 11,
+    flexDirection: "row",
+    position: "relative",
+    borderRadius: 8,
+  },
+  xAxisActivePill: {
+    position: "absolute",
+    height: "100%",
+    borderRadius: 6,
+    borderWidth: 1,
+    top: 0,
+    bottom: 0,
+  },
+  xAxisLabel: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 5,
+    zIndex: 2,
+  },
+  xAxisText: {
+    fontSize: 12,
     fontWeight: "600",
+    textAlign: "center",
+  },
+  xAxisTextActive: {
+    fontWeight: "700",
+  },
+  guideLine: {
+    position: "absolute",
+    width: 0,
+    borderLeftWidth: 1.5,
+    borderStyle: "dashed",
+    marginLeft: -0.75,
+    zIndex: 3,
+  },
+  indicatorDotContainer: {
+    position: "absolute",
+    width: 24,
+    height: 24,
+    marginLeft: -12,
+    marginTop: -12,
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 4,
+  },
+  indicatorGlowOuter: {
+    position: "absolute",
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+  },
+  indicatorGlowMid: {
+    position: "absolute",
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+  },
+  indicatorCoreWhite: {
+    position: "absolute",
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#FFFFFF",
+  },
+  indicatorInnerPip: {
+    position: "absolute",
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
   },
 });
 

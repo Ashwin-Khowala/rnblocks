@@ -2,25 +2,27 @@ name: CI
 
 on:
   push:
-    branches: [master, main]
+    branches: [master, main, "fix/**", "feat/**", "chore/**"]
   pull_request:
     branches: [master, main]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  # ── Layer 1: Schema + DOM API Scanner ────────────────────────────────────────
   registry:
-    name: Validate Registry
+    name: Registry — Schema & Platform Compat
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: 10.11.0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
@@ -28,23 +30,65 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Validate Registry
-        run: pnpm run validate:registry
+      - name: Validate registry schema + platform compat
+        run: pnpm validate:registry
 
+  # ── Layer 2: Dependency Contract ─────────────────────────────────────────────
+  validate-deps:
+    name: Registry — Dependency Contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate block dependency declarations
+        run: pnpm validate:deps
+
+  # ── Layer 3: Native-Only TypeScript ──────────────────────────────────────────
+  native-typecheck:
+    name: Native TypeScript (no DOM types)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type-check registry against native-only environment
+        run: pnpm validate:native
+
+  # ── Layer 4: Web Typecheck ───────────────────────────────────────────────────
   typecheck:
     name: Typecheck Workspaces
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: 10.11.0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
@@ -53,23 +97,21 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Typecheck
-        run: pnpm run typecheck
+        run: pnpm typecheck
 
+  # ── Layer 5: Web Build ───────────────────────────────────────────────────────
   build:
     name: Turborepo Build
-    needs: [registry, typecheck]
+    needs: [registry, validate-deps, native-typecheck, typecheck]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: 10.11.0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
@@ -78,4 +120,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build Apps and Packages
-        run: pnpm run build
+        run: pnpm build
+        env:
+          NODE_ENV: production

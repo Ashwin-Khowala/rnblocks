@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useMemo } from "react";
 import {
   View,
@@ -7,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import Svg, { Path } from "react-native-svg";
 
 // ─── Type Definitions ──────────────────────────────────────────────────────────
 
@@ -23,10 +22,31 @@ export interface InteractiveCalendarProps {
   selectedDate?: Date;
   theme?: Theme;
   accentColor?: string;
+  /**
+   * Record of ISO date keys (YYYY-MM-DD) to dot/marking config.
+   *
+   * @example
+   * // Minimal usage — no dots shown:
+   * <InteractiveCalendar />
+   *
+   * @example
+   * // Pass pre-built sample data to see dots in a demo:
+   * import { InteractiveCalendar, DEMO_MARKED_DATES } from "./interactive-calendar";
+   * <InteractiveCalendar markedDates={DEMO_MARKED_DATES} />
+   *
+   * @example
+   * // Real usage — your own event map:
+   * <InteractiveCalendar markedDates={{
+   *   "2025-02-14": { dots: [{ color: "#EF4444" }] },
+   *   "2025-02-20": { marked: true, dotColor: "#10B981" },
+   * }} />
+   */
   markedDates?: Record<string, MarkedDateConfig>;
   onSelectDate?: (date: Date) => void;
   showTodayButton?: boolean;
 }
+
+// ─── Theme Colors ──────────────────────────────────────────────────────────────
 
 const COLORS_DARK = {
   background: "#121217",
@@ -56,62 +76,66 @@ const COLORS_LIGHT = {
   defaultAccent: "#4F46E5",
 };
 
-// ─── Default Sample Marked Dates ──────────────────────────────────────────────
+// ─── Demo Sample Data ──────────────────────────────────────────────────────────
+//
+// `DEMO_MARKED_DATES` is provided for previews and storybook use.
+// It is NOT the default prop value — pass it explicitly when you want dots:
+//
+//   import { InteractiveCalendar, DEMO_MARKED_DATES } from "./interactive-calendar";
+//   <InteractiveCalendar markedDates={DEMO_MARKED_DATES} />
+//
 
-function getSampleMarkedDates(): Record<string, MarkedDateConfig> {
-  const now = new Date();
-  const formatKey = (offsetDays: number) => {
-    const d = new Date(now);
-    d.setDate(d.getDate() + offsetDays);
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  };
-
-  return {
-    [formatKey(0)]: {
-      dots: [{ color: "#3B82F6" }, { color: "#10B981" }, { color: "#8B5CF6" }],
-    },
-    [formatKey(1)]: {
-      dots: [{ color: "#EF4444" }],
-    },
-    [formatKey(3)]: {
-      dots: [{ color: "#10B981" }],
-    },
-    [formatKey(-2)]: {
-      dots: [{ color: "#8B5CF6" }],
-    },
-    [formatKey(5)]: {
-      dots: [{ color: "#F59E0B" }],
-    },
-  };
+function buildRelativeDateKey(offsetDays: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-// ─── Authentic Vector SVG Icons ────────────────────────────────────────────────
+export const DEMO_MARKED_DATES: Record<string, MarkedDateConfig> = {
+  [buildRelativeDateKey(0)]: {
+    dots: [{ color: "#3B82F6" }, { color: "#10B981" }, { color: "#8B5CF6" }],
+  },
+  [buildRelativeDateKey(1)]: {
+    dots: [{ color: "#EF4444" }],
+  },
+  [buildRelativeDateKey(3)]: {
+    dots: [{ color: "#10B981" }],
+  },
+  [buildRelativeDateKey(-2)]: {
+    dots: [{ color: "#8B5CF6" }],
+  },
+  [buildRelativeDateKey(5)]: {
+    dots: [{ color: "#F59E0B" }],
+  },
+};
+
+// ─── Vector Chevron Icons (react-native-svg) ────────────────────────────────────
 
 function ChevronLeftIcon({ color = "#FFFFFF", size = 16 }: { color?: string; size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <path
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <Path
         d="M15 18L9 12L15 6"
         stroke={color}
-        strokeWidth="2"
+        strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </svg>
+    </Svg>
   );
 }
 
 function ChevronRightIcon({ color = "#FFFFFF", size = 16 }: { color?: string; size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <path
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <Path
         d="M9 18L15 12L9 6"
         stroke={color}
-        strokeWidth="2"
+        strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </svg>
+    </Svg>
   );
 }
 
@@ -143,7 +167,7 @@ export function InteractiveCalendar({
   selectedDate: controlledSelectedDate,
   theme = "dark",
   accentColor = "#4F46E5",
-  markedDates = getSampleMarkedDates(),
+  markedDates,
   onSelectDate,
   showTodayButton = true,
 }: InteractiveCalendarProps) {
@@ -156,7 +180,6 @@ export function InteractiveCalendar({
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  // Navigation handlers
   const handlePrev = () => {
     const next = new Date(currentDate);
     next.setMonth(next.getMonth() - 1);
@@ -182,7 +205,6 @@ export function InteractiveCalendar({
     onSelectDate?.(dayDate);
   };
 
-  // Month grid calculations
   const monthCalendarDays = useMemo(() => {
     const firstDayIndex = new Date(year, month, 1).getDay();
     const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
@@ -190,7 +212,6 @@ export function InteractiveCalendar({
 
     const days: { date: Date; isCurrentMonth: boolean; key: string }[] = [];
 
-    // Previous month trailing days
     for (let i = firstDayIndex - 1; i >= 0; i--) {
       const dayNum = daysInPrevMonth - i;
       days.push({
@@ -200,7 +221,6 @@ export function InteractiveCalendar({
       });
     }
 
-    // Current month days
     for (let i = 1; i <= daysInCurrentMonth; i++) {
       days.push({
         date: new Date(year, month, i),
@@ -209,7 +229,6 @@ export function InteractiveCalendar({
       });
     }
 
-    // Next month leading days (fill up to 35 or 42 grid slots)
     const totalSlots = days.length > 35 ? 42 : 35;
     const remaining = totalSlots - days.length;
     for (let i = 1; i <= remaining; i++) {
@@ -303,7 +322,7 @@ export function InteractiveCalendar({
       </View>
 
       {/* ── Weekday Labels Header ───────────────────────────────────── */}
-      <View style={styles.weekdayRow} aria-hidden={true}>
+      <View style={styles.weekdayRow}>
         {WEEKDAY_NAMES.map((w, idx) => (
           <Text
             key={idx}
@@ -320,7 +339,7 @@ export function InteractiveCalendar({
           const isSelected = isSameDay(item.date, activeSelectedDate);
           const isCurrentDay = isSameDay(item.date, today);
           const dateKey = toDateKey(item.date);
-          const dayMarking = markedDates[dateKey];
+          const dayMarking = markedDates?.[dateKey];
           const dots = dayMarking?.dots || (dayMarking?.marked ? [{ color: dayMarking.dotColor || accentColor }] : []);
           const dayA11yLabel = `${MONTH_NAMES[item.date.getMonth()]} ${item.date.getDate()}, ${item.date.getFullYear()}${isCurrentDay ? ", today" : ""}${isSelected ? ", selected" : ""}`;
 

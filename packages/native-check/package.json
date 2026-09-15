@@ -1,0 +1,23 @@
+{
+  "name": "@rnblocks/native-check",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Native-only TypeScript type-check environment for registry blocks. This package has NO browser types — if it compiles, blocks are safe for iOS/Android.",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-svg": "*"
+  },
+  "devDependencies": {
+    "typescript": "*",
+    "@types/react": "*",
+    "@types/react-native": "*"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-native": ">=0.72"
+  }
+}

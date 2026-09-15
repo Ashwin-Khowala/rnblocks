@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { REGISTRY_ITEMS } from "@/data/blocks";
+import { REGISTRY_DATA } from "@/data/registry-data";
 
 export async function GET(
   request: NextRequest,
@@ -7,7 +7,7 @@ export async function GET(
 ) {
   try {
     const { slug } = await context.params;
-    const item = REGISTRY_ITEMS.find((b) => b.slug === slug);
+    const item = REGISTRY_DATA.find((b) => b.slug === slug);
 
     if (!item) {
       return NextResponse.json(
@@ -16,8 +16,7 @@ export async function GET(
       );
     }
 
-    const { Component, ...data } = item;
-    return NextResponse.json(data);
+    return NextResponse.json(item);
   } catch (error) {
     console.error("API item error:", error);
     return NextResponse.json({ error: "Failed to fetch item" }, { status: 500 });
