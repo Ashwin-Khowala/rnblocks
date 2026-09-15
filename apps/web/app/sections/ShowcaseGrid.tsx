@@ -13,33 +13,18 @@ export function ShowcaseGrid() {
     <section className="bg-[#070709] border-t border-white/[0.06] pt-16 md:pt-20 pb-20 md:pb-24">
       <div className="container-main">
         {/* Section Header Row */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between max-w-[440px] md:max-w-[960px] mx-auto mb-9 gap-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between max-w-[440px] md:max-w-[960px] mx-auto mb-7 md:mb-9 gap-4">
           <div>
-            {/* Eyebrow and Counter Pill */}
-            <div className="inline-flex items-center gap-2 md:gap-2.5 mb-2 md:mb-3">
-              <span className="inline-flex items-center justify-center h-[22px] px-2 rounded-full font-mono text-[11px] font-bold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 uppercase tracking-[0.04em] leading-none whitespace-nowrap">
-                {BLOCKS_DATA.length} blocks
-              </span>
-              <span className="font-mono text-[11.5px] font-semibold uppercase tracking-[0.08em] text-[#32c798] inline-flex items-center leading-none">
-                Available in Registry
-              </span>
-            </div>
-
             {/* Title */}
-            <h2 className="text-[21px] sm:text-[28px] md:text-[36px] font-extrabold text-white tracking-[-0.3px] md:tracking-[-0.8px] mb-1.5 md:mb-2">
+            <h2 className="text-[21px] sm:text-[28px] md:text-[36px] font-extrabold text-white tracking-[-0.3px] md:tracking-[-0.8px]">
               Components you <span className="font-editorial italic font-normal">copy</span> and own
             </h2>
-
-            {/* Subtitle */}
-            <p className="text-[13px] md:text-base leading-[1.4] md:leading-normal text-[#9ca3af] max-w-[310px] md:max-w-none">
-              No third-party runtime wrappers or mandatory theme providers. Every block is standalone TypeScript.
-            </p>
           </div>
 
           {/* View All Pill Button */}
           <Link
             href="/blocks"
-            className="group inline-flex items-center justify-center gap-2 text-[12.5px] md:text-[13px] font-semibold text-[#f3f4f6] bg-white/[0.04] border border-white/[0.12] hover:border-[#32c798]/35 hover:bg-[#32c798]/[0.08] hover:text-[#32c798] px-3.5 md:px-4 py-1.5 md:py-2 rounded-full transition-all duration-200 whitespace-nowrap w-fit self-start md:self-auto hover:-translate-y-0.5"
+            className="group inline-flex items-center justify-center gap-2 text-[12.5px] md:text-[13px] font-semibold text-[#f3f4f6] bg-white/[0.04] border border-white/[0.12] hover:border-[#32c798]/35 hover:bg-[#32c798]/[0.08] hover:text-[#32c798] px-3.5 md:px-4 py-1.5 md:py-2 rounded-full transition-all duration-200 whitespace-nowrap w-fit self-start sm:self-auto hover:-translate-y-0.5"
           >
             <span>View all components</span>
             <NextIcon size={14} className="transition-transform duration-200 group-hover:translate-x-0.5" />

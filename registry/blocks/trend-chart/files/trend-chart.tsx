@@ -1,4 +1,5 @@
 import React, {
+  useId,
   useState,
   useMemo,
   useRef,
@@ -564,10 +565,11 @@ export function TrendChart({
   // Both number and badge describe the same inspected point for semantic consistency.
   const displayValue = inspectedPoint.value;
 
-  // Unique gradient id to prevent collisions across multiple charts or theme switches
+  // Stable, SSR-safe unique gradient ID using React's useId to prevent hydration mismatch
+  const reactId = useId();
   const gradientId = useMemo(
-    () => `trendGrad-${theme}-${Math.random().toString(36).slice(2, 7)}`,
-    [theme]
+    () => `trendGrad-${theme}-${reactId.replace(/[^a-zA-Z0-9_-]/g, "")}`,
+    [theme, reactId]
   );
 
   const padTopPx = (PAD_T / SVG_VB_H) * height;
