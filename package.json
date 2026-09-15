@@ -36,6 +36,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-native": "^0.87.1",
+    "react-native-svg": "^15.15.5",
     "tsx": "^4.19.3",
     "turbo": "^2.4.4",
     "typescript": "^5.8.2"

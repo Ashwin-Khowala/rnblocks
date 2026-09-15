@@ -22,10 +22,10 @@
  * When adding a new block to the registry, add its import below.
  */
 
-import FloatingDocker from "../../registry/blocks/floating-docker/files/floating-docker";
-import InteractiveCalendar from "../../registry/blocks/interactive-calendar/files/interactive-calendar";
-import SocialAuthButtons from "../../registry/blocks/social-auth-buttons/files/social-auth-buttons";
-import TrendChart from "../../registry/blocks/trend-chart/files/trend-chart";
+import FloatingDocker from "../../../registry/blocks/floating-docker/files/floating-docker";
+import InteractiveCalendar from "../../../registry/blocks/interactive-calendar/files/interactive-calendar";
+import SocialAuthButtons from "../../../registry/blocks/social-auth-buttons/files/social-auth-buttons";
+import TrendChart from "../../../registry/blocks/trend-chart/files/trend-chart";
 
 // Suppress "unused import" errors — imports exist to trigger type-checking only.
 void FloatingDocker;
