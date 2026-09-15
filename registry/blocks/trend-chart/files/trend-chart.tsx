@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Platform,
   Animated,
+  PanResponder,
 } from "react-native";
 import Svg, {
   Path,
@@ -21,7 +22,7 @@ import Svg, {
   Stop,
   Line,
   G,
-  Rect,
+  Circle,
 } from "react-native-svg";
 
 // ─── Types & Interfaces ────────────────────────────────────────────────────────
@@ -120,94 +121,6 @@ function formatYValue(num: number): string {
 /** Locale-safe thousands-grouped number. Always uses ',' as separator. */
 function formatGrouped(num: number): string {
   return Math.round(num).toLocaleString("en-US");
-}
-
-// ─── AnimatedG and AnimatedLine via createAnimatedComponent ────────────────────
-
-const AnimatedG = Animated.createAnimatedComponent(G);
-const AnimatedLine = Animated.createAnimatedComponent(Line);
-
-// ─── Animated SVG Indicator ───────────────────────────────────────────────────
-
-interface SvgIndicatorProps {
-  accentColor: string;
-  guideTop: number;
-  guideBottom: number;
-  animX: Animated.Value;
-  animY: Animated.Value;
-  animOpacity: Animated.Value;
-}
-
-function SvgIndicator({
-  accentColor,
-  guideTop,
-  guideBottom,
-  animX,
-  animY,
-  animOpacity,
-}: SvgIndicatorProps) {
-  return (
-    <>
-      {/* Animated dashed guideline */}
-      <AnimatedLine
-        x1={animX as any}
-        x2={animX as any}
-        y1={guideTop}
-        y2={guideBottom}
-        stroke={accentColor}
-        strokeWidth={1.5}
-        strokeDasharray="3,3"
-        strokeOpacity={0.8}
-        opacity={animOpacity as any}
-      />
-      {/* Animated glowing node */}
-      <AnimatedG
-        x={animX as any}
-        y={animY as any}
-        opacity={animOpacity as any}
-      >
-        {/* Outer glow ring */}
-        <Rect
-          x={-12}
-          y={-12}
-          width={24}
-          height={24}
-          rx={12}
-          fill={accentColor}
-          fillOpacity={0.2}
-        />
-        {/* Mid glow ring */}
-        <Rect
-          x={-7}
-          y={-7}
-          width={14}
-          height={14}
-          rx={7}
-          fill={accentColor}
-          fillOpacity={0.4}
-        />
-        {/* Center white core */}
-        <Rect
-          x={-4}
-          y={-4}
-          width={8}
-          height={8}
-          rx={4}
-          fill="#FFFFFF"
-        />
-        {/* Inner accent dot */}
-        <Rect
-          x={-3}
-          y={-3}
-          width={6}
-          height={6}
-          rx={3}
-          fill={accentColor}
-          fillOpacity={0.9}
-        />
-      </AnimatedG>
-    </>
-  );
 }
 
 // ─── Rolling Digit ─────────────────────────────────────────────────────────────
@@ -653,94 +566,111 @@ export function TrendChart({
   // Both number and badge describe the same inspected point for semantic consistency.
   const displayValue = inspectedPoint.value;
 
-  // ── Animated indicator values ──
-  const defaultCoord = pointCoords[safeData.length - 1] ?? { x: 0, y: 0 };
-  const animX = useRef(new Animated.Value(defaultCoord.x)).current;
-  const animY = useRef(new Animated.Value(defaultCoord.y)).current;
-  const animOpacity = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const coord = pointCoords[activeIndex !== null ? activeIndex : safeData.length - 1];
-    if (!coord) return;
-    if (activeIndex !== null) {
-      Animated.parallel([
-        Animated.spring(animX, { toValue: coord.x, useNativeDriver: false, stiffness: 220, damping: 28 }),
-        Animated.spring(animY, { toValue: coord.y, useNativeDriver: false, stiffness: 220, damping: 28 }),
-        Animated.timing(animOpacity, { toValue: 1, duration: 180, useNativeDriver: false }),
-      ]).start();
-    } else {
-      Animated.timing(animOpacity, { toValue: 0, duration: 180, useNativeDriver: false }).start();
-    }
-  }, [activeIndex, pointCoords, animX, animY, animOpacity]);
-
-  // ── Native touch handlers ──
-  const handleNativeTouchMove = useCallback(
-    (e: any) => {
-      if (overlayWidth <= 0) return;
-      const locationX = e.nativeEvent?.locationX ?? 0;
-      const pct = Math.max(0, Math.min(1, locationX / overlayWidth));
-      const idx = Math.round(pct * (safeData.length - 1));
-      if (idx !== activeIndex) {
-        setActiveIndex(idx);
-        onPointSelect?.(safeData[idx], idx);
-      }
-    },
-    [overlayWidth, safeData, activeIndex, onPointSelect]
+  // Unique gradient id to prevent collisions across multiple charts or theme switches
+  const gradientId = useMemo(
+    () => `trendGrad-${theme}-${Math.random().toString(36).slice(2, 7)}`,
+    [theme]
   );
 
-  // ── Web pointer handlers ──
-  const handleWebPointerMove = useCallback(
-    (e: any) => {
+  const activeCoord = activeIndex !== null ? pointCoords[activeIndex] : null;
+
+  // ── Native PanResponder for Rock-Solid Touch & Drag Scrubbing on Mobile ──
+  const overlayRef = useRef<any>(null);
+  const chartLeftRef = useRef(0);
+  const chartWidthRef = useRef(0);
+
+  const measureOverlay = useCallback(() => {
+    overlayRef.current?.measure?.(
+      (_x: number, _y: number, width: number, _height: number, pageX: number) => {
+        if (pageX !== undefined && pageX > 0) {
+          chartLeftRef.current = pageX;
+        }
+        if (width > 0) {
+          chartWidthRef.current = width;
+        }
+      }
+    );
+  }, []);
+
+  const updatePointFromTouch = useCallback(
+    (evt: any, gestureState?: any) => {
+      const w = chartWidthRef.current || overlayWidth;
+      if (w <= 0) return;
+
+      let relX: number | undefined;
+
+      // 1. Try pageX relative to measured chart left (Android & iOS scroll-immune)
+      const pageX = evt?.nativeEvent?.pageX ?? gestureState?.moveX ?? gestureState?.x0;
+      if (pageX !== undefined && chartLeftRef.current > 0) {
+        relX = pageX - chartLeftRef.current;
+      }
+
+      // 2. Fallback to locationX
+      if (relX === undefined || isNaN(relX)) {
+        relX = evt?.nativeEvent?.locationX;
+      }
+
+      if (relX === undefined || isNaN(relX)) return;
+
+      const clampedX = Math.max(0, Math.min(w, relX));
+      const pct = clampedX / w;
+      const idx = Math.min(
+        safeData.length - 1,
+        Math.max(0, Math.floor(pct * safeData.length))
+      );
+
+      setActiveIndex(idx);
+      onPointSelect?.(safeData[idx], idx);
+    },
+    [overlayWidth, safeData, onPointSelect]
+  );
+
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponderCapture: () => true,
+        onMoveShouldSetPanResponderCapture: () => true,
+        // CRITICAL for mobile: prevents parent ScrollView/FlatList from hijacking the touch!
+        onPanResponderTerminationRequest: () => false,
+        onPanResponderGrant: (evt, gestureState) => {
+          measureOverlay();
+          updatePointFromTouch(evt, gestureState);
+        },
+        onPanResponderMove: (evt, gestureState) => {
+          updatePointFromTouch(evt, gestureState);
+        },
+        onPanResponderRelease: () => {
+          setActiveIndex(null);
+        },
+        onPanResponderTerminate: () => {
+          setActiveIndex(null);
+        },
+      }),
+    [measureOverlay, updatePointFromTouch]
+  );
+
+  // Web desktop mouse hover handlers (doesn't interfere with touch devices)
+  const webPointerProps = Platform.select({ web: {
+    onPointerMove: (e: any) => { // platform:web-safe
       if (!e?.currentTarget) return;
       const rect = (e.currentTarget as any)?.getBoundingClientRect?.(); // platform:web-safe
       if (!rect || rect.width <= 0) return;
       const relX = (e.clientX ?? 0) - rect.left;
-      const pct = Math.max(0, Math.min(1, relX / rect.width));
-      const idx = Math.round(pct * (safeData.length - 1));
-      if (idx !== activeIndex) {
-        setActiveIndex(idx);
-        onPointSelect?.(safeData[idx], idx);
-      }
+      const clampedX = Math.max(0, Math.min(rect.width, relX));
+      const pct = clampedX / rect.width;
+      const idx = Math.min(
+        safeData.length - 1,
+        Math.max(0, Math.floor(pct * safeData.length))
+      );
+      setActiveIndex(idx);
+      onPointSelect?.(safeData[idx], idx);
     },
-    [safeData, activeIndex, onPointSelect]
-  );
-
-  const handlePointerLeave = useCallback(() => setActiveIndex(null), []);
-
-  const overlayRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (Platform.OS !== "web") return;
-    const node = overlayRef.current as any;
-    if (!node || !node.addEventListener) return;
-
-    const handlePointer = (e: any) => {
-      handleWebPointerMove(e);
-    };
-    const handleLeave = () => {
-      handlePointerLeave();
-    };
-
-    node.addEventListener("pointerdown", handlePointer); // platform:web-safe
-    node.addEventListener("pointermove", handlePointer); // platform:web-safe
-    node.addEventListener("pointerleave", handleLeave); // platform:web-safe
-
-    return () => {
-      node.removeEventListener("pointerdown", handlePointer); // platform:web-safe
-      node.removeEventListener("pointermove", handlePointer); // platform:web-safe
-      node.removeEventListener("pointerleave", handleLeave); // platform:web-safe
-    };
-  }, [handleWebPointerMove, handlePointerLeave]);
-
-  // Platform-specific pointer props (web-only)
-  const webPointerProps = Platform.select({
-    web: {
-      onPointerDown: handleWebPointerMove, // platform:web-safe
-      onPointerMove: handleWebPointerMove, // platform:web-safe
-      onPointerLeave: handlePointerLeave, // platform:web-safe
+    onPointerLeave: () => { // platform:web-safe
+      setActiveIndex(null);
     },
-    default: {},
-  }) as object;
+  }, default: {} }) as object;
 
   return (
     <View
@@ -839,10 +769,17 @@ export function TrendChart({
             viewBox={`0 0 ${SVG_VB_W} ${SVG_VB_H}`}
             preserveAspectRatio="none"
           >
+            {/* SVG LinearGradient with percentage units for full cross-platform compatibility */}
             <Defs>
-              <LinearGradient id="tcGrad" x1="0" y1="0" x2="0" y2="1">
-                <Stop offset="0%" stopColor={accentColor} stopOpacity={0.25} />
-                <Stop offset="100%" stopColor={accentColor} stopOpacity={0.0} />
+              <LinearGradient
+                id={gradientId}
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <Stop offset="0%" stopColor={accentColor} stopOpacity={0.35} />
+                <Stop offset="100%" stopColor={accentColor} stopOpacity={0} />
               </LinearGradient>
             </Defs>
 
@@ -864,7 +801,7 @@ export function TrendChart({
             })}
 
             {/* Area Fill under the Curve */}
-            <Path d={areaPath} fill="url(#tcGrad)" />
+            <Path d={areaPath} fill={`url(#${gradientId})`} />
 
             {/* Linear Curve Line matching screenshot */}
             <Path
@@ -876,15 +813,52 @@ export function TrendChart({
               strokeLinejoin="round"
             />
 
-            {/* Animated Indicator (Dashed Guideline + Glowing Node) */}
-            <SvgIndicator
-              accentColor={accentColor}
-              guideTop={PAD_T}
-              guideBottom={PAD_T + drawH}
-              animX={animX}
-              animY={animY}
-              animOpacity={animOpacity}
-            />
+            {/* Active Indicator on Touch/Scrub: Dashed Guideline + Glowing Circle Node */}
+            {activeCoord && (
+              <G>
+                {/* Vertical dashed guideline */}
+                <Line
+                  x1={activeCoord.x}
+                  x2={activeCoord.x}
+                  y1={PAD_T}
+                  y2={PAD_T + drawH}
+                  stroke={accentColor}
+                  strokeWidth={1.5}
+                  strokeDasharray="3, 3"
+                  strokeOpacity={0.8}
+                />
+                {/* Outer halo */}
+                <Circle
+                  cx={activeCoord.x}
+                  cy={activeCoord.y}
+                  r={12}
+                  fill={accentColor}
+                  fillOpacity={0.2}
+                />
+                {/* Mid ring */}
+                <Circle
+                  cx={activeCoord.x}
+                  cy={activeCoord.y}
+                  r={7}
+                  fill={accentColor}
+                  fillOpacity={0.4}
+                />
+                {/* Center core */}
+                <Circle
+                  cx={activeCoord.x}
+                  cy={activeCoord.y}
+                  r={4}
+                  fill="#FFFFFF"
+                />
+                {/* Inner accent dot */}
+                <Circle
+                  cx={activeCoord.x}
+                  cy={activeCoord.y}
+                  r={2.5}
+                  fill={accentColor}
+                />
+              </G>
+            )}
           </Svg>
 
           {/* Per-column accessible labels (read-only — not interactive) */}
@@ -902,17 +876,13 @@ export function TrendChart({
           <View
             ref={overlayRef}
             style={StyleSheet.absoluteFill}
-            onStartShouldSetResponder={() => true}
-            onMoveShouldSetResponder={() => true}
-            onResponderGrant={handleNativeTouchMove}
-            onResponderMove={handleNativeTouchMove}
-            onResponderRelease={handlePointerLeave}
-            onResponderTerminate={handlePointerLeave}
-            onTouchStart={handleNativeTouchMove}
-            onTouchMove={handleNativeTouchMove}
-            onTouchEnd={handlePointerLeave}
-            onTouchCancel={handlePointerLeave}
-            onLayout={(e) => setOverlayWidth(e.nativeEvent.layout.width)}
+            onLayout={(e) => {
+              const w = e.nativeEvent.layout.width;
+              setOverlayWidth(w);
+              chartWidthRef.current = w;
+              measureOverlay();
+            }}
+            {...panResponder.panHandlers}
             {...webPointerProps}
           />
         </View>
