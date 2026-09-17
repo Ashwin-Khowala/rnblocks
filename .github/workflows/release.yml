@@ -45,9 +45,7 @@ jobs:
       # Publish using npm Trusted Publishing (OIDC)
       - name: Publish @rnblocks/cli to npm
         working-directory: packages/cli
-        run: |
-          npm install -g npm@latest
-          npm publish --access public --provenance
+        run: npm publish --access public --provenance
 
       # Generate GitHub Release with automated notes from commits / PRs
       - name: Create GitHub Release
