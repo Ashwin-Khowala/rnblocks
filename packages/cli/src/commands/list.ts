@@ -38,5 +38,5 @@ export async function listCommand() {
   }
 
   console.log(pc.dim(`Install any component with:`));
-  console.log(`  ${pc.cyan("npx rnblocks add <name>")}\n`);
+  console.log(`  ${pc.cyan("npx @rnblocks/cli add <name>")}\n`);
 }

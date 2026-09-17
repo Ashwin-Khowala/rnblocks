@@ -1,6 +1,6 @@
 # RNBlocks CLI Reference
 
-The `rnblocks` CLI allows developers to explore, resolve, and install components from the RNBlocks registry directly into React Native and Expo applications.
+The `@rnblocks/cli` package allows developers to explore, resolve, and install components from the RNBlocks registry directly into React Native and Expo applications.
 
 ---
 
@@ -9,13 +9,13 @@ The `rnblocks` CLI allows developers to explore, resolve, and install components
 You do not need to install the CLI globally. Execute commands using `npx`:
 
 ```bash
-npx rnblocks <command> [options]
+npx @rnblocks/cli <command> [options]
 ```
 
 Or install it globally if preferred:
 
 ```bash
-npm install -g rnblocks
+npm install -g @rnblocks/cli
 rnblocks --version
 ```
 
@@ -28,7 +28,7 @@ rnblocks --version
 Downloads and places the specified block or screen into your local project directory:
 
 ```bash
-npx rnblocks add floating-docker
+npx @rnblocks/cli add floating-docker
 ```
 
 #### Options:
@@ -43,10 +43,10 @@ npx rnblocks add floating-docker
 
 ```bash
 # Add to custom components folder
-npx rnblocks add trend-chart --path src/components/charts
+npx @rnblocks/cli add trend-chart --path src/components/charts
 
 # Overwrite an existing component with latest registry version
-npx rnblocks add interactive-calendar --overwrite
+npx @rnblocks/cli add interactive-calendar --overwrite
 ```
 
 ---
@@ -56,7 +56,7 @@ npx rnblocks add interactive-calendar --overwrite
 Lists all available blocks and screens currently published in the RNBlocks registry, along with their categories and authors:
 
 ```bash
-npx rnblocks list
+npx @rnblocks/cli list
 ```
 
 #### Output:
@@ -71,7 +71,7 @@ Blocks:
   trend-chart              SVG Gradient Area Trend Line Chart   by Ashwin Khowala
 
 Install any component with:
-  npx rnblocks add <name>
+  npx @rnblocks/cli add <name>
 ```
 
 ---
@@ -81,7 +81,7 @@ Install any component with:
 Scaffolds initial project configuration for RNBlocks, establishing target component directory preferences:
 
 ```bash
-npx rnblocks init
+npx @rnblocks/cli init
 ```
 
 ---

@@ -164,7 +164,7 @@ export default function SubmitPage() {
               <div className="flex-1">
                 <h3 className="text-sm sm:text-base font-semibold text-white mb-1">Review & Published</h3>
                 <p className="text-xs sm:text-sm text-[#9ca3af] leading-relaxed">
-                  Once approved and merged, the registry rebuilds automatically. Your block instantly appears in the web gallery and becomes installable via <code className="text-white font-mono bg-white/[0.06] px-1.5 py-0.5 rounded text-xs">npx rnblocks add [your-block]</code>.
+                  Once approved and merged, the registry rebuilds automatically. Your block instantly appears in the web gallery and becomes installable via <code className="text-white font-mono bg-white/[0.06] px-1.5 py-0.5 rounded text-xs">npx @rnblocks/cli add [your-block]</code>.
                 </p>
               </div>
             </div>

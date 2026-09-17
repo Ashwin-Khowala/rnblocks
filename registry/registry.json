@@ -1,7 +1,55 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-09-15T14:21:55.641Z",
+  "generatedAt": "2026-09-17T19:40:27.479Z",
   "items": [
+    {
+      "name": "bar-chart",
+      "title": "Interactive Rounded Bar Chart",
+      "description": "A modern, Bklit-inspired rounded bar column chart with vertical gradients, staggered spring entrance, touch scrubbing spotlight, and responsive SVG layout.",
+      "type": "block",
+      "author": {
+        "name": "Ashwin Khowala",
+        "github": "Ashwin-Khowala"
+      },
+      "version": "1.0.0",
+      "category": "analytics",
+      "tags": [
+        "chart",
+        "bar-chart",
+        "analytics",
+        "data-visualization",
+        "svg",
+        "gestures"
+      ],
+      "files": [
+        {
+          "path": "files/bar-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": [
+        "react-native-svg"
+      ],
+      "devDependencies": {},
+      "registryDependencies": [],
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "framework": "react-native",
+      "frameworks": [
+        "expo",
+        "react-native"
+      ],
+      "styling": [
+        "StyleSheet"
+      ],
+      "themes": [
+        "dark",
+        "light"
+      ]
+    },
     {
       "name": "floating-docker",
       "title": "Floating Glassmorphic Docker",

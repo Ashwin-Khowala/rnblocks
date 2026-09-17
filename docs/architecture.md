@@ -42,7 +42,7 @@ The single source of truth for schema definitions and registry parsing:
 - **`loader.ts`**: Provides file-system scanning helpers to discover items, validate schemas, and read associated component source code.
 
 ### 2. `@rnblocks/cli` (`packages/cli`)
-The command-line distribution tool invoked via `npx rnblocks`:
+The command-line distribution tool invoked via `npx @rnblocks/cli`:
 - **`add <slug>`**: Resolves a component from the local filesystem (in development) or from GitHub Raw (`master` branch). Places TypeScript source directly into the user's `components/rnblocks` or custom directory and instructs on required dependencies.
 - **`list`**: Enumerates available blocks and screens in the registry.
 - **`init`**: Guides initial project setup and component destination preferences.
@@ -69,7 +69,7 @@ The public-facing registry and documentation website at [rnblocks.vercel.app](ht
 
 3. Distribution
    Web: apps/web imports generated data and renders preview + copyable source code
-   CLI: npx rnblocks add <slug> fetches component files from registry and writes to user project
+   CLI: npx @rnblocks/cli add <slug> fetches component files from registry and writes to user project
 ```
 
 ---

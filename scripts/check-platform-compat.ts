@@ -20,6 +20,11 @@ const UNIVERSAL_VIOLATIONS: { regex: RegExp; label: string }[] = [
     label:
       'next/* import — Next.js-only. Registry blocks must be framework-agnostic React Native source.',
   },
+  {
+    regex: /\bdisplayPct:\s*[1-9]\d*(\.\d+)?/,
+    label:
+      'Hardcoded displayPct percentage literal detected. Percentage must always be dynamically computed from data, never hardcoded.',
+  },
 ];
 
 /** Violations that apply when a block claims ios or android support */
@@ -131,27 +136,60 @@ function checkPlatformCompat() {
         .filter((f) => /\.(tsx?|jsx?)$/.test(f))
         .map((f) => path.join(filesDir, f));
 
+      // Ensure block is covered by native-check package if it claims native support
+      if (claimsNative) {
+        const nativeCheckIndex = path.join(process.cwd(), "packages", "native-check", "src", "index.ts");
+        if (fs.existsSync(nativeCheckIndex)) {
+          const nativeCheckContent = fs.readFileSync(nativeCheckIndex, "utf-8");
+          if (!nativeCheckContent.includes(`registry/${type}/${slug}`)) {
+            console.error(
+              `[FAIL] ${slug}: Claims native support but is not imported in packages/native-check/src/index.ts.\n       Add its import to native-check so its types are continuously verified against pure React Native.\n`
+            );
+            errorCount++;
+          }
+        }
+      }
+
       for (const filePath of sourceFiles) {
         checkedFiles++;
         const rel = path.relative(process.cwd(), filePath);
-        const lines = fs.readFileSync(filePath, "utf-8").split("\n");
+        const fileContent = fs.readFileSync(filePath, "utf-8");
+        const lines = fileContent.split("\n");
+
+        // PanResponder robustness: continuous drag with locationX alone is fragile on mobile
+        if (fileContent.includes("PanResponder.create") && fileContent.includes("locationX")) {
+          if (!fileContent.includes("measure") && !fileContent.includes("pageX")) {
+            console.error(
+              `[FAIL] ${rel}: PanResponder uses locationX without .measure() + pageX.\n       On continuous drag on mobile, locationX shifts as the view shifts.\n       Use .measure() + pageX for scroll-immune touch tracking.\n`
+            );
+            errorCount++;
+          }
+        }
 
         const checkPatterns = (patterns: { regex: RegExp; label: string }[]) => {
           // Track whether we are inside a Platform.select({ web: ... }) block
           // or inside a function named handleWeb* — these are explicitly web-only
           // and platform-violating APIs are intentionally guarded there.
-          let platformSelectWebDepth = 0;
+          let insidePlatformSelect = false;
+          let insidePlatformWeb = false;
           let insideWebGuardedFn = false;
 
           for (let idx = 0; idx < lines.length; idx++) {
             const line = lines[idx];
 
-            // Track entry/exit of Platform.select({ web: blocks
-            if (/Platform\.select\s*\(\s*\{/.test(line) && /\bweb\s*:/.test(line)) {
-              platformSelectWebDepth++;
+            // Track entry/exit of Platform.select({ web: blocks (supports multi-line formatting)
+            if (/Platform\.select/.test(line)) {
+              insidePlatformSelect = true;
             }
-            if (/Platform\.select/.test(line) && /}\s*\)\s*;?/.test(line)) {
-              platformSelectWebDepth = Math.max(0, platformSelectWebDepth - 1);
+            if (insidePlatformSelect && /\bweb\s*:/.test(line)) {
+              insidePlatformWeb = true;
+            }
+            if (insidePlatformWeb && /\b(default|ios|android)\s*:/.test(line)) {
+              insidePlatformWeb = false;
+            }
+            if (/}\s*\)\s*;?/.test(line) && insidePlatformSelect) {
+              insidePlatformWeb = false;
+              insidePlatformSelect = false;
             }
 
             // Track functions explicitly named handleWeb* (intentionally web-only)
@@ -163,7 +201,7 @@ function checkPlatformCompat() {
               insideWebGuardedFn = false;
             }
 
-            const isWebGuardedContext = platformSelectWebDepth > 0 || insideWebGuardedFn;
+            const isWebGuardedContext = insidePlatformWeb || insideWebGuardedFn;
 
             // Allow: lines with explicit escape-hatch comment
             if (/\/\/\s*platform:web-safe/.test(line)) continue;

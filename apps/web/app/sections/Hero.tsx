@@ -14,9 +14,9 @@ export function Hero() {
   const TrendChartComponent = trendChartItem?.Component || (() => null);
 
   const cliCommands = {
-    npx: "npx rnblocks add trend-chart",
-    pnpm: "pnpm dlx rnblocks add trend-chart",
-    bun: "bunx rnblocks add trend-chart",
+    npx: "npx @rnblocks/cli add trend-chart",
+    pnpm: "pnpm dlx @rnblocks/cli add trend-chart",
+    bun: "bunx @rnblocks/cli add trend-chart",
   };
 
   return (

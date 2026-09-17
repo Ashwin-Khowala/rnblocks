@@ -26,9 +26,11 @@ import FloatingDocker from "../../../registry/blocks/floating-docker/files/float
 import InteractiveCalendar from "../../../registry/blocks/interactive-calendar/files/interactive-calendar";
 import SocialAuthButtons from "../../../registry/blocks/social-auth-buttons/files/social-auth-buttons";
 import TrendChart from "../../../registry/blocks/trend-chart/files/trend-chart";
+import BarChart from "../../../registry/blocks/bar-chart/files/bar-chart";
 
 // Suppress "unused import" errors — imports exist to trigger type-checking only.
 void FloatingDocker;
 void InteractiveCalendar;
 void SocialAuthButtons;
 void TrendChart;
+void BarChart;

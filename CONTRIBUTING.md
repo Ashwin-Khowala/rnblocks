@@ -226,7 +226,7 @@ Launch `pnpm dev` and visit [http://localhost:3000/blocks](http://localhost:3000
 
 ## Working on the CLI (`packages/cli`)
 
-The `rnblocks` CLI allows developers to add blocks directly into their React Native and Expo projects via `npx rnblocks add <slug>`.
+The `@rnblocks/cli` package allows developers to add blocks directly into their React Native and Expo projects via `npx @rnblocks/cli add <slug>`.
 
 To test the CLI locally:
 ```bash

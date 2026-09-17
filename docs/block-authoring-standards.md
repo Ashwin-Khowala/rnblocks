@@ -52,7 +52,7 @@ Web-only pointer props (`onPointerDown`, `onPointerMove`, `onPointerLeave`) may 
 
 ---
 
-## 2. Registry Metadata (P0 — will fail `npx rnblocks add <block>` for consumers)
+## 2. Registry Metadata (P0 — will fail `npx @rnblocks/cli add <block>` for consumers)
 
 ### 2.1  `registry.json` must declare every native dependency
 If a block imports a native module (anything that has a native `.podspec` or `build.gradle`), it **must** be listed in `"dependencies"` in the block's `registry.json`. The `validate:deps` script enforces this automatically — but only for packages already in `package.json`. Do not rely on implicit transitive installs.
@@ -63,7 +63,7 @@ If a block imports a native module (anything that has a native `.podspec` or `bu
   "dependencies": ["react-native-svg"]
 }
 
-// ❌ — consumer gets a red import after `npx rnblocks add trend-chart`
+// ❌ — consumer gets a red import after `npx @rnblocks/cli add trend-chart`
 {
   "dependencies": []
 }

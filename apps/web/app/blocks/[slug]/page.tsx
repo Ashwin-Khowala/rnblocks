@@ -84,8 +84,8 @@ export default function BlockDetailPage() {
 
           <div className="inline-flex items-center gap-2.5 bg-[#0a0a0e] border border-white/10 rounded-xl px-3.5 py-2 self-start md:self-auto shadow-inner">
             <span className="text-[#32c798] font-mono text-xs font-bold">$</span>
-            <span className="font-mono text-xs text-[#e4e4e7] select-all">npx rnblocks add {block.slug}</span>
-            <CopyButton text={`npx rnblocks add ${block.slug}`} label="Copy" />
+            <span className="font-mono text-xs text-[#e4e4e7] select-all">npx @rnblocks/cli add {block.slug}</span>
+            <CopyButton text={`npx @rnblocks/cli add ${block.slug}`} label="Copy" />
           </div>
         </div>
 
@@ -174,9 +174,9 @@ export default function BlockDetailPage() {
               <p className="text-xs text-[#9ca3af] mb-3">Add this block directly into your project:</p>
               <div className="flex items-center justify-between bg-[#040406] border border-white/[0.08] rounded-xl px-3 py-2">
                 <code className="font-mono text-xs text-[#e4e4e7] select-all truncate mr-2">
-                  npx rnblocks add {block.slug}
+                  npx @rnblocks/cli add {block.slug}
                 </code>
-                <CopyButton text={`npx rnblocks add ${block.slug}`} />
+                <CopyButton text={`npx @rnblocks/cli add ${block.slug}`} />
               </div>
             </div>
 

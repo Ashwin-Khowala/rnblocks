@@ -17,7 +17,7 @@ export async function addCommand(name: string, options: AddOptions) {
 
   if (!item) {
     logger.error(`Could not find "${name}" in the RNBlocks registry.`);
-    console.log(`Run ${pc.cyan("npx rnblocks list")} to see available blocks and screens.`);
+    console.log(`Run ${pc.cyan("npx @rnblocks/cli list")} to see available blocks and screens.`);
     process.exit(1);
   }
 
