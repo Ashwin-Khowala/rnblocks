@@ -1,0 +1,54 @@
+name: Release CLI
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+  id-token: write # Required for npm Trusted Publishing (OIDC) & provenance
+
+jobs:
+  release:
+    name: Validate, Build & Publish @rnblocks/cli
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Strict quality gate: ensures registry schema, platform compatibility, dependency matching, and native types pass
+      - name: Run verification suite
+        run: pnpm validate:all
+
+      - name: Run workspace typecheck
+        run: pnpm typecheck
+
+      # Build CLI bundle
+      - name: Build @rnblocks/cli
+        run: pnpm --filter @rnblocks/cli build
+
+      # Publish using npm Trusted Publishing (OIDC)
+      - name: Publish @rnblocks/cli to npm
+        run: pnpm --filter @rnblocks/cli publish --access public --no-git-checks --provenance
+
+      # Generate GitHub Release with automated notes from commits / PRs
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
