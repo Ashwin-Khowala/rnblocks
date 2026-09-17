@@ -29,7 +29,7 @@ export const DOC_CATEGORIES: DocCategory[] = [
         slug: "cli",
         title: "CLI Reference",
         category: "Using RNBlocks",
-        description: "Complete command guide for npx rnblocks add, list, and init.",
+        description: "Complete command guide for npx @rnblocks/cli add, list, and init.",
       },
       {
         slug: "styling-guide",

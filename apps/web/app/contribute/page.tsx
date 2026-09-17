@@ -169,7 +169,7 @@ export default function ContributePage() {
                 </div>
                 <h3 className="text-base font-bold text-white mb-2">Enhance the CLI</h3>
                 <p className="text-xs sm:text-sm text-[#9ca3af] leading-relaxed mb-4">
-                  Help improve <code className="text-white font-mono bg-white/[0.06] px-1.5 py-0.5 rounded text-xs">npx rnblocks</code> in <code className="text-white font-mono bg-white/[0.06] px-1.5 py-0.5 rounded text-xs">packages/cli</code> with automated dependency installation, project scaffolding, and conflict resolution.
+                  Help improve <code className="text-white font-mono bg-white/[0.06] px-1.5 py-0.5 rounded text-xs">npx @rnblocks/cli</code> in <code className="text-white font-mono bg-white/[0.06] px-1.5 py-0.5 rounded text-xs">packages/cli</code> with automated dependency installation, project scaffolding, and conflict resolution.
                 </p>
               </div>
               <a

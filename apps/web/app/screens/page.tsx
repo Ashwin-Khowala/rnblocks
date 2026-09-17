@@ -73,7 +73,7 @@ export default function ScreensPage() {
                     <div className="mb-4">
                       <div className="inline-flex items-center gap-2 bg-[#040406] border border-white/[0.08] rounded-xl px-3 py-1.5 text-xs font-mono text-[#d1d5db]">
                         <Terminal size={13} className="text-[#32c798]" />
-                        <code>npx rnblocks add {screen.name}</code>
+                        <code>npx @rnblocks/cli add {screen.name}</code>
                       </div>
                     </div>
 

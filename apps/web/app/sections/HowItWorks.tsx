@@ -49,8 +49,8 @@ export function HowItWorks() {
               directly into your <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-xs text-white">components/rnblocks</code> folder.
             </p>
             <div className="mt-5 flex items-center justify-between bg-[#08080a] border border-white/10 rounded-lg p-2 px-3 font-mono text-xs text-[#f3f4f6]">
-              <code className="truncate mr-2">npx rnblocks add floating-docker</code>
-              <CopyButton text="npx rnblocks add floating-docker" />
+              <code className="truncate mr-2">npx @rnblocks/cli add floating-docker</code>
+              <CopyButton text="npx @rnblocks/cli add floating-docker" />
             </div>
           </div>
 

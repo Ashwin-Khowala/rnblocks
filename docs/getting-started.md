@@ -17,10 +17,10 @@ RNBlocks is an open-source UI component registry designed for React Native and E
 
 ### Using the CLI (Recommended)
 
-To install a block, run the `rnblocks` CLI in your project root:
+To install a block, run the `@rnblocks/cli` command in your project root:
 
 ```bash
-npx rnblocks add floating-docker
+npx @rnblocks/cli add floating-docker
 ```
 
 The CLI executes the following steps automatically:

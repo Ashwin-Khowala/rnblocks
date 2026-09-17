@@ -17,10 +17,10 @@ Production-ready React Native and Expo UI components, delivered as clean source 
 
 | Component | Category | Preview | CLI Install Command |
 |---|---|---|---|
-| **[Floating Glassmorphic Docker](https://rnblocks.vercel.app/blocks/floating-docker)** | Navigation & Docks | [Inspect](https://rnblocks.vercel.app/blocks/floating-docker) | `npx rnblocks add floating-docker` |
-| **[Interactive Calendar](https://rnblocks.vercel.app/blocks/interactive-calendar)** | Data Display & Scheduling | [Inspect](https://rnblocks.vercel.app/blocks/interactive-calendar) | `npx rnblocks add interactive-calendar` |
-| **[Social OAuth Buttons](https://rnblocks.vercel.app/blocks/social-auth-buttons)** | Authentication | [Inspect](https://rnblocks.vercel.app/blocks/social-auth-buttons) | `npx rnblocks add social-auth-buttons` |
-| **[SVG Gradient Trend Chart](https://rnblocks.vercel.app/blocks/trend-chart)** | Analytics & Data Viz | [Inspect](https://rnblocks.vercel.app/blocks/trend-chart) | `npx rnblocks add trend-chart` |
+| **[Floating Glassmorphic Docker](https://rnblocks.vercel.app/blocks/floating-docker)** | Navigation & Docks | [Inspect](https://rnblocks.vercel.app/blocks/floating-docker) | `npx @rnblocks/cli add floating-docker` |
+| **[Interactive Calendar](https://rnblocks.vercel.app/blocks/interactive-calendar)** | Data Display & Scheduling | [Inspect](https://rnblocks.vercel.app/blocks/interactive-calendar) | `npx @rnblocks/cli add interactive-calendar` |
+| **[Social OAuth Buttons](https://rnblocks.vercel.app/blocks/social-auth-buttons)** | Authentication | [Inspect](https://rnblocks.vercel.app/blocks/social-auth-buttons) | `npx @rnblocks/cli add social-auth-buttons` |
+| **[SVG Gradient Trend Chart](https://rnblocks.vercel.app/blocks/trend-chart)** | Analytics & Data Viz | [Inspect](https://rnblocks.vercel.app/blocks/trend-chart) | `npx @rnblocks/cli add trend-chart` |
 
 ---
 
@@ -30,7 +30,7 @@ Production-ready React Native and Expo UI components, delivered as clean source 
 - **Zero Runtime Dependencies**: No wrapper contexts, no mandatory `ThemeProvider`, no CSS-in-JS runtime engine.
 - **Universal StyleSheet Primitives**: Authored using standard `StyleSheet.create` for universal compatibility. Easily adaptable to NativeWind v4, Tamagui, or any styling solution.
 - **Universal Mobile Compatibility**: Tested across Expo (SDK 52+) and React Native CLI (0.76+ with New Architecture & TurboModules).
-- **One-Command CLI**: Add components with a single command: `npx rnblocks add <block>`.
+- **One-Command CLI**: Add components with a single command: `npx @rnblocks/cli add <block>`.
 
 ---
 
@@ -39,7 +39,7 @@ Production-ready React Native and Expo UI components, delivered as clean source 
 Add a component directly into your project:
 
 ```bash
-npx rnblocks add floating-docker
+npx @rnblocks/cli add floating-docker
 ```
 
 Or browse, preview, and copy components directly from the web registry at [rnblocks.vercel.app](https://rnblocks.vercel.app).

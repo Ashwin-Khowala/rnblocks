@@ -1,5 +1,5 @@
 {
-  "name": "rnblocks",
+  "name": "@rnblocks/cli",
   "version": "0.1.0",
   "type": "module",
   "description": "CLI to add React Native components and screens directly to your project",
@@ -8,25 +8,32 @@
   "homepage": "https://rnblocks.vercel.app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ashwin-Khowala/rnblocks.git",
+    "url": "git+https://github.com/Ashwin-Khowala/rnblocks.git",
     "directory": "packages/cli"
   },
   "bin": {
-    "rnblocks": "./dist/index.js"
+    "rnblocks": "dist/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "dependencies": {
-    "@rnblocks/registry": "workspace:*",
     "commander": "^13.1.0",
     "picocolors": "^1.1.1",
     "prompts": "^2.4.2",
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@rnblocks/registry": "workspace:*",
     "@types/node": "^20.17.0",
     "@types/prompts": "^2.4.9",
     "tsup": "^8.4.0",

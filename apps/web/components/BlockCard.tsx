@@ -103,7 +103,7 @@ export function BlockCard({ block, className }: BlockCardProps) {
       {/* Top Right Quick Copy CLI */}
       <div className="hidden md:flex absolute top-3.5 right-3.5 z-20 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
         <CopyButton
-          text={`npx rnblocks add ${slug}`}
+          text={`npx @rnblocks/cli add ${slug}`}
           className="!bg-[#0c0c10]/90 !backdrop-blur-md !border-white/[0.12] hover:!border-white/[0.22] hover:!bg-[#14141a]/95 !rounded-full !px-2.5 !py-1 !font-mono !text-[11px] !font-medium !text-[#94a3b8] hover:!text-white !shadow-[0_4px_18px_rgba(0,0,0,0.55)]"
           label="CLI"
         />
