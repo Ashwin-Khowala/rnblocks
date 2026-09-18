@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { BLOCKS_DATA } from "@/data/blocks";
+import { BLOCK_DOCS } from "@/data/block-docs";
 import { LiveBlockPreview } from "@/components/LiveBlockPreview";
 import { CodeViewer } from "@/components/CodeViewer";
 import { CopyButton } from "@/components/CopyButton";
@@ -17,6 +18,9 @@ import {
   Code2,
   Smartphone,
   AlertCircle,
+  Sparkles,
+  ShieldCheck,
+  Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +28,7 @@ export default function BlockDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
   const block = BLOCKS_DATA.find((b) => b.slug === slug);
+  const blockDoc = BLOCK_DOCS[slug];
 
   const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
 
@@ -49,101 +54,279 @@ export default function BlockDetailPage() {
 
   const stylingLabel = Array.isArray(block.styling) ? block.styling.join(", ") : block.styling;
 
+  const defaultUsageSnippet = `import ${block.title.replace(/\s+/g, "")} from "@/components/${block.slug}";
+
+export default function Screen() {
+  return (
+    <${block.title.replace(/\s+/g, "")}
+      theme="dark"
+    />
+  );
+}`;
+
+  const usageSnippet = blockDoc?.usageCode || defaultUsageSnippet;
+
   return (
     <div className="min-h-screen bg-[#030305] text-[#ededed] pt-24 md:pt-28 pb-24 flex-1">
       <div className="container-main">
-        {/* Breadcrumb Back Link */}
+        {/* Breadcrumbs Navigation */}
         <div className="flex items-center gap-2 text-xs font-mono text-[#71717a] mb-6">
           <Link
             href="/blocks"
             className="inline-flex items-center gap-1.5 text-[#9ca3af] hover:text-white transition-colors"
           >
             <BackIcon size={14} />
-            <span>Back to Blocks</span>
+            <span>Blocks</span>
           </Link>
           <span>/</span>
-          <span className="text-[#32c798] truncate max-w-[200px] sm:max-w-none">{block.title}</span>
+          <span className="text-[#71717a] capitalize">{block.category}</span>
+          <span>/</span>
+          <span className="text-[#32c798] truncate max-w-[200px] sm:max-w-none font-medium">
+            {block.title}
+          </span>
         </div>
 
-        {/* Title Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8 pb-6 border-b border-white/[0.08]">
-          <div>
-            <div className="inline-flex items-center gap-2 mb-2">
-              <span className="font-mono text-[10.5px] font-bold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
+        {/* Hero Header Section */}
+        <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 pb-8 border-b border-white/[0.08]">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 mb-3">
+              <span className="font-mono text-[11px] font-bold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                 {block.category}
               </span>
+              <span className="inline-flex items-center gap-1 font-mono text-[11px] text-[#9ca3af] bg-white/[0.03] border border-white/[0.08] px-2 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#32c798]" />
+                <span>v{block.version || "1.0.0"}</span>
+              </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3">
               {block.title}
             </h1>
-            <div className="flex items-center gap-2 text-xs text-[#9ca3af]">
-              <span>by</span>
-              <span className="font-medium text-white">{block.author}</span>
+
+            <p className="text-sm sm:text-base text-[#9ca3af] leading-relaxed mb-4">
+              {block.description}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[#71717a]">
+              <div className="flex items-center gap-1.5">
+                <span>By</span>
+                <span className="text-white font-medium">{block.author}</span>
+              </div>
+              <span>•</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[#32c798]">Platforms:</span>
+                <span className="text-[#d1d5db]">iOS, Android, Web</span>
+              </div>
+              <span>•</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[#32c798]">Styling:</span>
+                <span className="text-[#d1d5db]">{stylingLabel}</span>
+              </div>
             </div>
           </div>
 
-          <div className="inline-flex items-center gap-2.5 bg-[#0a0a0e] border border-white/10 rounded-xl px-3.5 py-2 self-start md:self-auto shadow-inner">
-            <span className="text-[#32c798] font-mono text-xs font-bold">$</span>
-            <span className="font-mono text-xs text-[#e4e4e7] select-all">npx @rnblocks/cli add {block.slug}</span>
-            <CopyButton text={`npx @rnblocks/cli add ${block.slug}`} label="Copy" />
+          {/* Quick Install Bar */}
+          <div className="flex flex-col gap-2.5 shrink-0 self-start lg:self-end w-full sm:w-auto">
+            <div className="flex items-center justify-between gap-3 bg-[#08080c] border border-white/[0.12] rounded-xl px-4 py-2.5 shadow-lg">
+              <div className="flex items-center gap-2 font-mono text-xs text-[#e4e4e7] select-all">
+                <span className="text-[#32c798] font-bold">$</span>
+                <span>npx @rnblocks/cli add {block.slug}</span>
+              </div>
+              <CopyButton text={`npx @rnblocks/cli add ${block.slug}`} label="Copy" />
+            </div>
+            <div className="flex items-center justify-end gap-2 text-[11px] font-mono text-[#71717a]">
+              <span>Universal Expo & Bare RN</span>
+            </div>
           </div>
         </div>
 
         {/* Main Content Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8 items-start">
-          {/* Left Column: Preview & Code Tabs */}
-          <div className="w-full min-w-0">
-            {/* View Switcher Tabs */}
-            <div className="flex items-center gap-2 mb-4 bg-white/[0.03] border border-white/[0.08] p-1 rounded-xl w-fit">
-              <button
-                onClick={() => setActiveTab("preview")}
-                className={cn(
-                  "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
-                  activeTab === "preview"
-                    ? "bg-white/[0.1] text-white font-semibold shadow-sm"
-                    : "text-[#71717a] hover:text-white"
+          {/* Left Column: Preview / Code & Inline Usage & Props */}
+          <div className="w-full min-w-0 space-y-8">
+            {/* View Switcher Controls */}
+            <div>
+              <div className="flex items-center justify-between gap-4 mb-4">
+                <div className="flex items-center gap-1.5 bg-white/[0.03] border border-white/[0.08] p-1 rounded-xl">
+                  <button
+                    onClick={() => setActiveTab("preview")}
+                    className={cn(
+                      "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
+                      activeTab === "preview"
+                        ? "bg-white/[0.1] text-white font-semibold shadow-sm"
+                        : "text-[#71717a] hover:text-white"
+                    )}
+                  >
+                    <Smartphone size={14} />
+                    <span>Live Preview</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("code")}
+                    className={cn(
+                      "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
+                      activeTab === "code"
+                        ? "bg-white/[0.1] text-white font-semibold shadow-sm"
+                        : "text-[#71717a] hover:text-white"
+                    )}
+                  >
+                    <Code2 size={14} />
+                    <span>Source Code</span>
+                  </button>
+                </div>
+
+                <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-[#71717a]">
+                  <FileCode size={13} className="text-[#32c798]" />
+                  <span>components/{block.slug}.tsx</span>
+                </div>
+              </div>
+
+              {/* Main Canvas View */}
+              <div>
+                {activeTab === "preview" ? (
+                  <LiveBlockPreview
+                    Component={block.Component}
+                    title={block.title}
+                    type={block.type}
+                  />
+                ) : (
+                  <CodeViewer
+                    code={block.code}
+                    filename={`components/${block.slug}.tsx`}
+                    language="tsx"
+                  />
                 )}
-              >
-                <Smartphone size={14} />
-                <span>Live Preview</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("code")}
-                className={cn(
-                  "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
-                  activeTab === "code"
-                    ? "bg-white/[0.1] text-white font-semibold shadow-sm"
-                    : "text-[#71717a] hover:text-white"
-                )}
-              >
-                <Code2 size={14} />
-                <span>Source Code</span>
-              </button>
+              </div>
             </div>
 
-            {/* Tab Contents */}
-            <div className="mb-8">
-              {activeTab === "preview" ? (
-                <LiveBlockPreview Component={block.Component} title={block.title} type={block.type} />
-              ) : (
-                <CodeViewer
-                  code={block.code}
-                  filename={`components/${block.slug}.tsx`}
-                  language="tsx"
-                />
-              )}
-            </div>
-
-            {/* About / Implementation Guide */}
+            {/* Inline Quick Usage Card (Displayed right beneath the preview for instant copy-pasting) */}
             <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 md:p-8">
-              <h3 className="text-lg font-bold text-white mb-2">About this block</h3>
-              <p className="text-sm text-[#9ca3af] leading-relaxed mb-6">
-                {block.description}
+              <div className="flex items-center justify-between gap-4 mb-4 pb-4 border-b border-white/[0.08]">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-[#32c798]/10 border border-[#32c798]/30 flex items-center justify-center text-[#32c798]">
+                    <Terminal size={16} />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-white leading-none">Quick Usage</h3>
+                    <p className="text-xs text-[#9ca3af] mt-1">
+                      Copy and paste this drop-in example into your screen or view:
+                    </p>
+                  </div>
+                </div>
+                <CopyButton text={usageSnippet} label="Copy Example" />
+              </div>
+
+              <CodeViewer
+                code={usageSnippet}
+                filename={`screens/${block.slug}-example.tsx`}
+                language="tsx"
+              />
+            </div>
+
+            {/* Component Props & API Table */}
+            {blockDoc?.props && blockDoc.props.length > 0 && (
+              <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 md:p-8">
+                <div className="flex items-center justify-between gap-4 mb-3 pb-3 border-b border-white/[0.08]">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                      <Layers size={16} />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-white leading-none">
+                        Component Props & API
+                      </h3>
+                      <p className="text-xs text-[#9ca3af] mt-1">
+                        Configurable props accepted by <code>{block.title.replace(/\s+/g, "")}</code>
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-mono text-[#71717a] bg-white/[0.04] px-2.5 py-1 rounded-md border border-white/[0.06]">
+                    {blockDoc.props.length} props
+                  </span>
+                </div>
+
+                <div className="overflow-x-auto mt-4">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="border-b border-white/[0.08] text-[#71717a] font-mono uppercase text-[10px] tracking-wider">
+                        <th className="pb-3 pr-4">Prop</th>
+                        <th className="pb-3 pr-4">Type</th>
+                        <th className="pb-3 pr-4">Default</th>
+                        <th className="pb-3">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/[0.04]">
+                      {blockDoc.props.map((p, idx) => (
+                        <tr key={idx} className="group hover:bg-white/[0.02] transition-colors">
+                          <td className="py-3 pr-4 font-mono text-[#32c798] font-semibold whitespace-nowrap align-top">
+                            {p.name}
+                            {p.required && (
+                              <span className="ml-1 text-[10px] text-[#ef4444] font-bold" title="Required prop">
+                                *
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-3 pr-4 font-mono text-[#93c5fd] text-[11px] align-top">
+                            <span className="bg-blue-500/10 border border-blue-500/20 px-1.5 py-0.5 rounded text-[#93c5fd]">
+                              {p.type}
+                            </span>
+                          </td>
+                          <td className="py-3 pr-4 font-mono text-[#a1a1aa] text-[11px] align-top whitespace-nowrap">
+                            {p.default ? <code>{p.default}</code> : "—"}
+                          </td>
+                          <td className="py-3 text-[#d1d5db] text-xs leading-relaxed align-top">
+                            {p.description}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Accessibility & Assistive Tech Section */}
+            {blockDoc?.a11yFeatures && blockDoc.a11yFeatures.length > 0 && (
+              <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 md:p-8">
+                <div className="flex items-center gap-2.5 mb-3 pb-3 border-b border-white/[0.08]">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-[#32c798]">
+                    <ShieldCheck size={16} />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-white leading-none">
+                      Accessibility & Assistive Tech
+                    </h3>
+                    <p className="text-xs text-[#9ca3af] mt-1">
+                      Built to meet RNBlocks accessibility, touch target, and screen reader standards
+                    </p>
+                  </div>
+                </div>
+
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                  {blockDoc.a11yFeatures.map((feat, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2.5 bg-white/[0.02] border border-white/[0.06] rounded-xl p-3 text-xs text-[#d1d5db]"
+                    >
+                      <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* About / Architecture Guide */}
+            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 md:p-8">
+              <h3 className="text-base font-bold text-white mb-2">Integration & Architecture</h3>
+              <p className="text-xs sm:text-sm text-[#9ca3af] leading-relaxed mb-6">
+                This component is authored using pure React Native primitives and standard{" "}
+                <span className="text-white font-medium">{stylingLabel}</span> styling. It has zero
+                lock-in to proprietary design systems and operates without wrapping context providers.
               </p>
 
-              <div className="border-t border-white/[0.08] pt-6">
+              <div className="border-t border-white/[0.08] pt-4">
                 <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#32c798] mb-3">
-                  Integration Details
+                  Key Specifications
                 </h4>
                 <ul className="space-y-2 text-xs sm:text-sm text-[#d1d5db]">
                   <li className="flex items-start gap-2">
@@ -152,24 +335,24 @@ export default function BlockDetailPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
-                    <span>Formatted with strict TypeScript types and zero third-party lock-in.</span>
+                    <span>Strict TypeScript types with zero `any` declarations.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
-                    <span>Styled with standard {stylingLabel} patterns for straightforward customization.</span>
+                    <span>Built-in light and dark theme mode support via centralized color tokens.</span>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Metadata Sidebar */}
-          <div className="flex flex-col gap-4 w-full">
+          {/* Right Column: Metadata & Actions Sidebar */}
+          <div className="flex flex-col gap-5 w-full">
             {/* Installation Box */}
             <div className="bg-[#07070a] border border-white/10 rounded-2xl p-5">
               <h4 className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-white mb-2">
                 <Terminal size={14} className="text-[#32c798]" />
-                <span>Installation</span>
+                <span>CLI Installation</span>
               </h4>
               <p className="text-xs text-[#9ca3af] mb-3">Add this block directly into your project:</p>
               <div className="flex items-center justify-between bg-[#040406] border border-white/[0.08] rounded-xl px-3 py-2">

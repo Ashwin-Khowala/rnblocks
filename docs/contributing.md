@@ -67,9 +67,9 @@ This starts the web registry at `http://localhost:3000`.
 
 3. **Verify Locally Before Submitting**:
    ```bash
-   pnpm run validate:registry
+   pnpm run validate:all
    pnpm run typecheck
    pnpm run build
    ```
 
-4. **Open Pull Request**: Complete the provided pull request template, attach visual previews or recordings, and check all relevant quality checklist items.
+4. **Open Pull Request**: Complete the provided pull request template, attach visual previews or recordings, and verify compliance with our [Quality Standards](./quality-standards.md) (semantic a11y roles/labels/states, 44x44pt touch targets, visible focus rings, and drop-in usage examples).

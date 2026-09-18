@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { BlockItem } from "@/data/blocks";
 import { CopyButton } from "./CopyButton";
+import { ArrowUpRight, Terminal, Smartphone } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface BlockCardProps {
@@ -46,71 +47,47 @@ export function BlockCard({ block, className }: BlockCardProps) {
   return (
     <div
       className={cn(
-        "group relative bg-[#050508] hover:bg-[#07070c] flex flex-col overflow-hidden transition-colors duration-200 h-full border border-white/10 rounded-2xl",
+        "group relative bg-[#07070a] hover:bg-[#09090f] flex flex-col overflow-hidden transition-all duration-300 h-full border border-white/10 hover:border-[#32c798]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.6),0_0_24px_rgba(50,199,152,0.08)] rounded-2xl",
         className
       )}
     >
-      {/* Top Left Sleek Floating Control: Docs & Redirect to Component */}
-      <div className="hidden md:flex absolute top-3.5 left-3.5 z-20 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
-        <div className="inline-flex items-center bg-[#0c0c10]/90 backdrop-blur-md border border-white/[0.12] rounded-full p-[3px] shadow-[0_4px_18px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.04)]">
-          <Link
-            href="/docs"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-mono text-[11px] font-medium leading-none text-[#94a3b8] hover:text-white hover:bg-white/[0.08] transition-all duration-150"
-            title="Documentation"
-          >
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
-              <path d="M6 6h10" />
-              <path d="M6 10h10" />
-            </svg>
-            <span>Docs</span>
-          </Link>
-          <span className="w-px h-3 bg-white/[0.15] mx-px" aria-hidden="true" />
+      {/* Card Header Bar */}
+      <div className="flex items-center justify-between px-4 py-3 bg-[#0a0a0e]/90 border-b border-white/[0.08] gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex items-center gap-1.5 shrink-0" aria-hidden="true">
+            <span className="w-2 h-2 rounded-full bg-white/20" />
+            <span className="w-2 h-2 rounded-full bg-white/10" />
+            <span className="w-2 h-2 rounded-full bg-white/10" />
+          </div>
           <Link
             href={`/blocks/${slug}`}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-mono text-[11px] font-semibold leading-none text-[#32c798] hover:text-[#4ade80] hover:bg-[#32c798]/[0.14] transition-all duration-150"
+            className="text-xs sm:text-sm font-semibold text-white hover:text-[#32c798] truncate transition-colors"
+          >
+            {title}
+          </Link>
+          <span className="hidden sm:inline-block font-mono text-[10px] font-semibold uppercase tracking-wider text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/25 px-2 py-0.5 rounded-full">
+            {category}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <CopyButton
+            text={`npx @rnblocks/cli add ${slug}`}
+            className="!bg-white/[0.04] !border-white/[0.1] hover:!border-[#32c798]/40 hover:!bg-[#32c798]/10 !rounded-lg !px-2.5 !py-1 !font-mono !text-[11px] !text-[#9ca3af] hover:!text-[#32c798]"
+            label="CLI"
+          />
+          <Link
+            href={`/blocks/${slug}`}
+            className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-white/[0.04] border border-white/[0.1] text-[#9ca3af] hover:text-white hover:bg-white/[0.08] transition-colors"
             title={`View ${title}`}
           >
-            <span>Component</span>
-            <svg
-              width="10"
-              height="10"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M7 17L17 7" />
-              <path d="M7 7h10v10" />
-            </svg>
+            <ArrowUpRight size={14} />
           </Link>
         </div>
       </div>
 
-      {/* Top Right Quick Copy CLI */}
-      <div className="hidden md:flex absolute top-3.5 right-3.5 z-20 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
-        <CopyButton
-          text={`npx @rnblocks/cli add ${slug}`}
-          className="!bg-[#0c0c10]/90 !backdrop-blur-md !border-white/[0.12] hover:!border-white/[0.22] hover:!bg-[#14141a]/95 !rounded-full !px-2.5 !py-1 !font-mono !text-[11px] !font-medium !text-[#94a3b8] hover:!text-white !shadow-[0_4px_18px_rgba(0,0,0,0.55)]"
-          label="CLI"
-        />
-      </div>
-
       {/* Interactive Canvas Preview */}
-      <div className="relative w-full h-[290px] md:h-[360px] flex items-center justify-center bg-[#050508] bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:18px_18px] overflow-hidden p-3.5 md:p-6">
+      <div className="relative w-full h-[280px] sm:h-[320px] md:h-[350px] flex items-center justify-center bg-[#050508] bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:16px_16px] overflow-hidden p-4">
         <div
           className="card-preview-scaler flex items-center justify-center origin-center select-none transition-transform duration-200 w-full"
           style={
@@ -127,31 +104,27 @@ export function BlockCard({ block, className }: BlockCardProps) {
         </div>
       </div>
 
-      {/* Bottom Architectural Info Bar */}
-      <div className="flex items-center justify-between p-2.5 md:py-3 md:px-4.5 bg-[#07070b] border-t border-white/[0.06] gap-3 mt-auto">
-        <div className="flex items-center gap-2 min-w-0">
-          <Link href={`/blocks/${slug}`} className="min-w-0 inline-flex items-center">
-            <span className="text-[12.5px] md:text-[13.5px] font-semibold text-[#f3f4f6] hover:text-[#32c798] whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-150">
-              {title}
-            </span>
-          </Link>
-          <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-[#71717a] bg-white/[0.04] border border-white/[0.08] px-1.5 py-0.5 rounded-full whitespace-nowrap">
-            {category}
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5 shrink-0">
+      {/* Bottom Information & Action Bar */}
+      <div className="flex items-center justify-between p-3.5 sm:px-4 bg-[#08080c] border-t border-white/[0.08] gap-3 mt-auto">
+        <div className="flex items-center gap-2">
           <Link
-            href="/docs"
-            className="font-mono text-[10px] font-semibold text-[#94a3b8] hover:text-[#32c798] bg-white/[0.04] hover:bg-[#32c798]/[0.08] border border-white/[0.08] hover:border-[#32c798]/30 px-1.5 py-0.5 rounded transition-all duration-150 inline-flex items-center"
-            title="Documentation"
+            href={`/blocks/${slug}`}
+            className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[#32c798] hover:text-[#4ade80] transition-colors"
           >
-            Docs
+            <span>View & Usage</span>
+            <ArrowUpRight size={13} />
           </Link>
-          <span className="font-mono text-[10px] font-medium text-[#a1a1aa] bg-white/[0.03] border border-white/[0.08] px-1.5 py-0.5 rounded whitespace-nowrap">
+        </div>
+
+        <div className="flex items-center gap-1.5 shrink-0 text-[10.5px] font-mono">
+          <span className="text-[#71717a] bg-white/[0.03] border border-white/[0.08] px-2 py-0.5 rounded">
             {stylingLabel}
           </span>
-          <span className="hidden md:inline font-mono text-[10px] font-medium text-[#a1a1aa] bg-white/[0.03] border border-white/[0.08] px-1.5 py-0.5 rounded whitespace-nowrap">
-            {framework === "expo" ? "Expo" : "React Native"}
+          <span className="hidden sm:inline-block text-[#71717a] bg-white/[0.03] border border-white/[0.08] px-2 py-0.5 rounded">
+            {framework === "expo" ? "Expo" : "Bare RN"}
+          </span>
+          <span className="text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/20 px-2 py-0.5 rounded font-medium">
+            iOS • Android • Web
           </span>
         </div>
       </div>

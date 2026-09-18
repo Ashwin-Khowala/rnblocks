@@ -107,6 +107,43 @@ Any `Text` whose parent has a fixed pixel height (slot-based odometer, day badge
 />
 ```
 
+### 3.3  Use `accessibilityState` for dynamic state, not label concatenation
+Do not encode state into the `accessibilityLabel` when `accessibilityState` exists. Screen readers announce state natively (e.g. "selected", "disabled", "collapsed").
+
+```tsx
+// ✅ Correct — semantic state separated from label
+<Pressable
+  accessibilityRole="tab"
+  accessibilityLabel={tab.title}
+  accessibilityState={{ selected: isSelected, disabled: isDisabled }}
+>
+
+// ❌ Conflating state into label string
+<Pressable
+  accessibilityRole="button"
+  accessibilityLabel={`${tab.title} (Selected, Disabled)`}
+>
+```
+
+### 3.4  Provide container-level screen reader summaries for data charts
+Avoid trapping screen reader users in 30+ sequential swipes through individual bars or points. Wrap the visualization in an accessible container that conveys the macro insight:
+
+```tsx
+// ✅ Accessible high-level summary on chart container
+<View
+  accessible={true}
+  accessibilityRole="summary"
+  accessibilityLabel={`Weekly revenue trend: starts at $1,200 on Mon, peaks at $3,890 on Wed, overall positive trend.`}
+>
+  {/* Individual visual bars */}
+</View>
+```
+
+### 3.5  Keyboard focus: Visible focus rings and native activation
+- **Do not invent custom `onKeyDown` handlers for basic buttons**: React Native's `Pressable` and `TouchableOpacity` map to native focus and activation (<kbd>Enter</kbd>/<kbd>Space</kbd> on web, tap on mobile) automatically. Adding unneeded `onKeyDown` listeners introduces fragility.
+- **Provide visible focus styling**: Sighted keyboard and switch-access users must see where focus is. On web or when using `Pressable`, style the focused state (e.g. `({ focused }) => [styles.btn, focused && styles.btnFocused]`).
+- **Composite 2D controls**: For complex widgets where keyboard operation is expected (e.g., calendar date pickers), implement standard arrow-key navigation (<kbd>←</kbd><kbd>→</kbd> day, <kbd>↑</kbd><kbd>↓</kbd> week) using platform-safe handlers (`Platform.select`).
+
 ---
 
 ## 4. Number Formatting (P1 — silent data corruption on non-EN locales)
@@ -163,7 +200,39 @@ Any constant that makes the idle/default state look good in the demo but is wron
 
 ---
 
-## 7. Validation Gates (must pass before every PR)
+## 7. Usage Documentation & Examples (P1 — developer experience)
+
+### 7.1  Provide a self-contained copy-paste usage snippet
+Every block must include a clear, drop-in usage snippet that consumers can copy directly into their screen.
+- The snippet must show imports, realistic dummy data, and essential props.
+- Place this snippet in the component header JSDoc (`@example`) and in the documentation.
+- Never force consumers to reverse-engineer a 500-line source file to discover prop shapes.
+
+```tsx
+/**
+ * @example
+ * import { MyBlock } from "@/components/my-block";
+ *
+ * export default function Screen() {
+ *   return (
+ *     <MyBlock
+ *       theme="dark"
+ *       onSelect={(id) => console.log("Selected:", id)}
+ *     />
+ *   );
+ * }
+ */
+```
+
+### 7.2  Document the public props interface
+Every block's TypeScript props interface must include JSDoc comments explaining:
+- The purpose of each prop
+- Expected data shapes
+- Default values
+
+---
+
+## 8. Validation Gates (must pass before every PR)
 
 ```sh
 pnpm generate:registry   # re-generate from source
@@ -176,7 +245,7 @@ These three commands are the minimum bar. They do not replace testing on a real 
 
 ---
 
-## 8. PR Checklist
+## 9. PR Checklist
 
 Before opening a PR that touches a registry block:
 
@@ -186,6 +255,12 @@ Before opening a PR that touches a registry block:
 - [ ] Every DOM API call has a `Platform.OS === "web"` guard **and** a `// platform:web-safe` comment
 - [ ] Every fixed-height `Text` inside a slot has `allowFontScaling={false}`
 - [ ] `toLocaleString` calls pin `"en-US"` locale
+- [ ] Appropriate `accessibilityRole` on interactive elements
+- [ ] Concise `accessibilityLabel` on icons and unlabeled triggers
+- [ ] `accessibilityState` used for dynamic selection/disabled/expanded states
 - [ ] No `accessibilityRole="button"` on `pointerEvents="none"` views
+- [ ] High-contrast visible focus indicators for keyboard/web navigation
+- [ ] Screen-reader friendly container summary for complex charts
+- [ ] Clean copy-paste usage example provided in JSDoc / documentation
 - [ ] Displayed numbers, badges, and percentages all describe the same data point
 - [ ] Chart supports negative input values without clipping
