@@ -31,16 +31,28 @@ RNBlocks maintains high standards for every contributed component. Each block an
 
 ---
 
-## 4. Accessibility
+## 4. Accessibility & Assistive Technology
 
-- **Semantic Roles**: Pressable and interactive elements must declare an appropriate `accessibilityRole` (e.g. `"button"`, `"tab"`, `"link"`).
-- **Descriptive Labels**: Icons and visual triggers lacking visible text must declare an `accessibilityLabel` describing the action.
-- **Touch Target Sizing**: Ensure interactive touch targets meet the recommended 44x44pt minimum for comfortable thumb interaction.
-- **Contrast**: Maintain sufficient contrast ratio between text, borders, and background surfaces across both dark and light modes.
+- **Semantic Roles**: Pressable and interactive elements must declare an appropriate `accessibilityRole` (e.g. `"button"`, `"tab"`, `"link"`, `"header"`).
+- **Descriptive Labels**: Icons and visual triggers lacking visible text must declare a concise `accessibilityLabel` describing the purpose or action.
+- **Interactive State**: Dynamic elements must communicate their current state using `accessibilityState` (e.g. `{ selected: true }`, `{ disabled: true }`, `{ expanded: false }`). Never conflate state with role or label.
+- **Touch Target Sizing**: Interactive touch targets must meet the recommended **44x44pt** minimum. If a visual icon or badge is smaller, pad the touch wrapper (`hitSlop` or container padding) to ensure comfortable thumb activation.
+- **Color Contrast**: Maintain sufficient contrast ratio between text, borders, and background surfaces across both dark and light modes (minimum 4.5:1 for normal text, 3:1 for large text).
+- **Screen Reader Ergonomics**: Avoid forcing screen reader users (VoiceOver/TalkBack) to swipe through dozens of granular data points sequentially. For complex visualizations (such as charts), provide a high-level container summary (e.g. `accessibilityLabel="Weekly active users chart, ranging from 1,200 to 3,890, trending upward"`).
+- **Font Scaling Safety**: Text elements inside containers with fixed pixel heights must set `allowFontScaling={false}` to prevent clipping under large-text accessibility settings, while descriptive paragraph text should wrap and scale gracefully.
 
 ---
 
-## 5. Performance
+## 5. Keyboard Interaction & Focus Management
+
+- **Platform-Native Activation**: Standard pressable elements (buttons, links, action cards) must rely on platform-native focus and activation behavior (e.g. Enter/Space on Web/Desktop, tap on mobile). Do not inject unnecessary custom `onKeyDown` listeners into simple buttons where native `Pressable` handles activation out of the box.
+- **Visible Focus States**: Sighted keyboard users (on Web, iPad with hardware keyboard, or Desktop) must be able to track active focus. Interactive elements must display a clear, high-contrast focus indicator (e.g. `:focus-visible` outline or `Pressable` `({ focused })` styling).
+- **Complex Composite Controls**: 2D controls, date pickers, or composite widgets where keyboard interaction is part of expected desktop UX should implement standard navigation (such as Arrow key navigation: Left/Right for day, Up/Down for week, Enter to select) using platform-safe handlers.
+- **Virtual Software Keyboard Handling**: When components contain text inputs, they must properly account for mobile software keyboards by utilizing `KeyboardAvoidingView`, `keyboardShouldPersistTaps="handled"`, and auto-dismissal gestures.
+
+---
+
+## 6. Performance
 
 - **Render Optimization**: Avoid expensive object or array instantiations directly inside render functions. Memoize complex calculations with `useMemo` and callbacks with `useCallback` where appropriate.
 - **Animation Execution**: Run animations on the native UI thread using React Native's built-in `Animated` API with `useNativeDriver: true`, or React Native Reanimated.
@@ -48,7 +60,15 @@ RNBlocks maintains high standards for every contributed component. Each block an
 
 ---
 
-## 6. Registry Manifest
+## 7. Usage Documentation & Copy-Paste Snippets
+
+- **Copy-Paste Usage Example**: Every block must provide a clear, drop-in usage code example in its documentation and registry entry. Users must be able to copy the snippet directly into a screen without having to reverse-engineer hundreds of lines of source code.
+- **Props Table & Types**: All public props, configuration options, and custom data types must be explicitly documented with: Prop Name, Type, Default Value, and Description.
+- **Sensible Zero-Config Defaults**: Dropping `<MyBlock />` into a screen with zero required props must render a functional, aesthetic default state rather than throwing runtime errors or rendering blank space.
+
+---
+
+## 8. Registry Manifest
 
 - **Schema Conformance**: The component's `registry.json` must validate against `RegistryItemSchema` using `pnpm run validate:registry`.
 - **Accurate Metadata**: Provide concise, descriptive titles, descriptions, and categories.

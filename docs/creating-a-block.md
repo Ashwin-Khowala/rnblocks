@@ -78,14 +78,57 @@ export default function MyComponent({ theme = "dark", ...props }: MyComponentPro
    - Never assume fixed device widths (e.g. `width: 390`).
    - Test that the component looks natural in compact (320pt) containers as well as full-width tablets.
 
-6. **Accessibility**:
-   - Add `accessibilityRole="button"` or appropriate roles on pressable elements.
+6. **Accessibility & Focus**:
+   - Add `accessibilityRole` on pressable elements (e.g. `"button"`, `"tab"`).
    - Add clear `accessibilityLabel` attributes to icons and buttons.
-   - Ensure interactive touch targets meet the recommended 44x44pt minimum.
+   - Use `accessibilityState` for dynamic state (e.g. `{ selected: isSelected, disabled: isDisabled }`).
+   - Ensure interactive touch targets meet the recommended **44x44pt** minimum.
+   - Provide visible focus styling for keyboard and web users (e.g. outline or high-contrast focus state).
+   - For chart components, provide an accessible container summary rather than forcing screen-reader users through dozens of granular swipes.
+
+7. **Header JSDoc with Copy-Paste Usage Example**:
+   Include a concise `@example` block at the top of `files/my-component.tsx` showing how consumers can copy and immediately render your component:
+
+```tsx
+/**
+ * @example
+ * import MyComponent from "./components/my-component";
+ *
+ * export default function Screen() {
+ *   return (
+ *     <MyComponent
+ *       theme="dark"
+ *       onAction={() => console.log("Pressed")}
+ *     />
+ *   );
+ * }
+ */
+```
 
 ---
 
-## Step 4: Write `registry.json`
+## Step 4: Document Props & Quick Usage
+
+Every block must be easy for consumers to drop into their projects without guessing prop names or parsing 500 lines of implementation code.
+
+1. **Self-Documented Props Interface**:
+   ```tsx
+   export interface MyComponentProps {
+     /** Color theme variant. Defaults to "dark". */
+     theme?: "dark" | "light";
+     /** Primary accent color used for highlights and active states. */
+     accentColor?: string;
+     /** Callback fired when an item is selected. */
+     onSelect?: (id: string) => void;
+   }
+   ```
+
+2. **Sensible Zero-Prop Default**:
+   Whenever possible, allow `<MyComponent />` to render with default mock data so developers can preview it immediately after running `npx @rnblocks/cli add <slug>`.
+
+---
+
+## Step 5: Write `registry.json`
 
 Create `registry/blocks/my-component/registry.json`:
 
@@ -120,7 +163,7 @@ Create `registry/blocks/my-component/registry.json`:
 
 ---
 
-## Step 5: Validate and Generate
+## Step 6: Validate and Generate
 
 Run the automated validation script:
 
@@ -136,7 +179,7 @@ pnpm run generate:registry
 
 ---
 
-## Step 6: Test Locally in Web Preview
+## Step 7: Test Locally in Web Preview
 
 Start the local development server:
 
@@ -148,12 +191,13 @@ Visit `http://localhost:3000/blocks` in your browser. Verify:
 - Your component card appears in the gallery with proper metadata.
 - Interactive live preview renders cleanly in both dark and light modes.
 - Source code view displays the exact component source.
+- Quick usage snippet is clearly presented and copyable.
 
 ---
 
-## Step 7: Submit Your Pull Request
+## Step 8: Submit Your Pull Request
 
 1. Commit your changes following Conventional Commits (`feat: add my-component block`).
 2. Push your branch and open a Pull Request.
-3. Fill out the Pull Request template completely, including the quality checklist and preview screenshot.
+3. Fill out the Pull Request template completely, including the quality checklist (roles, labels, states, touch targets, focus indicators, usage examples) and preview screenshot.
 4. Confirm the licensing agreement attestation in the PR description.

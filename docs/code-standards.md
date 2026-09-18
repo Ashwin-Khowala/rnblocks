@@ -176,11 +176,14 @@ const styles = StyleSheet.create({
   - Colors must meet WCAG AA contrast (minimum 4.5:1 for normal text, 3:1 for large text).
   - Primary accent default: `#32C798` (RNBlocks Emerald).
 
-### 3.5. Accessibility (a11y)
+### 3.5. Accessibility (a11y) & Keyboard Navigation
 - **Roles**: All interactive elements must declare `accessibilityRole` (`"button"`, `"tab"`, `"link"`, `"combobox"`).
 - **Labels**: Every icon-only button must include a concise `accessibilityLabel` (e.g., `accessibilityLabel="Close dialog"`).
-- **State**: Selected or expanded elements must declare `accessibilityState` (e.g., `accessibilityState={{ selected: isFocused }}`).
-- **Touch Target Size**: Minimum **44x44pt** for interactive targets. If the visual icon is 20px, pad the touch wrapper to reach 44px.
+- **State**: Selected or expanded elements must declare `accessibilityState` (e.g., `accessibilityState={{ selected: isFocused, disabled: isDisabled }}`).
+- **Touch Target Size**: Minimum **44x44pt** for interactive targets. If the visual icon is 20px, pad the touch wrapper (`hitSlop` or container padding) to reach 44px.
+- **Visible Focus States**: Ensure interactive elements display clear, high-contrast focus rings when focused via keyboard navigation on Web/Desktop.
+- **Native Pressable Activation**: Rely on native platform activation (Enter/Space on web, tap on native) for standard buttons; do not invent unnecessary custom `onKeyDown` listeners on simple pressables.
+- **Screen Reader Ergonomics**: For data visualizations (e.g. charts), provide an overarching container summary rather than requiring users to swipe through 30+ separate points.
 
 ### 3.6. Animations & Performance
 - **Native Driver**: When using React Native's built-in `Animated`, always set `useNativeDriver: true` for transform and opacity animations.
@@ -199,6 +202,11 @@ Every block that claims `ios` or `android` in `registry.json → platforms` **mu
 - **Use `onLayout` not `getBoundingClientRect`**: To measure element size, use the `onLayout` callback prop instead of `getBoundingClientRect`.
 
 The CI check (`pnpm run check:platform-compat`) enforces these rules automatically and blocks merges on violation.
+
+### 3.8. Usage Documentation & Examples
+- **Copy-Paste Snippet**: Every block must include a self-contained, drop-in `@example` usage snippet in its source header and registry documentation.
+- **Self-Documented Props**: The block's TypeScript props interface must be documented with descriptive JSDoc comments for all public props, types, and defaults.
+- **Sensible Zero-Prop Default**: Components should gracefully render an aesthetic default preview state when instantiated with zero props.
 
 ---
 
