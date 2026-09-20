@@ -3,9 +3,10 @@
 import React from "react";
 import { REGISTRY_DATA, RegistryItemData } from "./registry-data";
 import { default as BarChartComponent } from "../../../registry/blocks/bar-chart/files/bar-chart";
-import { default as FloatingDockerComponent } from "../../../registry/blocks/floating-docker/files/floating-docker";
 import { default as InteractiveCalendarComponent } from "../../../registry/blocks/interactive-calendar/files/interactive-calendar";
 import { DEMO_MARKED_DATES as _CalendarDemoData } from "../../../registry/blocks/interactive-calendar/files/interactive-calendar";
+import { default as FloatingDockerComponent } from "../../../registry/blocks/floating-docker/files/floating-docker";
+import { default as ComparisonChartComponent } from "../../../registry/blocks/comparison-chart/files/comparison-chart";
 import { default as SocialAuthButtonsComponent } from "../../../registry/blocks/social-auth-buttons/files/social-auth-buttons";
 import { default as TrendChartComponent } from "../../../registry/blocks/trend-chart/files/trend-chart";
 
@@ -21,16 +22,20 @@ export const REGISTRY_ITEMS: RegistryWebItem[] = [
     Component: BarChartComponent as React.ComponentType,
   },
   {
-    ...REGISTRY_DATA.find((item) => item.slug === "floating-docker")!,
-    Component: FloatingDockerComponent as React.ComponentType,
-  },
-  {
     ...REGISTRY_DATA.find((item) => item.slug === "interactive-calendar")!,
     Component: (() => {
       const Wrapped = (props: any) => <InteractiveCalendarComponent markedDates={_CalendarDemoData} {...props} />;
       Wrapped.displayName = "InteractiveCalendarComponentWrapped";
       return Wrapped;
     })() as React.ComponentType,
+  },
+  {
+    ...REGISTRY_DATA.find((item) => item.slug === "floating-docker")!,
+    Component: FloatingDockerComponent as React.ComponentType,
+  },
+  {
+    ...REGISTRY_DATA.find((item) => item.slug === "comparison-chart")!,
+    Component: ComparisonChartComponent as React.ComponentType,
   },
   {
     ...REGISTRY_DATA.find((item) => item.slug === "social-auth-buttons")!,

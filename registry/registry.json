@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-09-17T19:40:27.479Z",
+  "generatedAt": "2026-09-20T11:08:40.806Z",
   "items": [
     {
       "name": "bar-chart",
@@ -24,6 +24,51 @@
       "files": [
         {
           "path": "files/bar-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": [
+        "react-native-svg"
+      ],
+      "devDependencies": {},
+      "registryDependencies": [],
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "framework": "react-native",
+      "frameworks": [
+        "expo",
+        "react-native"
+      ],
+      "styling": [
+        "StyleSheet"
+      ],
+      "themes": [
+        "dark",
+        "light"
+      ]
+    },
+    {
+      "name": "interactive-calendar",
+      "title": "Interactive Calendar",
+      "description": "A sleek month calendar date picker with react-native-svg chevrons, event dot indicators, smooth date navigation, and dark & light themes. Exports DEMO_MARKED_DATES for preview stubs.",
+      "type": "block",
+      "author": {
+        "name": "Ashwin Khowala",
+        "github": "Ashwin-Khowala"
+      },
+      "version": "1.0.0",
+      "category": "data-display",
+      "tags": [
+        "calendar",
+        "date-picker",
+        "scheduling"
+      ],
+      "files": [
+        {
+          "path": "files/interactive-calendar.tsx",
           "type": "registry:component"
         }
       ],
@@ -97,24 +142,55 @@
       ]
     },
     {
-      "name": "interactive-calendar",
-      "title": "Interactive Calendar",
-      "description": "A sleek month calendar date picker with react-native-svg chevrons, event dot indicators, smooth date navigation, and dark & light themes. Exports DEMO_MARKED_DATES for preview stubs.",
+      "name": "comparison-chart",
+      "title": "Interactive Multi-Series Comparison Chart",
+      "description": "A dual-series smooth spline comparison chart with interactive vertical scrubber, intersection anchor dots, floating glassmorphic multi-metric tooltip, and active date pill.",
       "type": "block",
       "author": {
         "name": "Ashwin Khowala",
         "github": "Ashwin-Khowala"
       },
       "version": "1.0.0",
-      "category": "data-display",
+      "category": "analytics",
       "tags": [
-        "calendar",
-        "date-picker",
-        "scheduling"
+        "chart",
+        "analytics",
+        "comparison",
+        "multi-series",
+        "dual-line",
+        "spline",
+        "svg",
+        "data-visualization",
+        "interactive",
+        "tooltip"
       ],
       "files": [
         {
-          "path": "files/interactive-calendar.tsx",
+          "path": "files/comparison-chart.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/comparison-chart.types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/comparison-chart.utils.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/comparison-chart.spline.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/comparison-chart.a11y.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/comparison-chart.rolling-number.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/index.ts",
           "type": "registry:component"
         }
       ],

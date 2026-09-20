@@ -100,6 +100,68 @@ function validateRegistry() {
               errorCount++;
             } else {
               const content = fs.readFileSync(filePath, "utf-8");
+              // Scan for imports: validate internal sibling files and external dependencies
+              const importMatches = content.matchAll(
+                /(?:import|from)\s+['"]([^'"]+)['"]/g
+              );
+              const declaredDeps = new Set(parsed.data.dependencies || []);
+              for (const match of importMatches) {
+                const importPkg = match[1];
+
+                if (importPkg.startsWith(".")) {
+                  // Internal relative import: verify target exists and is registered in registry.json
+                  const candidateDir = path.dirname(filePath);
+                  const resolvedBase = path.resolve(candidateDir, importPkg);
+                  const extensions = ["", ".ts", ".tsx", ".js", ".jsx", "/index.ts", "/index.tsx"];
+                  let resolvedFile: string | null = null;
+                  for (const ext of extensions) {
+                    const candidate = resolvedBase + ext;
+                    if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+                      resolvedFile = candidate;
+                      break;
+                    }
+                  }
+
+                  if (!resolvedFile) {
+                    console.error(
+                      `[ERROR] [${type}/${slug}] File ${file.path} imports sibling "${importPkg}", but the target file does not exist.`
+                    );
+                    errorCount++;
+                  } else {
+                    const relToItem = path.relative(itemDir, resolvedFile).replace(/\\/g, "/");
+                    const isRegistered = parsed.data.files.some(
+                      (f) => f.path.replace(/\\/g, "/") === relToItem
+                    );
+                    if (!isRegistered) {
+                      console.error(
+                        `[ERROR] [${type}/${slug}] File ${file.path} imports "${importPkg}" (${relToItem}), but it is not listed in registry.json "files" array.`
+                      );
+                      errorCount++;
+                    }
+                  }
+                  continue;
+                }
+
+                if (
+                  importPkg === "react" ||
+                  importPkg === "react-native" ||
+                  importPkg.startsWith("react/") ||
+                  importPkg.startsWith("react-native/") ||
+                  importPkg.startsWith("node:")
+                ) {
+                  continue;
+                }
+                const basePkg = importPkg.startsWith("@")
+                  ? importPkg.split("/").slice(0, 2).join("/")
+                  : importPkg.split("/")[0];
+                if (!declaredDeps.has(basePkg) && !declaredDeps.has(importPkg)) {
+                  console.error(
+                    `[ERROR] [${type}/${slug}] File ${file.path} imports "${importPkg}" but "${basePkg}" is not declared in registry.json dependencies`
+                  );
+                  errorCount++;
+                }
+              }
+
               for (const check of SUSPICIOUS_PATTERNS) {
                 if (check.regex.test(content)) {
                   console.warn(
