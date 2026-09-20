@@ -27,7 +27,7 @@ export function CopyButton({ text, className, label }: CopyButtonProps) {
     <button
       onClick={handleCopy}
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-[#111115] border border-white/10 text-[#9ca3af] hover:text-white hover:bg-white/[0.06] hover:border-white/20 transition-all cursor-pointer select-none",
+        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-[#111115] border border-white/10 text-[#9ca3af] hover:text-white hover:bg-white/[0.06] hover:border-white/20 transition-all cursor-pointer select-none shrink-0",
         copied && "border-[#32c798]/40 text-[#32c798]",
         className
       )}
@@ -36,12 +36,12 @@ export function CopyButton({ text, className, label }: CopyButtonProps) {
       {copied ? (
         <>
           <Check size={14} className="shrink-0 text-[#32c798]" />
-          {label && <span className="text-[#32c798]">Copied!</span>}
+          {label && <span className="text-[#32c798] truncate">{label === "Copy" ? "Copied!" : label}</span>}
         </>
       ) : (
         <>
           <Copy size={14} className="shrink-0" />
-          {label && <span>{label}</span>}
+          {label && <span className="truncate">{label}</span>}
         </>
       )}
     </button>
