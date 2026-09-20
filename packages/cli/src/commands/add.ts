@@ -26,7 +26,14 @@ export async function addCommand(name: string, options: AddOptions) {
 
   const projectRoot = detectProjectRoot();
   const defaultDir = item.type === "screen" ? "screens" : "components/rnblocks";
-  const targetDir = path.resolve(projectRoot, options.path || defaultDir);
+  const isMultiFile = item.codeFiles && item.codeFiles.length > 1;
+
+  // Multi-file blocks install into a dedicated directory (e.g. components/rnblocks/comparison-chart/)
+  // to keep the user's project clean and modular, matching shadcn's block architecture.
+  const baseDir = options.path || defaultDir;
+  const targetDir = isMultiFile
+    ? (path.basename(baseDir) === item.name ? path.resolve(projectRoot, baseDir) : path.resolve(projectRoot, baseDir, item.name))
+    : path.resolve(projectRoot, baseDir);
 
   ensureDir(targetDir);
 
@@ -61,9 +68,24 @@ export async function addCommand(name: string, options: AddOptions) {
   }
 
   console.log(`\n${pc.green("Success:")} Import your component:`);
-  const componentImport = item.files[0]
-    ? path.basename(item.files[0].path, path.extname(item.files[0].path))
-    : name;
-  const relImport = path.relative(projectRoot, path.join(targetDir, componentImport)).replace(/\\/g, "/");
+  let importTarget: string;
+  if (isMultiFile) {
+    const hasIndex = item.codeFiles.some((f) => path.basename(f.path).startsWith("index."));
+    if (hasIndex) {
+      importTarget = targetDir;
+    } else {
+      const primaryBase = item.files[0]
+        ? path.basename(item.files[0].path, path.extname(item.files[0].path))
+        : name;
+      importTarget = path.join(targetDir, primaryBase);
+    }
+  } else {
+    const componentImport = item.files[0]
+      ? path.basename(item.files[0].path, path.extname(item.files[0].path))
+      : name;
+    importTarget = path.join(targetDir, componentImport);
+  }
+
+  const relImport = path.relative(projectRoot, importTarget).replace(/\\/g, "/");
   console.log(`  ${pc.cyan(`import { ... } from "./${relImport}";`)}\n`);
 }
