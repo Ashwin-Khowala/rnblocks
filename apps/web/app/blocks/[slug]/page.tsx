@@ -176,7 +176,11 @@ export default function Screen() {
 
                 <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-[#71717a]">
                   <FileCode size={13} className="text-[#32c798]" />
-                  <span>components/{block.slug}.tsx</span>
+                  <span>
+                    {block.codeFiles && block.codeFiles.length > 1
+                      ? `components/${block.slug}/ (${block.codeFiles.length} files)`
+                      : `components/${block.slug}.tsx`}
+                  </span>
                 </div>
               </div>
 
@@ -191,6 +195,7 @@ export default function Screen() {
                 ) : (
                   <CodeViewer
                     code={block.code}
+                    files={block.codeFiles}
                     filename={`components/${block.slug}.tsx`}
                     language="tsx"
                   />
@@ -399,10 +404,40 @@ export default function Screen() {
                 <FileCode size={14} className="text-[#32c798]" />
                 <span>Files Included</span>
               </h4>
-              <div className="font-mono text-xs bg-[#040406] border border-white/[0.08] rounded-xl p-3 space-y-1">
-                <div className="text-[#71717a]">components/</div>
-                <div className="pl-4 text-[#32c798] font-semibold">{block.slug}.tsx</div>
-              </div>
+              {block.codeFiles && block.codeFiles.length > 1 ? (
+                <div className="font-mono text-xs bg-[#040406] border border-white/[0.08] rounded-xl p-3 space-y-1.5">
+                  <div className="text-[#71717a] flex items-center justify-between text-[11px] pb-1.5 border-b border-white/[0.06]">
+                    <span>components/{block.slug}/</span>
+                    <span className="text-[10px] text-[#32c798] bg-[#32c798]/10 px-1.5 py-0.5 rounded">
+                      {block.codeFiles.length} files
+                    </span>
+                  </div>
+                  {block.codeFiles.map((file, i) => {
+                    const fname = file.path.split("/").pop() || file.path;
+                    const isEntry = i === 0;
+                    return (
+                      <div
+                        key={file.path}
+                        className="flex items-center justify-between text-[11.5px] pl-2"
+                      >
+                        <span className={isEntry ? "text-[#32c798] font-semibold" : "text-[#d1d5db]"}>
+                          {fname}
+                        </span>
+                        {isEntry && (
+                          <span className="text-[9.5px] font-mono text-[#32c798] bg-[#32c798]/10 px-1.5 py-0.5 rounded">
+                            entry
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="font-mono text-xs bg-[#040406] border border-white/[0.08] rounded-xl p-3 space-y-1">
+                  <div className="text-[#71717a]">components/</div>
+                  <div className="pl-4 text-[#32c798] font-semibold">{block.slug}.tsx</div>
+                </div>
+              )}
             </div>
 
             {/* Dependencies */}

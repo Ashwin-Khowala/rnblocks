@@ -13,6 +13,131 @@ export interface BlockDocInfo {
 }
 
 export const BLOCK_DOCS: Record<string, BlockDocInfo> = {
+  "comparison-chart": {
+    usageCode: `import ComparisonChart from "@/components/comparison-chart";
+
+export default function PerformanceScreen() {
+  const performanceData = [
+    { label: "Jan 21", fullDate: "Sun, Jan 21", revenue: 3200, costs: 5800 },
+    { label: "Jan 22", fullDate: "Mon, Jan 22", revenue: 3900, costs: 5100 },
+    { label: "Jan 23", fullDate: "Tue, Jan 23", revenue: 4800, costs: 4300 },
+    { label: "Jan 24", fullDate: "Wed, Jan 24", revenue: 5800, costs: 3600 },
+    { label: "Jan 25", fullDate: "Thu, Jan 25", revenue: 6400, costs: 3300 },
+    { label: "Jan 26", fullDate: "Fri, Jan 26", revenue: 6200, costs: 3800 },
+    { label: "Jan 27", fullDate: "Sat, Jan 27", revenue: 5500, costs: 4700 },
+    { label: "Jan 28", fullDate: "Sun, Jan 28", revenue: 4800, costs: 5800 },
+  ];
+
+  return (
+    <ComparisonChart
+      data={performanceData}
+      series={[
+        { key: "revenue", label: "revenue", color: "#32C798" },
+        { key: "costs", label: "costs", color: "#818CF8" },
+      ]}
+      theme="dark"
+      title="Revenue vs Costs"
+      valuePrefix="$"
+      height={220}
+      onPointSelect={(point, index) => {
+        console.log("Scrubbed point:", point, "at index:", index);
+      }}
+    />
+  );
+}`,
+    props: [
+      {
+        name: "data",
+        type: "ComparisonDataPoint[]",
+        default: "DEFAULT_COMPARISON_DATA",
+        required: false,
+        description: "Dataset containing multi-series numeric values, short x-axis labels, and full formatted dates.",
+      },
+      {
+        name: "series",
+        type: "SeriesConfig[]",
+        default: "DEFAULT_SERIES",
+        required: false,
+        description: "Array defining each data series with key, display label, and line/indicator color.",
+      },
+      {
+        name: "theme",
+        type: '"dark" | "light"',
+        default: '"dark"',
+        required: false,
+        description: "Color theme mode for card surface, grid lines, text tokens, and tooltip backdrop.",
+      },
+      {
+        name: "title",
+        type: "string",
+        default: '"Performance Overview"',
+        required: false,
+        description: "Header title displayed above the comparative spline visualization.",
+      },
+      {
+        name: "valuePrefix",
+        type: "string",
+        default: '"$"',
+        required: false,
+        description: "Prefix formatted before numerical metrics in the tooltip and legend (e.g. '$').",
+      },
+      {
+        name: "valueSuffix",
+        type: "string",
+        default: '""',
+        required: false,
+        description: "Suffix formatted after numerical metrics in the tooltip and legend (e.g. ' pts').",
+      },
+      {
+        name: "height",
+        type: "number",
+        default: "220",
+        required: false,
+        description: "Height in pixels of the interactive SVG canvas area.",
+      },
+      {
+        name: "showTooltip",
+        type: "boolean",
+        default: "true",
+        required: false,
+        description: "Whether to render the floating glassmorphic tooltip card that tracks the scrub cursor.",
+      },
+      {
+        name: "missingData",
+        type: '"interpolate" | "zero" | "gap"',
+        default: '"interpolate"',
+        required: false,
+        description: "Strategy for handling null or undefined values in series data points ('interpolate' linearly estimates missing points smoothly, 'zero' plots missing values at 0, 'gap' gracefully interpolates).",
+      },
+      {
+        name: "accessibilityLabel",
+        type: "string",
+        default: "undefined",
+        required: false,
+        description: "Custom accessibility narrative override for screen readers.",
+      },
+      {
+        name: "formatValue",
+        type: "(value: number) => string",
+        default: "undefined",
+        required: false,
+        description: "Custom formatter function for numerical values in legend and tooltip.",
+      },
+      {
+        name: "onPointSelect",
+        type: "(point: ComparisonDataPoint, index: number) => void",
+        default: "undefined",
+        required: false,
+        description: "Callback fired when a data point is scrubbed or tapped.",
+      },
+    ],
+    a11yFeatures: [
+      "Container declares accessibilityRole='summary' with a dynamic, high-level spoken narrative.",
+      "Interactive series legend pills declare accessibilityRole='button' and accessibilityState={{ selected }}.",
+      "allowFontScaling={false} on fixed-pixel tooltip numbers and active date pills prevents text truncation.",
+      "Touch responder maintains comfortable continuous touch and mouse tracking across mobile and desktop.",
+    ],
+  },
   "bar-chart": {
     usageCode: `import BarChart from "@/components/bar-chart";
 

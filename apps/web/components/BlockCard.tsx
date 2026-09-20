@@ -24,6 +24,8 @@ export function BlockCard({ block, className }: BlockCardProps) {
       ? 1.0
       : slug === "interactive-calendar"
       ? 0.78
+      : slug === "comparison-chart"
+      ? 0.96
       : slug === "social-auth-buttons"
       ? 0.88
       : 1.0;
@@ -33,6 +35,8 @@ export function BlockCard({ block, className }: BlockCardProps) {
       ? 0.84
       : slug === "interactive-calendar"
       ? 0.68
+      : slug === "comparison-chart"
+      ? 0.84
       : slug === "social-auth-buttons"
       ? 0.78
       : 0.82;
@@ -40,6 +44,8 @@ export function BlockCard({ block, className }: BlockCardProps) {
   const canvasMaxWidth =
     slug === "floating-docker"
       ? "440px"
+      : slug === "comparison-chart"
+      ? "520px"
       : slug === "trend-chart"
       ? "400px"
       : "380px";
