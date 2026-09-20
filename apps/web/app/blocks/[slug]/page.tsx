@@ -54,11 +54,16 @@ export default function BlockDetailPage() {
 
   const stylingLabel = Array.isArray(block.styling) ? block.styling.join(", ") : block.styling;
 
-  const defaultUsageSnippet = `import ${block.title.replace(/\s+/g, "")} from "@/components/${block.slug}";
+  const componentPascalName = block.slug
+    .split("-")
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join("");
+
+  const defaultUsageSnippet = `import ${componentPascalName} from "@/components/${block.slug}";
 
 export default function Screen() {
   return (
-    <${block.title.replace(/\s+/g, "")}
+    <${componentPascalName}
       theme="dark"
     />
   );
@@ -126,13 +131,13 @@ export default function Screen() {
           </div>
 
           {/* Quick Install Bar */}
-          <div className="flex flex-col gap-2.5 shrink-0 self-start lg:self-end w-full sm:w-auto">
-            <div className="flex items-center justify-between gap-3 bg-[#08080c] border border-white/[0.12] rounded-xl px-4 py-2.5 shadow-lg">
-              <div className="flex items-center gap-2 font-mono text-xs text-[#e4e4e7] select-all">
-                <span className="text-[#32c798] font-bold">$</span>
-                <span>npx @rnblocks/cli add {block.slug}</span>
+          <div className="flex flex-col gap-2 shrink-0 self-start lg:self-end w-full sm:w-auto max-w-full">
+            <div className="flex items-center justify-between gap-2.5 bg-[#08080c] border border-white/[0.12] rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-lg max-w-full min-w-0">
+              <div className="flex items-center gap-2 font-mono text-[11.5px] sm:text-xs text-[#e4e4e7] select-all min-w-0 truncate">
+                <span className="text-[#32c798] font-bold shrink-0">$</span>
+                <span className="truncate">npx @rnblocks/cli add {block.slug}</span>
               </div>
-              <CopyButton text={`npx @rnblocks/cli add ${block.slug}`} label="Copy" />
+              <CopyButton text={`npx @rnblocks/cli add ${block.slug}`} label="Copy" className="shrink-0" />
             </div>
             <div className="flex items-center justify-end gap-2 text-[11px] font-mono text-[#71717a]">
               <span>Universal Expo & Bare RN</span>
@@ -146,12 +151,12 @@ export default function Screen() {
           <div className="w-full min-w-0 space-y-8">
             {/* View Switcher Controls */}
             <div>
-              <div className="flex items-center justify-between gap-4 mb-4">
-                <div className="flex items-center gap-1.5 bg-white/[0.03] border border-white/[0.08] p-1 rounded-xl">
+              <div className="flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-3 mb-4">
+                <div className="flex items-center gap-1.5 bg-white/[0.03] border border-white/[0.08] p-1 rounded-xl w-full xs:w-auto">
                   <button
                     onClick={() => setActiveTab("preview")}
                     className={cn(
-                      "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
+                      "flex-1 xs:flex-initial inline-flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
                       activeTab === "preview"
                         ? "bg-white/[0.1] text-white font-semibold shadow-sm"
                         : "text-[#71717a] hover:text-white"
@@ -163,7 +168,7 @@ export default function Screen() {
                   <button
                     onClick={() => setActiveTab("code")}
                     className={cn(
-                      "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
+                      "flex-1 xs:flex-initial inline-flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
                       activeTab === "code"
                         ? "bg-white/[0.1] text-white font-semibold shadow-sm"
                         : "text-[#71717a] hover:text-white"
@@ -204,20 +209,22 @@ export default function Screen() {
             </div>
 
             {/* Inline Quick Usage Card (Displayed right beneath the preview for instant copy-pasting) */}
-            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 md:p-8">
-              <div className="flex items-center justify-between gap-4 mb-4 pb-4 border-b border-white/[0.08]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-[#32c798]/10 border border-[#32c798]/30 flex items-center justify-center text-[#32c798]">
+            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-4 border-b border-white/[0.08]">
+                <div className="flex items-start sm:items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-[#32c798]/10 border border-[#32c798]/30 flex items-center justify-center text-[#32c798] shrink-0 mt-0.5 sm:mt-0">
                     <Terminal size={16} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="text-base font-bold text-white leading-none">Quick Usage</h3>
-                    <p className="text-xs text-[#9ca3af] mt-1">
+                    <p className="text-xs text-[#9ca3af] mt-1 leading-snug">
                       Copy and paste this drop-in example into your screen or view:
                     </p>
                   </div>
                 </div>
-                <CopyButton text={usageSnippet} label="Copy Example" />
+                <div className="self-start sm:self-auto shrink-0">
+                  <CopyButton text={usageSnippet} label="Copy Example" />
+                </div>
               </div>
 
               <CodeViewer
@@ -229,27 +236,65 @@ export default function Screen() {
 
             {/* Component Props & API Table */}
             {blockDoc?.props && blockDoc.props.length > 0 && (
-              <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 md:p-8">
-                <div className="flex items-center justify-between gap-4 mb-3 pb-3 border-b border-white/[0.08]">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+              <div className="bg-[#07070a] border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8">
+                <div className="flex items-center justify-between gap-3 mb-4 pb-4 border-b border-white/[0.08]">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
                       <Layers size={16} />
                     </div>
-                    <div>
-                      <h3 className="text-base font-bold text-white leading-none">
+                    <div className="min-w-0">
+                      <h3 className="text-base font-bold text-white leading-none truncate">
                         Component Props & API
                       </h3>
-                      <p className="text-xs text-[#9ca3af] mt-1">
-                        Configurable props accepted by <code>{block.title.replace(/\s+/g, "")}</code>
+                      <p className="text-xs text-[#9ca3af] mt-1 truncate">
+                        Configurable props for <code className="text-[#32c798]">{`<${componentPascalName} />`}</code>
                       </p>
                     </div>
                   </div>
-                  <span className="text-xs font-mono text-[#71717a] bg-white/[0.04] px-2.5 py-1 rounded-md border border-white/[0.06]">
+                  <span className="text-xs font-mono text-[#71717a] bg-white/[0.04] px-2.5 py-1 rounded-md border border-white/[0.06] shrink-0">
                     {blockDoc.props.length} props
                   </span>
                 </div>
 
-                <div className="overflow-x-auto mt-4">
+                {/* Mobile Card-Based Props List (< md) */}
+                <div className="space-y-3 md:hidden">
+                  {blockDoc.props.map((p, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-[#0a0a0e] border border-white/[0.06] rounded-xl p-3.5 space-y-2 text-xs"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5 font-mono text-[13px] font-semibold text-[#32c798]">
+                          <span>{p.name}</span>
+                          {p.required && (
+                            <span className="text-[10px] text-[#ef4444] font-bold bg-red-500/10 border border-red-500/20 px-1 py-0.2 rounded" title="Required prop">
+                              required
+                            </span>
+                          )}
+                        </div>
+                        <span className="font-mono text-[11px] text-[#93c5fd] bg-blue-500/10 border border-blue-500/20 px-1.5 py-0.5 rounded break-all max-w-full">
+                          {p.type}
+                        </span>
+                      </div>
+
+                      <p className="text-[#d1d5db] text-xs leading-relaxed">
+                        {p.description}
+                      </p>
+
+                      {p.default && (
+                        <div className="pt-2 border-t border-white/[0.04] flex items-center gap-1.5 font-mono text-[11px] text-[#71717a]">
+                          <span>default:</span>
+                          <code className="text-[#a1a1aa] bg-white/[0.04] px-1.5 py-0.5 rounded border border-white/[0.06] break-all">
+                            {p.default}
+                          </code>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Desktop Matrix Table (>= md) */}
+                <div className="hidden md:block overflow-x-auto mt-4">
                   <table className="w-full text-left text-xs border-collapse">
                     <thead>
                       <tr className="border-b border-white/[0.08] text-[#71717a] font-mono uppercase text-[10px] tracking-wider">
@@ -291,7 +336,7 @@ export default function Screen() {
 
             {/* Accessibility & Assistive Tech Section */}
             {blockDoc?.a11yFeatures && blockDoc.a11yFeatures.length > 0 && (
-              <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 md:p-8">
+              <div className="bg-[#07070a] border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8">
                 <div className="flex items-center gap-2.5 mb-3 pb-3 border-b border-white/[0.08]">
                   <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-[#32c798]">
                     <ShieldCheck size={16} />
@@ -321,7 +366,7 @@ export default function Screen() {
             )}
 
             {/* About / Architecture Guide */}
-            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 md:p-8">
+            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8">
               <h3 className="text-base font-bold text-white mb-2">Integration & Architecture</h3>
               <p className="text-xs sm:text-sm text-[#9ca3af] leading-relaxed mb-6">
                 This component is authored using pure React Native primitives and standard{" "}

@@ -84,7 +84,7 @@ export function LiveBlockPreview({
       {/* Main Canvas Area */}
       <div
         className={cn(
-          "p-6 sm:p-9 flex justify-center items-center min-h-[460px] transition-colors duration-200 overflow-hidden",
+          "p-3 sm:p-6 md:p-9 flex justify-center items-center min-h-[460px] transition-colors duration-200 overflow-hidden",
           theme === "light"
             ? "bg-[#e4e4e7] bg-[radial-gradient(rgba(0,0,0,0.08)_1px,transparent_1px)] bg-[size:16px_16px]"
             : "bg-[#09090c] bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:16px_16px]"

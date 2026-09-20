@@ -184,31 +184,31 @@ export function CodeViewer({
       )}
     >
       {/* Header bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-[#0f0f13] border-b border-white/[0.08] text-left">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 bg-[#0f0f13] border-b border-white/[0.08] text-left gap-2 min-w-0">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="hidden xs:flex items-center gap-1.5 shrink-0">
             <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
             <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
             <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-[#e4e4e7] font-medium bg-white/[0.05] px-2.5 py-1 rounded-md border border-white/[0.06]">
-            <FileCode size={13} className="text-[#32c798]" />
-            <span>{currentFileName}</span>
+          <div className="flex items-center gap-1.5 text-xs text-[#e4e4e7] font-medium bg-white/[0.05] px-2 sm:px-2.5 py-1 rounded-md border border-white/[0.06] min-w-0">
+            <FileCode size={13} className="text-[#32c798] shrink-0" />
+            <span className="truncate max-w-[120px] xs:max-w-[170px] sm:max-w-none">{currentFileName}</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <span className="text-[11px] text-[#71717a] font-medium">{lines.length} lines</span>
-          <span className="text-[10.5px] text-[#a1a1aa] font-semibold tracking-wider bg-white/[0.06] border border-white/[0.08] px-2 py-0.5 rounded uppercase">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          <span className="hidden sm:inline text-[11px] text-[#71717a] font-medium">{lines.length} lines</span>
+          <span className="hidden xs:inline-block text-[10.5px] text-[#a1a1aa] font-semibold tracking-wider bg-white/[0.06] border border-white/[0.08] px-2 py-0.5 rounded uppercase">
             {currentLang}
           </span>
-          <CopyButton text={currentFile.content} label={`Copy ${currentFileName}`} />
+          <CopyButton text={currentFile.content} label="Copy" />
         </div>
       </div>
 
       {/* Mobile Horizontal File Tab Bar (only when multi-file) */}
       {hasMultipleFiles && (
-        <div className="flex md:hidden items-center gap-1 px-3 py-2 bg-[#0c0c10] border-b border-white/[0.08] overflow-x-auto scrollbar-none">
+        <div className="flex md:hidden items-center gap-1.5 px-3 py-2 bg-[#0c0c10] border-b border-white/[0.08] overflow-x-auto scrollbar-none touch-pan-x">
           {fileList.map((f) => {
             const fName = f.path.split("/").pop() || f.path;
             const isActive = f.path === currentFile.path;
@@ -217,7 +217,7 @@ export function CodeViewer({
                 key={f.path}
                 onClick={() => setActivePath(f.path)}
                 className={cn(
-                  "shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer",
+                  "shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer",
                   isActive
                     ? "bg-[#32c798]/15 text-[#32c798] border border-[#32c798]/30 font-medium"
                     : "text-[#71717a] hover:text-white bg-white/[0.03] border border-transparent"
@@ -274,15 +274,15 @@ export function CodeViewer({
         )}
 
         {/* Code body with line numbers */}
-        <div className="flex-1 py-4 overflow-x-auto overflow-y-auto max-h-[600px] bg-[#09090c] text-left min-w-0">
-          <pre className="m-0 text-[12.5px] leading-[22px] text-[#f3f4f6] font-mono text-left block">
+        <div className="flex-1 py-3 sm:py-4 overflow-x-auto overflow-y-auto max-h-[600px] bg-[#09090c] text-left min-w-0">
+          <pre className="m-0 text-[12px] sm:text-[12.5px] leading-[22px] text-[#f3f4f6] font-mono text-left block">
             <code className="block text-left min-w-full">
               {lines.map((line, idx) => (
                 <div
                   key={idx}
-                  className="flex items-start justify-start px-4 min-w-full text-left hover:bg-white/[0.035] transition-colors duration-100"
+                  className="flex items-start justify-start px-2.5 sm:px-4 min-w-full text-left hover:bg-white/[0.035] transition-colors duration-100"
                 >
-                  <span className="w-10 shrink-0 text-[#4b5563] select-none text-right pr-3.5 text-[11.5px] border-r border-white/[0.07] mr-4 leading-[22px]">
+                  <span className="w-8 sm:w-10 shrink-0 text-[#4b5563] select-none text-right pr-2 sm:pr-3.5 text-[11px] sm:text-[11.5px] border-r border-white/[0.07] mr-2.5 sm:mr-4 leading-[22px]">
                     {idx + 1}
                   </span>
                   <span className="whitespace-pre flex-1 min-w-0 text-left font-mono leading-[22px] [tab-size:2]">
