@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, ArrowUpRight, Layers, Search } from "lucide-react";
-import { GitHubIcon } from "./icons/GitHubIcon";
+import { Menu, X, ArrowUpRight, Layers } from "lucide-react";
+import { GitHubIcon, SearchIcon } from "./icons";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -149,7 +149,7 @@ export function Navbar() {
             onClick={handleSearchClick}
             aria-label="Search blocks (Ctrl+K)"
           >
-            <Search size={13} className="text-[#9ca3af]" />
+            <SearchIcon size={14} className="text-[#9ca3af]" />
             <span className="font-normal">Search...</span>
             <kbd className="font-mono text-[10px] font-semibold text-[#71717a] bg-white/[0.06] border border-white/10 rounded px-1.5 py-0.5 leading-tight">
               {isMac ? "⌘K" : "Ctrl K"}
@@ -205,7 +205,7 @@ export function Navbar() {
               }}
             >
               <div className="flex items-center gap-2">
-                <Search size={15} className="text-[#71717a]" />
+                <SearchIcon size={15} className="text-[#71717a]" />
                 <span>Search blocks & components...</span>
               </div>
               <kbd className="font-mono text-[10px] font-semibold text-[#71717a] bg-white/[0.06] border border-white/10 rounded px-1.5 py-0.5 leading-tight">

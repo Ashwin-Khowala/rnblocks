@@ -3,7 +3,8 @@
 import React, { useState, useMemo } from "react";
 import { BLOCKS_DATA } from "@/data/blocks";
 import { BlockCard } from "@/components/BlockCard";
-import { Search, Layers, X, ChevronDown, Sparkles, Filter } from "lucide-react";
+import { Layers, X, ChevronDown, Sparkles, Filter } from "lucide-react";
+import { SearchIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 export default function BlocksGalleryPage() {
@@ -123,7 +124,7 @@ export default function BlocksGalleryPage() {
             <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
               {/* Search Input */}
               <div className="relative flex-1">
-                <Search
+                <SearchIcon
                   size={16}
                   className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
                 />
