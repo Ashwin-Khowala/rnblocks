@@ -22,6 +22,7 @@ function generateRegistry() {
 
     const PREFERRED_BLOCK_ORDER = [
       "bar-chart",
+      "grouped-bar-chart",
       "interactive-calendar",
       "floating-docker",
       "comparison-chart",

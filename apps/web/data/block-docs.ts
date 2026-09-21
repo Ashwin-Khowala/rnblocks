@@ -244,6 +244,150 @@ export default function AnalyticsScreen() {
       "Meets 44x44pt minimum touch target requirements for thumb interaction.",
     ],
   },
+  "grouped-bar-chart": {
+    usageCode: `import GroupedBarChart from "@/components/grouped-bar-chart";
+
+export default function FinancialPerformanceScreen() {
+  const financialData = [
+    { label: "Jan", fullDate: "January 2026", revenue: 10400, profit: 3600 },
+    { label: "Feb", fullDate: "February 2026", revenue: 15500, profit: 5200 },
+    { label: "Mar", fullDate: "March 2026", revenue: 12200, profit: 4100 },
+    { label: "Apr", fullDate: "April 2026", revenue: 18900, profit: 7800 },
+    { label: "May", fullDate: "May 2026", revenue: 14200, profit: 4900 },
+    { label: "Jun", fullDate: "June 2026", revenue: 21000, profit: 9200 },
+  ];
+
+  return (
+    <GroupedBarChart
+      data={financialData}
+      series={[
+        { key: "revenue", label: "revenue" },
+        { key: "profit", label: "profit" },
+      ]}
+      theme="dark"
+      title="Financial Performance"
+      valuePrefix="$"
+      height={240}
+      onSelectGroup={(point, index) => {
+        console.log("Selected group:", point.label, "at index:", index);
+      }}
+    />
+  );
+}`,
+    props: [
+      {
+        name: "data",
+        type: "GroupedBarDataPoint[]",
+        default: "DEFAULT_GROUPED_BAR_DATA",
+        required: false,
+        description: "Dataset containing multi-series numeric values, category labels, and optional full date descriptions.",
+      },
+      {
+        name: "series",
+        type: "BarSeriesConfig[]",
+        default: "DEFAULT_BAR_SERIES",
+        required: false,
+        description: "Array defining each data series with key, display label, and optional custom colors.",
+      },
+      {
+        name: "theme",
+        type: '"dark" | "light"',
+        default: '"dark"',
+        required: false,
+        description: "Color theme mode for canvas surface, grid lines, text tokens, bars, and tooltip backdrop.",
+      },
+      {
+        name: "title",
+        type: "string",
+        default: "undefined",
+        required: false,
+        description: "Optional header title displayed above the grouped bar chart.",
+      },
+      {
+        name: "subtitle",
+        type: "string",
+        default: "undefined",
+        required: false,
+        description: "Optional secondary description displayed below the title.",
+      },
+      {
+        name: "valuePrefix",
+        type: "string",
+        default: '""',
+        required: false,
+        description: "Prefix formatted before numerical metrics in the tooltip (e.g. '$').",
+      },
+      {
+        name: "valueSuffix",
+        type: "string",
+        default: '""',
+        required: false,
+        description: "Suffix formatted after numerical metrics in the tooltip (e.g. ' pts').",
+      },
+      {
+        name: "height",
+        type: "number",
+        default: "240",
+        required: false,
+        description: "Height in pixels of the interactive SVG chart visualization.",
+      },
+      {
+        name: "animated",
+        type: "boolean",
+        default: "true",
+        required: false,
+        description: "Whether to animate bar heights with a staggered spring entrance on mount.",
+      },
+      {
+        name: "showBackgroundTrack",
+        type: "boolean",
+        default: "true",
+        required: false,
+        description: "Whether to render subtle background vertical tracks behind each group slot.",
+      },
+      {
+        name: "showLegend",
+        type: "boolean",
+        default: "true",
+        required: false,
+        description: "Whether to display interactive series legend pills with live rolling numbers in the header.",
+      },
+      {
+        name: "showTooltip",
+        type: "boolean",
+        default: "true",
+        required: false,
+        description: "Whether to render the floating glassmorphic tooltip with animated rolling numbers.",
+      },
+      {
+        name: "showGridLines",
+        type: "boolean",
+        default: "true",
+        required: false,
+        description: "Whether to render dashed horizontal grid lines across the chart area.",
+      },
+      {
+        name: "initialIndex",
+        type: "number | null",
+        default: "null",
+        required: false,
+        description: "Optional initial active group index on mount (defaults to null for clean idle state).",
+      },
+      {
+        name: "onSelectGroup",
+        type: "(point: GroupedBarDataPoint, index: number) => void",
+        default: "undefined",
+        required: false,
+        description: "Callback fired when a category group is scrubbed, clicked, or tapped.",
+      },
+    ],
+    a11yFeatures: [
+      "Chart container declares accessibilityRole='summary' with a high-level spoken narrative generated from data.",
+      "allowFontScaling={false} on fixed-pixel tooltip numbers and active category pill to prevent text truncation.",
+      "ArrowLeft and ArrowRight keyboard navigation support for full web accessibility.",
+      "Mobile PanResponder gesture tracking with auto-clamping ensures accurate thumb scrubbing across all screen widths.",
+    ],
+  },
   "floating-docker": {
     usageCode: `import FloatingDocker from "@/components/floating-docker";
 

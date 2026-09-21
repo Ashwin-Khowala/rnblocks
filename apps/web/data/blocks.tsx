@@ -3,6 +3,7 @@
 import React from "react";
 import { REGISTRY_DATA, RegistryItemData } from "./registry-data";
 import { default as BarChartComponent } from "../../../registry/blocks/bar-chart/files/bar-chart";
+import { default as GroupedBarChartComponent } from "../../../registry/blocks/grouped-bar-chart/files/grouped-bar-chart";
 import { default as InteractiveCalendarComponent } from "../../../registry/blocks/interactive-calendar/files/interactive-calendar";
 import { DEMO_MARKED_DATES as _CalendarDemoData } from "../../../registry/blocks/interactive-calendar/files/interactive-calendar";
 import { default as FloatingDockerComponent } from "../../../registry/blocks/floating-docker/files/floating-docker";
@@ -20,6 +21,10 @@ export const REGISTRY_ITEMS: RegistryWebItem[] = [
   {
     ...REGISTRY_DATA.find((item) => item.slug === "bar-chart")!,
     Component: BarChartComponent as React.ComponentType,
+  },
+  {
+    ...REGISTRY_DATA.find((item) => item.slug === "grouped-bar-chart")!,
+    Component: GroupedBarChartComponent as React.ComponentType,
   },
   {
     ...REGISTRY_DATA.find((item) => item.slug === "interactive-calendar")!,
