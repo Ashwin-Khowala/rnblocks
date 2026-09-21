@@ -27,6 +27,7 @@ import InteractiveCalendar from "../../../registry/blocks/interactive-calendar/f
 import SocialAuthButtons from "../../../registry/blocks/social-auth-buttons/files/social-auth-buttons";
 import TrendChart from "../../../registry/blocks/trend-chart/files/trend-chart";
 import BarChart from "../../../registry/blocks/bar-chart/files/bar-chart";
+import GroupedBarChart from "../../../registry/blocks/grouped-bar-chart/files/grouped-bar-chart";
 import ComparisonChart from "../../../registry/blocks/comparison-chart/files/comparison-chart";
 
 // Suppress "unused import" errors — imports exist to trigger type-checking only.
@@ -35,4 +36,5 @@ void InteractiveCalendar;
 void SocialAuthButtons;
 void TrendChart;
 void BarChart;
+void GroupedBarChart;
 void ComparisonChart;
