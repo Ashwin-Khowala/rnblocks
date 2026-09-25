@@ -86,8 +86,6 @@ export function Navbar() {
   // RNBlocks navigation items
   const navLinks = [
     { label: "Blocks", href: "/blocks" },
-    { label: "Dashboard", href: "/dashboard" },
-    { label: "Submit", href: "/submit" },
     { label: "Contribute", href: "/contribute" },
     { label: "Docs", href: "/docs" },
   ];

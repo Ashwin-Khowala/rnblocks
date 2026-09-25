@@ -1,0 +1,71 @@
+{
+  "name": "donut-chart",
+  "title": "Interactive Donut & Radial Chart",
+  "description": "An interactive SVG donut chart with animated arcs, glassmorphic center summary with rolling numbers, segment selection scrubbing, customizable stroke thickness, and interactive legend breakdown.",
+  "type": "block",
+  "author": {
+    "name": "Ashwin Khowala",
+    "github": "Ashwin-Khowala"
+  },
+  "version": "1.0.0",
+  "category": "analytics",
+  "tags": [
+    "chart",
+    "donut-chart",
+    "radial-chart",
+    "pie-chart",
+    "analytics",
+    "data-visualization",
+    "svg",
+    "gestures",
+    "legend"
+  ],
+  "files": [
+    {
+      "path": "files/donut-chart.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "files/donut-chart.types.ts",
+      "type": "registry:component"
+    },
+    {
+      "path": "files/donut-chart.utils.ts",
+      "type": "registry:component"
+    },
+    {
+      "path": "files/donut-chart.a11y.ts",
+      "type": "registry:component"
+    },
+    {
+      "path": "files/donut-chart.rolling-number.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "files/index.ts",
+      "type": "registry:component"
+    }
+  ],
+  "dependencies": [
+    "react-native-svg"
+  ],
+  "devDependencies": {},
+  "registryDependencies": [],
+  "platforms": [
+    "ios",
+    "android",
+    "web"
+  ],
+  "framework": "react-native",
+  "frameworks": [
+    "expo",
+    "react-native"
+  ],
+  "styling": [
+    "StyleSheet"
+  ],
+  "themes": [
+    "dark",
+    "light"
+  ]
+}

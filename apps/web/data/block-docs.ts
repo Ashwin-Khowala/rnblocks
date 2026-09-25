@@ -388,6 +388,142 @@ export default function FinancialPerformanceScreen() {
       "Mobile PanResponder gesture tracking with auto-clamping ensures accurate thumb scrubbing across all screen widths.",
     ],
   },
+  "donut-chart": {
+    usageCode: `import DonutChart from "@/components/donut-chart";
+
+export default function RadialDistributionScreen() {
+  const data = [
+    { label: "Category A", value: 40, pattern: "solid", color: "#32C798", accentColor: "#32C798" },
+    { label: "Category B", value: 25, pattern: "solid", color: "#818CF8", accentColor: "#818CF8" },
+    { label: "Category C", value: 20, pattern: "vertical-stripes", patternColor: "#FBBF24", accentColor: "#FBBF24" },
+    { label: "Category D", value: 15, pattern: "diagonal-stripes", patternColor: "#38BDF8", accentColor: "#38BDF8" },
+  ];
+
+  return (
+    <DonutChart
+      data={data}
+      theme="dark"
+      variant="brand"
+      size={250}
+      innerRadiusRatio={0.54}
+      padAngle={2.5}
+      explosionDistance={8}
+      animated={true}
+      centerLabel="Total"
+      onSelectSlice={(slice, index) => {
+        console.log("Selected slice:", slice?.label, "value:", slice?.value);
+      }}
+    />
+  );
+}`,
+    props: [
+      {
+        name: "data",
+        type: "DonutDataPoint[]",
+        default: "DEFAULT_DONUT_DATA",
+        required: false,
+        description: "Array of category data points with label, numerical value, pattern (solid, vertical-stripes, diagonal-stripes), and optional custom colors.",
+      },
+      {
+        name: "theme",
+        type: '"dark" | "light"',
+        default: '"dark"',
+        required: false,
+        description: "Color theme mode for card surface, center cutout backdrop, borders, and slice palette.",
+      },
+      {
+        name: "variant",
+        type: '"brand" | "monochrome"',
+        default: '"brand"',
+        required: false,
+        description: "Visual variant: brand emerald/indigo/amber/sky accents, or technical monochrome hatching.",
+      },
+      {
+        name: "size",
+        type: "number",
+        default: "250",
+        required: false,
+        description: "Outer diameter in pixels of the SVG donut visualization.",
+      },
+      {
+        name: "innerRadiusRatio",
+        type: "number",
+        default: "0.54",
+        required: false,
+        description: "Ratio of the inner hole radius relative to the outer radius (0.2 to 0.85).",
+      },
+      {
+        name: "padAngle",
+        type: "number",
+        default: "0",
+        required: false,
+        description: "Angular gap in degrees between adjacent slices (defaults to 0 for a seamless continuous ring).",
+      },
+      {
+        name: "explosionDistance",
+        type: "number",
+        default: "10",
+        required: false,
+        description: "Distance in pixels by which the active slice explodes outward along its bisector angle.",
+      },
+      {
+        name: "numberFontFamily",
+        type: "string",
+        default: "monospace (JetBrains Mono / Menlo)",
+        required: false,
+        description: "Custom font family for the center numbers and tabular rolling counters.",
+      },
+      {
+        name: "startAngleOffset",
+        type: "number",
+        default: "270",
+        required: false,
+        description: "Starting rotation offset in degrees (270 = 9 o'clock horizontal left).",
+      },
+      {
+        name: "animated",
+        type: "boolean",
+        default: "true",
+        required: false,
+        description: "Whether to animate slice circular entrance and hover transitions.",
+      },
+      {
+        name: "loading",
+        type: "boolean",
+        default: "false",
+        required: false,
+        description: "Whether the chart is in a loading state with a circular loading spinner ring.",
+      },
+      {
+        name: "centerLabel",
+        type: "string",
+        default: '"Total"',
+        required: false,
+        description: "Default label displayed under the center total when idle.",
+      },
+      {
+        name: "initialIndex",
+        type: "number | null",
+        default: "null",
+        required: false,
+        description: "Optional initial active slice index on mount (defaults to null for idle overall total).",
+      },
+      {
+        name: "onSelectSlice",
+        type: "(slice: DonutDataPoint | null, index: number | null) => void",
+        default: "undefined",
+        required: false,
+        description: "Callback fired when a slice is clicked, tapped, or hovered.",
+      },
+    ],
+    a11yFeatures: [
+      "Chart container declares accessibilityRole='summary' with a dynamically generated spoken narrative summarizing total value and category distributions.",
+      "Individual legend rows declare accessibilityRole='button' with dynamic accessibilityLabel and accessibilityState={{ selected }}.",
+      "allowFontScaling={false} on fixed-pixel center rolling digits and percentage badges to prevent text truncation.",
+      "Keyboard navigation support on web with ArrowLeft, ArrowRight, and Escape.",
+      "Mobile PanResponder angle tracking with automatic radius filtering ensures reliable touch scrubbing across all screen sizes.",
+    ],
+  },
   "floating-docker": {
     usageCode: `import FloatingDocker from "@/components/floating-docker";
 

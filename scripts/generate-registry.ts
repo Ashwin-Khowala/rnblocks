@@ -23,6 +23,7 @@ function generateRegistry() {
     const PREFERRED_BLOCK_ORDER = [
       "bar-chart",
       "grouped-bar-chart",
+      "donut-chart",
       "interactive-calendar",
       "floating-docker",
       "comparison-chart",
@@ -94,7 +95,7 @@ function generateRegistry() {
       const componentVal =
         slug === "interactive-calendar"
           ? `(() => {
-      const Wrapped = (props: any) => <${compName} markedDates={_CalendarDemoData} {...props} />;
+      const Wrapped = (props: Record<string, unknown>) => <${compName} markedDates={_CalendarDemoData} {...props} />;
       Wrapped.displayName = "${compName}Wrapped";
       return Wrapped;
     })()`
