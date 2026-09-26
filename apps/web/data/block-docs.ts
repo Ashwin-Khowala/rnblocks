@@ -524,6 +524,149 @@ export default function RadialDistributionScreen() {
       "Mobile PanResponder angle tracking with automatic radius filtering ensures reliable touch scrubbing across all screen sizes.",
     ],
   },
+  "pie-chart": {
+    usageCode: `import PieChart from "@/components/pie-chart";
+
+export default function AnalyticsScreen() {
+  const data = [
+    { label: "Category A", value: 40 },
+    { label: "Category B", value: 25 },
+    { label: "Category C", value: 20 },
+    { label: "Category D", value: 15 },
+  ];
+
+  return (
+    <PieChart
+      data={data}
+      theme="dark"
+      variant="brand"
+      size={250}
+      explosionDistance={10}
+      animated={true}
+      title="Distribution"
+      subtitle="Interactive breakdown"
+      onSelectSlice={(slice, index) => {
+        console.log("Selected slice:", slice?.label, "value:", slice?.value);
+      }}
+    />
+  );
+}`,
+    props: [
+      {
+        name: "data",
+        type: "PieDataPoint[]",
+        default: "DEFAULT_PIE_DATA",
+        required: false,
+        description: "Array of category data points with label, numerical value, and optional custom slice colors.",
+      },
+      {
+        name: "theme",
+        type: '"dark" | "light"',
+        default: '"dark"',
+        required: false,
+        description: "Color theme mode for card surface, borders, and slice palette.",
+      },
+      {
+        name: "variant",
+        type: '"brand" | "monochrome"',
+        default: '"brand"',
+        required: false,
+        description: "Visual variant: brand emerald/indigo/amber/sky accents, or sleek monochrome slate/zinc shades.",
+      },
+      {
+        name: "size",
+        type: "number",
+        default: "250",
+        required: false,
+        description: "Diameter in points of the SVG pie chart visualization. Automatically scales down on narrow viewports.",
+      },
+      {
+        name: "padAngle",
+        type: "number",
+        default: "0",
+        required: false,
+        description: "Angular gap in degrees between adjacent slices (defaults to 0 for a seamless continuous pie).",
+      },
+      {
+        name: "explosionDistance",
+        type: "number",
+        default: "10",
+        required: false,
+        description: "Distance in pixels by which the active slice explodes outward along its radial bisector.",
+      },
+      {
+        name: "title",
+        type: "string",
+        default: '"Distribution"',
+        required: false,
+        description: "Card header title.",
+      },
+      {
+        name: "subtitle",
+        type: "string",
+        default: '"Interactive breakdown"',
+        required: false,
+        description: "Card header context subtitle.",
+      },
+      {
+        name: "numberFontFamily",
+        type: "string",
+        default: "monospace (JetBrains Mono / Menlo)",
+        required: false,
+        description: "Custom font family for the header rolling numbers and counters.",
+      },
+      {
+        name: "startAngleOffset",
+        type: "number",
+        default: "270",
+        required: false,
+        description: "Starting rotation offset in degrees (270 = 12 o'clock top).",
+      },
+      {
+        name: "animated",
+        type: "boolean",
+        default: "true",
+        required: false,
+        description: "Whether to animate slice circular entrance and hover transitions.",
+      },
+      {
+        name: "loading",
+        type: "boolean",
+        default: "false",
+        required: false,
+        description: "Whether the chart is in a loading state with a circular loading spinner ring.",
+      },
+      {
+        name: "centerLabel",
+        type: "string",
+        default: '"Total"',
+        required: false,
+        description: "Label displayed in header readout when no slice is selected.",
+      },
+      {
+        name: "initialIndex",
+        type: "number | null",
+        default: "null",
+        required: false,
+        description: "Optional initial active slice index on mount.",
+      },
+      {
+        name: "onSelectSlice",
+        type: "(slice: PieDataPoint | null, index: number | null) => void",
+        default: "undefined",
+        required: false,
+        description: "Callback fired when a slice is clicked, tapped, or hovered.",
+      },
+    ],
+    a11yFeatures: [
+      "Chart container declares accessibilityRole='image' with a dynamically generated spoken narrative summarizing total value and category distributions.",
+      "Dedicated screen-reader data breakdown list with accessibilityRole='list' announcing every slice label, value, and percentage.",
+      "Interactive header readout button announces current slice and supports one-tap reset back to overall Total.",
+      "allowFontScaling={false} on fixed-pixel rolling digits and percentage badges to prevent text truncation.",
+      "Full keyboard navigation support on web with ArrowLeft, ArrowRight, and Escape.",
+      "Mobile PanResponder with non-aggressive gesture claiming and touchAction='pan-y' prevents parent scroll hijacking.",
+    ],
+  },
   "floating-docker": {
     usageCode: `import FloatingDocker from "@/components/floating-docker";
 

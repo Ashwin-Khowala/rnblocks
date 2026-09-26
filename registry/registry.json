@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-09-25T18:23:48.260Z",
+  "generatedAt": "2026-09-26T21:51:49.917Z",
   "items": [
     {
       "name": "bar-chart",
@@ -162,6 +162,76 @@
         },
         {
           "path": "files/donut-chart.rolling-number.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/index.ts",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": [
+        "react-native-svg"
+      ],
+      "devDependencies": {},
+      "registryDependencies": [],
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "framework": "react-native",
+      "frameworks": [
+        "expo",
+        "react-native"
+      ],
+      "styling": [
+        "StyleSheet"
+      ],
+      "themes": [
+        "dark",
+        "light"
+      ]
+    },
+    {
+      "name": "pie-chart",
+      "title": "Interactive Pie Chart",
+      "description": "An interactive SVG pie chart with precision radial wedges, outward slice explosion, header card readout with animated rolling numbers, non-aggressive touch gestures, and full screen-reader accessibility.",
+      "type": "block",
+      "author": {
+        "name": "Ashwin Khowala",
+        "github": "Ashwin-Khowala"
+      },
+      "version": "1.0.0",
+      "category": "analytics",
+      "tags": [
+        "chart",
+        "pie-chart",
+        "radial-chart",
+        "analytics",
+        "data-visualization",
+        "svg",
+        "gestures",
+        "rolling-numbers"
+      ],
+      "files": [
+        {
+          "path": "files/pie-chart.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/pie-chart.types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/pie-chart.utils.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/pie-chart.a11y.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "files/pie-chart.rolling-number.tsx",
           "type": "registry:component"
         },
         {

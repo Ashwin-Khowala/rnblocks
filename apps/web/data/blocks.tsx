@@ -5,6 +5,7 @@ import { REGISTRY_DATA, RegistryItemData } from "./registry-data";
 import { default as BarChartComponent } from "../../../registry/blocks/bar-chart/files/bar-chart";
 import { default as GroupedBarChartComponent } from "../../../registry/blocks/grouped-bar-chart/files/grouped-bar-chart";
 import { default as DonutChartComponent } from "../../../registry/blocks/donut-chart/files/donut-chart";
+import { default as PieChartComponent } from "../../../registry/blocks/pie-chart/files/pie-chart";
 import { default as InteractiveCalendarComponent } from "../../../registry/blocks/interactive-calendar/files/interactive-calendar";
 import { DEMO_MARKED_DATES as _CalendarDemoData } from "../../../registry/blocks/interactive-calendar/files/interactive-calendar";
 import { default as FloatingDockerComponent } from "../../../registry/blocks/floating-docker/files/floating-docker";
@@ -30,6 +31,10 @@ export const REGISTRY_ITEMS: RegistryWebItem[] = [
   {
     ...REGISTRY_DATA.find((item) => item.slug === "donut-chart")!,
     Component: DonutChartComponent as React.ComponentType,
+  },
+  {
+    ...REGISTRY_DATA.find((item) => item.slug === "pie-chart")!,
+    Component: PieChartComponent as React.ComponentType,
   },
   {
     ...REGISTRY_DATA.find((item) => item.slug === "interactive-calendar")!,

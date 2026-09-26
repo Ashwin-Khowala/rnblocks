@@ -24,6 +24,7 @@ function generateRegistry() {
       "bar-chart",
       "grouped-bar-chart",
       "donut-chart",
+      "pie-chart",
       "interactive-calendar",
       "floating-docker",
       "comparison-chart",
