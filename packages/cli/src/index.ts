@@ -7,7 +7,7 @@ const program = new Command();
 program
   .name("rnblocks")
   .description("Add production-ready React Native blocks and screens directly to your project")
-  .version("0.1.4");
+  .version("0.1.5");
 
 program
   .command("add")
