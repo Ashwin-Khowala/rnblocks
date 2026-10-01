@@ -366,3 +366,13 @@ main:not(:has(.landing-root)) {
 .markdown-body a:hover {
   color: #ffffff;
 }
+
+/* Hide scrollbar for Chrome, Safari, Opera, Edge and Firefox */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
