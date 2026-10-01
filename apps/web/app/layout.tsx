@@ -5,6 +5,8 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ReactNativeWebRegistry } from "@/components/ReactNativeWebRegistry";
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
@@ -128,12 +130,15 @@ export default function RootLayout({
         />
       </head>
       <body className={nunitoSans.className}>
-        <Navbar />
-        <main style={{ minHeight: "calc(100vh - 60px - 280px)", display: "flex", flexDirection: "column" }}>
-          {children}
-        </main>
-        <Footer />
-        <Analytics />
+        <ReactNativeWebRegistry>
+          <Navbar />
+          <main style={{ minHeight: "calc(100vh - 60px - 280px)", display: "flex", flexDirection: "column" }}>
+            {children}
+          </main>
+          <Footer />
+          <Analytics />
+          <SpeedInsights />
+        </ReactNativeWebRegistry>
       </body>
     </html>
   );
