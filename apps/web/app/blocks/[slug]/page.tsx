@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { BLOCKS_DATA } from "@/data/blocks";
@@ -8,19 +8,25 @@ import { BLOCK_DOCS } from "@/data/block-docs";
 import { LiveBlockPreview } from "@/components/LiveBlockPreview";
 import { CodeViewer } from "@/components/CodeViewer";
 import { CopyButton } from "@/components/CopyButton";
-import { BackIcon } from "@/components/icons/BackIcon";
+import { GitHubIcon } from "@/components/icons/GitHubIcon";
+import {
+  BlockNavSidebar,
+  BlockMobileBar,
+  BlockHeader,
+  BlockInstallation,
+  BlockPropsTable,
+  BlockTocSidebar,
+  BlockPagination,
+  TOC_SECTIONS,
+} from "@/components/docs";
 import {
   CheckCircle2,
   Terminal,
-  FileCode,
   Package,
-  ExternalLink,
   Code2,
   Smartphone,
   AlertCircle,
-  Sparkles,
-  ShieldCheck,
-  Layers,
+  ChevronLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -31,10 +37,48 @@ export default function BlockDetailPage() {
   const blockDoc = BLOCK_DOCS[slug];
 
   const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
+  const [activeSection, setActiveSection] = useState<string>("preview");
+
+  // Current block index for Next/Previous pagination
+  const currentIndex = BLOCKS_DATA.findIndex((b) => b.slug === slug);
+  const prevBlock = currentIndex > 0 ? BLOCKS_DATA[currentIndex - 1] : null;
+  const nextBlock = currentIndex < BLOCKS_DATA.length - 1 ? BLOCKS_DATA[currentIndex + 1] : null;
+
+  // Track active scroll section for desktop TOC and mobile horizontal pill bar
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const offset = 140;
+
+      for (let i = TOC_SECTIONS.length - 1; i >= 0; i--) {
+        const sectionEl = document.getElementById(TOC_SECTIONS[i].id);
+        if (sectionEl) {
+          const top = sectionEl.offsetTop - offset;
+          if (scrollY >= top) {
+            setActiveSection(TOC_SECTIONS[i].id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const yOffset = -90;
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
 
   if (!block) {
     return (
-      <div className="min-h-screen bg-[#030305] text-[#ededed] pt-24 pb-20 flex items-center justify-center">
+      <div className="min-h-screen bg-[#070709] text-[#ededed] pt-24 pb-20 flex items-center justify-center">
         <div className="container-main flex flex-col items-center justify-center text-center gap-4 py-20">
           <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#ef4444] mb-2">
             <AlertCircle size={28} />
@@ -44,15 +88,13 @@ export default function BlockDetailPage() {
             The requested block &ldquo;{slug}&rdquo; does not exist in the registry.
           </p>
           <Link href="/blocks" className="btn-primary inline-flex items-center gap-2 mt-2">
-            <BackIcon size={16} />
+            <ChevronLeft size={16} />
             <span>Back to Blocks</span>
           </Link>
         </div>
       </div>
     );
   }
-
-  const stylingLabel = Array.isArray(block.styling) ? block.styling.join(", ") : block.styling;
 
   const componentPascalName = block.slug
     .split("-")
@@ -72,124 +114,69 @@ export default function Screen() {
   const usageSnippet = blockDoc?.usageCode || defaultUsageSnippet;
 
   return (
-    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-24 md:pt-28 pb-24 flex-1">
-      <div className="container-main">
-        {/* Breadcrumbs Navigation */}
-        <div className="flex items-center gap-2 text-xs font-mono text-[#71717a] mb-6">
-          <Link
-            href="/blocks"
-            className="inline-flex items-center gap-1.5 text-[#9ca3af] hover:text-white transition-colors"
-          >
-            <BackIcon size={14} />
-            <span>Blocks</span>
-          </Link>
-          <span>/</span>
-          <span className="text-[#71717a] capitalize">{block.category}</span>
-          <span>/</span>
-          <span className="text-[#32c798] truncate max-w-[200px] sm:max-w-none font-medium">
-            {block.title}
-          </span>
-        </div>
+    <div className="min-h-screen bg-[#070709] text-[#ededed] pb-24 flex-1">
+      {/* 3-Column Responsive Documentation Layout */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-4 lg:pt-6">
+        <div className="flex gap-8 lg:gap-10 items-start">
+          {/* Column 1: Left Navigation Sidebar (Desktop >= lg) */}
+          <BlockNavSidebar blocks={BLOCKS_DATA} currentSlug={block.slug} />
 
-        {/* Hero Header Section */}
-        <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 pb-8 border-b border-white/[0.08]">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 mb-3">
-              <span className="font-mono text-[11px] font-bold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                {block.category}
-              </span>
-              <span className="inline-flex items-center gap-1 font-mono text-[11px] text-[#9ca3af] bg-white/[0.03] border border-white/[0.08] px-2 py-0.5 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#32c798]" />
-                <span>v{block.version || "1.0.0"}</span>
-              </span>
-            </div>
+          {/* Column 2: Center Main Documentation Stage */}
+          <main className="flex-1 min-w-0 max-w-4xl py-2 space-y-10">
+            {/* Mobile In-Flow Header: Breadcrumbs & Drawer Trigger (< lg, Static, Never Floats) */}
+            <BlockMobileBar blocks={BLOCKS_DATA} currentBlock={block} />
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3">
-              {block.title}
-            </h1>
+            {/* Header: Title, Concise Description, and Copy Actions */}
+            <BlockHeader block={block} />
 
-            <p className="text-sm sm:text-base text-[#9ca3af] leading-relaxed mb-4">
-              {block.description}
-            </p>
+            {/* Section 1: Preview */}
+            <section id="preview" className="space-y-3 scroll-mt-24">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <h2 className="text-lg font-bold text-white tracking-tight">Preview</h2>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[#71717a]">
-              <div className="flex items-center gap-1.5">
-                <span>By</span>
-                <span className="text-white font-medium">{block.author}</span>
-              </div>
-              <span>•</span>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[#32c798]">Platforms:</span>
-                <span className="text-[#d1d5db]">iOS, Android, Web</span>
-              </div>
-              <span>•</span>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[#32c798]">Styling:</span>
-                <span className="text-[#d1d5db]">{stylingLabel}</span>
-              </div>
-            </div>
-          </div>
+                <div className="flex items-center gap-2">
+                  {/* View Switcher: Preview / Code */}
+                  <div className="flex bg-white/[0.04] border border-white/[0.08] p-0.5 rounded-lg">
+                    <button
+                      onClick={() => setActiveTab("preview")}
+                      className={cn(
+                        "inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md transition-colors cursor-pointer",
+                        activeTab === "preview"
+                          ? "bg-white/[0.1] text-white font-semibold"
+                          : "text-[#71717a] hover:text-white"
+                      )}
+                    >
+                      <Smartphone size={13} />
+                      <span>Preview</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab("code")}
+                      className={cn(
+                        "inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md transition-colors cursor-pointer",
+                        activeTab === "code"
+                          ? "bg-white/[0.1] text-white font-semibold"
+                          : "text-[#71717a] hover:text-white"
+                      )}
+                    >
+                      <Code2 size={13} />
+                      <span>Code</span>
+                    </button>
+                  </div>
 
-          {/* Quick Install Bar */}
-          <div className="flex flex-col gap-2 shrink-0 self-start lg:self-end w-full sm:w-auto max-w-full">
-            <div className="flex items-center justify-between gap-2.5 bg-[#08080c] border border-white/[0.12] rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-lg max-w-full min-w-0">
-              <div className="flex items-center gap-2 font-mono text-[11.5px] sm:text-xs text-[#e4e4e7] select-all min-w-0 truncate">
-                <span className="text-[#32c798] font-bold shrink-0">$</span>
-                <span className="truncate">npx @rnblocks/cli add {block.slug}</span>
-              </div>
-              <CopyButton text={`npx @rnblocks/cli add ${block.slug}`} label="Copy" className="shrink-0" />
-            </div>
-            <div className="flex items-center justify-end gap-2 text-[11px] font-mono text-[#71717a]">
-              <span>Universal Expo & Bare RN</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Content Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8 items-start">
-          {/* Left Column: Preview / Code & Inline Usage & Props */}
-          <div className="w-full min-w-0 space-y-8">
-            {/* View Switcher Controls */}
-            <div>
-              <div className="flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-3 mb-4">
-                <div className="flex items-center gap-1.5 bg-white/[0.03] border border-white/[0.08] p-1 rounded-xl w-full xs:w-auto">
-                  <button
-                    onClick={() => setActiveTab("preview")}
-                    className={cn(
-                      "flex-1 xs:flex-initial inline-flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
-                      activeTab === "preview"
-                        ? "bg-white/[0.1] text-white font-semibold shadow-sm"
-                        : "text-[#71717a] hover:text-white"
-                    )}
+                  {/* GitHub Source Button */}
+                  <a
+                    href={`https://github.com/Ashwin-Khowala/rnblocks/tree/master/registry/blocks/${block.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-[#d1d5db] hover:text-white transition-colors"
                   >
-                    <Smartphone size={14} />
-                    <span>Live Preview</span>
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("code")}
-                    className={cn(
-                      "flex-1 xs:flex-initial inline-flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer",
-                      activeTab === "code"
-                        ? "bg-white/[0.1] text-white font-semibold shadow-sm"
-                        : "text-[#71717a] hover:text-white"
-                    )}
-                  >
-                    <Code2 size={14} />
-                    <span>Source Code</span>
-                  </button>
-                </div>
-
-                <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-[#71717a]">
-                  <FileCode size={13} className="text-[#32c798]" />
-                  <span>
-                    {block.codeFiles && block.codeFiles.length > 1
-                      ? `components/${block.slug}/ (${block.codeFiles.length} files)`
-                      : `components/${block.slug}.tsx`}
-                  </span>
+                    <GitHubIcon size={12} />
+                    <span>Source</span>
+                  </a>
                 </div>
               </div>
 
-              {/* Main Canvas View */}
+              {/* Canvas Preview Area */}
               <div>
                 {activeTab === "preview" ? (
                   <LiveBlockPreview
@@ -206,25 +193,21 @@ export default function Screen() {
                   />
                 )}
               </div>
-            </div>
+            </section>
 
-            {/* Inline Quick Usage Card (Displayed right beneath the preview for instant copy-pasting) */}
-            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-4 border-b border-white/[0.08]">
-                <div className="flex items-start sm:items-center gap-2.5 min-w-0">
-                  <div className="w-8 h-8 rounded-lg bg-[#32c798]/10 border border-[#32c798]/30 flex items-center justify-center text-[#32c798] shrink-0 mt-0.5 sm:mt-0">
-                    <Terminal size={16} />
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-base font-bold text-white leading-none">Quick Usage</h3>
-                    <p className="text-xs text-[#9ca3af] mt-1 leading-snug">
-                      Copy and paste this drop-in example into your screen or view:
-                    </p>
-                  </div>
+            {/* Section 2: Installation (Command & Manual with 3 Steps) */}
+            <BlockInstallation block={block} />
+
+            {/* Section 3: Usage */}
+            <section id="usage" className="space-y-4 scroll-mt-24">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-white tracking-tight">Usage</h2>
+                  <p className="text-xs sm:text-sm text-[#9ca3af] mt-1">
+                    Drop this code into your screen or view:
+                  </p>
                 </div>
-                <div className="self-start sm:self-auto shrink-0">
-                  <CopyButton text={usageSnippet} label="Copy Example" />
-                </div>
+                <CopyButton text={usageSnippet} label="Copy Usage" className="hidden sm:inline-flex" />
               </div>
 
               <CodeViewer
@@ -232,297 +215,51 @@ export default function Screen() {
                 filename={`screens/${block.slug}-example.tsx`}
                 language="tsx"
               />
-            </div>
+            </section>
 
-            {/* Component Props & API Table */}
-            {blockDoc?.props && blockDoc.props.length > 0 && (
-              <div className="bg-[#07070a] border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8">
-                <div className="flex items-center justify-between gap-3 mb-4 pb-4 border-b border-white/[0.08]">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
-                      <Layers size={16} />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="text-base font-bold text-white leading-none truncate">
-                        Component Props & API
-                      </h3>
-                      <p className="text-xs text-[#9ca3af] mt-1 truncate">
-                        Configurable props for <code className="text-[#32c798]">{`<${componentPascalName} />`}</code>
-                      </p>
-                    </div>
-                  </div>
-                  <span className="text-xs font-mono text-[#71717a] bg-white/[0.04] px-2.5 py-1 rounded-md border border-white/[0.06] shrink-0">
-                    {blockDoc.props.length} props
-                  </span>
-                </div>
-
-                {/* Mobile Card-Based Props List (< md) */}
-                <div className="space-y-3 md:hidden">
-                  {blockDoc.props.map((p, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-[#0a0a0e] border border-white/[0.06] rounded-xl p-3.5 space-y-2 text-xs"
-                    >
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="flex items-center gap-1.5 font-mono text-[13px] font-semibold text-[#32c798]">
-                          <span>{p.name}</span>
-                          {p.required && (
-                            <span className="text-[10px] text-[#ef4444] font-bold bg-red-500/10 border border-red-500/20 px-1 py-0.2 rounded" title="Required prop">
-                              required
-                            </span>
-                          )}
-                        </div>
-                        <span className="font-mono text-[11px] text-[#93c5fd] bg-blue-500/10 border border-blue-500/20 px-1.5 py-0.5 rounded break-all max-w-full">
-                          {p.type}
-                        </span>
-                      </div>
-
-                      <p className="text-[#d1d5db] text-xs leading-relaxed">
-                        {p.description}
-                      </p>
-
-                      {p.default && (
-                        <div className="pt-2 border-t border-white/[0.04] flex items-center gap-1.5 font-mono text-[11px] text-[#71717a]">
-                          <span>default:</span>
-                          <code className="text-[#a1a1aa] bg-white/[0.04] px-1.5 py-0.5 rounded border border-white/[0.06] break-all">
-                            {p.default}
-                          </code>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Desktop Matrix Table (>= md) */}
-                <div className="hidden md:block overflow-x-auto mt-4">
-                  <table className="w-full text-left text-xs border-collapse">
-                    <thead>
-                      <tr className="border-b border-white/[0.08] text-[#71717a] font-mono uppercase text-[10px] tracking-wider">
-                        <th className="pb-3 pr-4">Prop</th>
-                        <th className="pb-3 pr-4">Type</th>
-                        <th className="pb-3 pr-4">Default</th>
-                        <th className="pb-3">Description</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/[0.04]">
-                      {blockDoc.props.map((p, idx) => (
-                        <tr key={idx} className="group hover:bg-white/[0.02] transition-colors">
-                          <td className="py-3 pr-4 font-mono text-[#32c798] font-semibold whitespace-nowrap align-top">
-                            {p.name}
-                            {p.required && (
-                              <span className="ml-1 text-[10px] text-[#ef4444] font-bold" title="Required prop">
-                                *
-                              </span>
-                            )}
-                          </td>
-                          <td className="py-3 pr-4 font-mono text-[#93c5fd] text-[11px] align-top">
-                            <span className="bg-blue-500/10 border border-blue-500/20 px-1.5 py-0.5 rounded text-[#93c5fd]">
-                              {p.type}
-                            </span>
-                          </td>
-                          <td className="py-3 pr-4 font-mono text-[#a1a1aa] text-[11px] align-top whitespace-nowrap">
-                            {p.default ? <code>{p.default}</code> : "—"}
-                          </td>
-                          <td className="py-3 text-[#d1d5db] text-xs leading-relaxed align-top">
-                            {p.description}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+            {/* Section 4: Props & API Reference */}
+            {blockDoc?.props && (
+              <BlockPropsTable
+                props={blockDoc.props}
+                componentPascalName={componentPascalName}
+              />
             )}
 
-            {/* Accessibility & Assistive Tech Section */}
+            {/* Section 5: Accessibility & Performance */}
             {blockDoc?.a11yFeatures && blockDoc.a11yFeatures.length > 0 && (
-              <div className="bg-[#07070a] border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8">
-                <div className="flex items-center gap-2.5 mb-3 pb-3 border-b border-white/[0.08]">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-[#32c798]">
-                    <ShieldCheck size={16} />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-white leading-none">
-                      Accessibility & Assistive Tech
-                    </h3>
-                    <p className="text-xs text-[#9ca3af] mt-1">
-                      Built to meet RNBlocks accessibility, touch target, and screen reader standards
-                    </p>
-                  </div>
+              <section id="accessibility" className="space-y-4 scroll-mt-24">
+                <div>
+                  <h2 className="text-xl font-bold text-white tracking-tight">
+                    Accessibility & Performance
+                  </h2>
+                  <p className="text-xs sm:text-sm text-[#9ca3af] mt-1">
+                    Native touch gestures, screen reader attributes, and 60fps frame budgets:
+                  </p>
                 </div>
 
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {blockDoc.a11yFeatures.map((feat, idx) => (
-                    <li
+                    <div
                       key={idx}
-                      className="flex items-start gap-2.5 bg-white/[0.02] border border-white/[0.06] rounded-xl p-3 text-xs text-[#d1d5db]"
+                      className="flex items-start gap-2.5 bg-[#09090d] border border-white/[0.06] rounded-xl p-3.5 text-xs text-[#d1d5db]"
                     >
                       <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
                       <span className="leading-relaxed">{feat}</span>
-                    </li>
+                    </div>
                   ))}
-                </ul>
-              </div>
+                </div>
+              </section>
             )}
 
-            {/* About / Architecture Guide */}
-            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8">
-              <h3 className="text-base font-bold text-white mb-2">Integration & Architecture</h3>
-              <p className="text-xs sm:text-sm text-[#9ca3af] leading-relaxed mb-6">
-                This component is authored using pure React Native primitives and standard{" "}
-                <span className="text-white font-medium">{stylingLabel}</span> styling. It has zero
-                lock-in to proprietary design systems and operates without wrapping context providers.
-              </p>
+            {/* Previous / Next Block Navigation */}
+            <BlockPagination prevBlock={prevBlock} nextBlock={nextBlock} />
+          </main>
 
-              <div className="border-t border-white/[0.08] pt-4">
-                <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#32c798] mb-3">
-                  Key Specifications
-                </h4>
-                <ul className="space-y-2 text-xs sm:text-sm text-[#d1d5db]">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
-                    <span>Drop-in ready for Expo Router, React Navigation, and Bare React Native.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
-                    <span>Strict TypeScript types with zero `any` declarations.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
-                    <span>Built-in light and dark theme mode support via centralized color tokens.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Metadata & Actions Sidebar */}
-          <div className="flex flex-col gap-5 w-full">
-            {/* Installation Box */}
-            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-5">
-              <h4 className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-white mb-2">
-                <Terminal size={14} className="text-[#32c798]" />
-                <span>CLI Installation</span>
-              </h4>
-              <p className="text-xs text-[#9ca3af] mb-3">Add this block directly into your project:</p>
-              <div className="flex items-center justify-between bg-[#040406] border border-white/[0.08] rounded-xl px-3 py-2">
-                <code className="font-mono text-xs text-[#e4e4e7] select-all truncate mr-2">
-                  npx @rnblocks/cli add {block.slug}
-                </code>
-                <CopyButton text={`npx @rnblocks/cli add ${block.slug}`} />
-              </div>
-            </div>
-
-            {/* Compatibility Checklist */}
-            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-5">
-              <h4 className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-white mb-3">
-                <CheckCircle2 size={14} className="text-[#32c798]" />
-                <span>Compatibility</span>
-              </h4>
-              <div className="space-y-2.5 text-xs font-mono">
-                <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-                  <span className="text-[#9ca3af]">Expo SDK</span>
-                  <span className="text-[#32c798] font-semibold">Supported</span>
-                </div>
-                <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-                  <span className="text-[#9ca3af]">React Native</span>
-                  <span className="text-white font-medium">Bare & Managed</span>
-                </div>
-                <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-                  <span className="text-[#9ca3af]">Platforms</span>
-                  <span className="text-white font-medium">iOS & Android</span>
-                </div>
-                <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-                  <span className="text-[#9ca3af]">React Native Web</span>
-                  <span className="text-[#32c798] font-semibold">Live In-Browser</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[#9ca3af]">Styling</span>
-                  <span className="text-white font-medium">{stylingLabel}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Files Included */}
-            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-5">
-              <h4 className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-white mb-3">
-                <FileCode size={14} className="text-[#32c798]" />
-                <span>Files Included</span>
-              </h4>
-              {block.codeFiles && block.codeFiles.length > 1 ? (
-                <div className="font-mono text-xs bg-[#040406] border border-white/[0.08] rounded-xl p-3 space-y-1.5">
-                  <div className="text-[#71717a] flex items-center justify-between text-[11px] pb-1.5 border-b border-white/[0.06]">
-                    <span>components/{block.slug}/</span>
-                    <span className="text-[10px] text-[#32c798] bg-[#32c798]/10 px-1.5 py-0.5 rounded">
-                      {block.codeFiles.length} files
-                    </span>
-                  </div>
-                  {block.codeFiles.map((file, i) => {
-                    const fname = file.path.split("/").pop() || file.path;
-                    const isEntry = i === 0;
-                    return (
-                      <div
-                        key={file.path}
-                        className="flex items-center justify-between text-[11.5px] pl-2"
-                      >
-                        <span className={isEntry ? "text-[#32c798] font-semibold" : "text-[#d1d5db]"}>
-                          {fname}
-                        </span>
-                        {isEntry && (
-                          <span className="text-[9.5px] font-mono text-[#32c798] bg-[#32c798]/10 px-1.5 py-0.5 rounded">
-                            entry
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="font-mono text-xs bg-[#040406] border border-white/[0.08] rounded-xl p-3 space-y-1">
-                  <div className="text-[#71717a]">components/</div>
-                  <div className="pl-4 text-[#32c798] font-semibold">{block.slug}.tsx</div>
-                </div>
-              )}
-            </div>
-
-            {/* Dependencies */}
-            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-5">
-              <h4 className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-white mb-3">
-                <Package size={14} className="text-[#32c798]" />
-                <span>Dependencies</span>
-              </h4>
-              {block.dependencies && block.dependencies.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5">
-                  {block.dependencies.map((dep, idx) => (
-                    <span
-                      key={idx}
-                      className="font-mono text-[11px] bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded text-[#d1d5db]"
-                    >
-                      {dep}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-[#71717a]">Zero external dependencies required.</p>
-              )}
-            </div>
-
-            {/* GitHub Source CTA */}
-            <div className="bg-[#07070a] border border-white/10 rounded-2xl p-4">
-              <a
-                href={`https://github.com/Ashwin-Khowala/rnblocks/tree/master/registry/blocks/${block.slug}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full btn-secondary !py-2.5 !text-xs !justify-center group"
-              >
-                <span>View on GitHub</span>
-                <ExternalLink
-                  size={13}
-                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </a>
-            </div>
-          </div>
+          {/* Column 3: Right Table of Contents Sidebar (Desktop >= xl) */}
+          <BlockTocSidebar
+            activeSection={activeSection}
+            onSectionClick={scrollToSection}
+          />
         </div>
       </div>
     </div>
