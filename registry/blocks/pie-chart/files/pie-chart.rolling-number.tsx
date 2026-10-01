@@ -654,17 +654,16 @@ export const SmoothLabel = memo(function SmoothLabel({
   const [prevLabel, setPrevLabel] = useState<string | null>(null);
 
   const anim = useRef(new Animated.Value(1)).current;
-
-  // Track label updates during render so React synchronously updates state before paint
-  if (label !== currentLabel) {
-    setPrevLabel(currentLabel);
-    setCurrentLabel(label);
-    anim.setValue(0);
-  }
+  const labelRef = useRef(label);
 
   useEffect(() => {
-    if (prevLabel !== null) {
+    if (label !== labelRef.current) {
+      const old = labelRef.current;
+      labelRef.current = label;
+      setPrevLabel(old);
+      setCurrentLabel(label);
       anim.setValue(0);
+
       const animation = Animated.timing(anim, {
         toValue: 1,
         duration,
@@ -682,7 +681,7 @@ export const SmoothLabel = memo(function SmoothLabel({
         animation.stop();
       };
     }
-  }, [currentLabel, prevLabel, anim, duration]);
+  }, [label, duration, anim]);
 
   const outgoingOpacity = anim.interpolate({
     inputRange: [0, 1],

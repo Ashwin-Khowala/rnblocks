@@ -10,8 +10,6 @@ import { cn } from "@/lib/utils";
 export default function BlocksGalleryPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [stylingFilter, setStylingFilter] = useState<string>("all");
-  const [frameworkFilter, setFrameworkFilter] = useState<string>("all");
 
   const categories = [
     { id: "all", label: "All Blocks" },
@@ -31,23 +29,25 @@ export default function BlocksGalleryPage() {
 
       // Category match
       if (selectedCategory !== "all") {
-        if (selectedCategory === "charts") {
-          if (!block.slug.includes("chart") && block.category !== "charts") return false;
-        } else if (selectedCategory === "calendar") {
-          if (!block.slug.includes("calendar") && block.category !== "calendar") return false;
+        if (selectedCategory === "charts" || selectedCategory === "analytics") {
+          if (block.category !== "analytics" && block.category !== "charts" && !block.slug.includes("chart")) {
+            return false;
+          }
+        } else if (selectedCategory === "calendar" || selectedCategory === "data-display") {
+          if (block.category !== "data-display" && block.category !== "calendar" && !block.slug.includes("calendar")) {
+            return false;
+          }
+        } else if (selectedCategory === "navigation") {
+          if (block.category !== "navigation" && !block.slug.includes("docker")) {
+            return false;
+          }
+        } else if (selectedCategory === "auth" || selectedCategory === "authentication") {
+          if (block.category !== "authentication" && block.category !== "auth" && !block.slug.includes("auth")) {
+            return false;
+          }
         } else if (block.category !== selectedCategory) {
           return false;
         }
-      }
-
-      // Styling filter
-      if (stylingFilter !== "all" && !block.styling.includes(stylingFilter)) {
-        return false;
-      }
-
-      // Framework filter
-      if (frameworkFilter !== "all" && block.framework !== frameworkFilter) {
-        return false;
       }
 
       // Search query
@@ -63,19 +63,13 @@ export default function BlocksGalleryPage() {
 
       return true;
     });
-  }, [searchQuery, selectedCategory, stylingFilter, frameworkFilter]);
+  }, [searchQuery, selectedCategory]);
 
-  const hasActiveFilters =
-    selectedCategory !== "all" ||
-    stylingFilter !== "all" ||
-    frameworkFilter !== "all" ||
-    searchQuery !== "";
+  const hasActiveFilters = selectedCategory !== "all" || searchQuery !== "";
 
   const resetFilters = () => {
     setSearchQuery("");
     setSelectedCategory("all");
-    setStylingFilter("all");
-    setFrameworkFilter("all");
   };
 
   return (
@@ -119,98 +113,59 @@ export default function BlocksGalleryPage() {
             </div>
           </div>
 
-          {/* Search & Filter Controls Bar */}
-          <div className="bg-[#07070a]/90 backdrop-blur-md border border-white/[0.08] rounded-2xl p-3 sm:p-4 mb-5 shadow-xl">
-            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
-              {/* Search Input */}
-              <div className="relative flex-1">
-                <SearchIcon
-                  size={16}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
-                />
-                <input
-                  type="text"
-                  className="w-full bg-[#040406] border border-white/[0.08] rounded-xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-[#71717a] focus:border-[#32c798]/50 focus:outline-none focus:ring-1 focus:ring-[#32c798]/30 transition-all duration-150"
-                  placeholder="Search blocks by name, category, or functionality (chart, calendar, dock, auth)..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#71717a] hover:text-white rounded-md hover:bg-white/[0.08] transition-colors"
-                    title="Clear search"
-                    aria-label="Clear search"
-                  >
-                    <X size={14} />
-                  </button>
-                )}
-              </div>
-
-              {/* Dropdown Filters */}
-              <div className="flex items-center gap-2.5 shrink-0">
-                {/* Styling Filter */}
-                <div className="relative flex-1 sm:flex-initial">
-                  <select
-                    value={stylingFilter}
-                    onChange={(e) => setStylingFilter(e.target.value)}
-                    aria-label="Filter by styling"
-                    className="w-full sm:w-auto appearance-none bg-[#040406] border border-white/[0.08] rounded-xl pl-3.5 pr-8 py-2.5 text-xs font-mono font-medium text-[#d1d5db] focus:border-[#32c798]/50 focus:outline-none cursor-pointer hover:border-white/20 transition-colors"
-                  >
-                    <option value="all">Styling: All</option>
-                    <option value="StyleSheet">StyleSheet</option>
-                    <option value="NativeWind">NativeWind</option>
-                  </select>
-                  <ChevronDown
-                    size={13}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
-                  />
-                </div>
-
-                {/* Framework Filter */}
-                <div className="relative flex-1 sm:flex-initial">
-                  <select
-                    value={frameworkFilter}
-                    onChange={(e) => setFrameworkFilter(e.target.value)}
-                    aria-label="Filter by framework"
-                    className="w-full sm:w-auto appearance-none bg-[#040406] border border-white/[0.08] rounded-xl pl-3.5 pr-8 py-2.5 text-xs font-mono font-medium text-[#d1d5db] focus:border-[#32c798]/50 focus:outline-none cursor-pointer hover:border-white/20 transition-colors"
-                  >
-                    <option value="all">Framework: All</option>
-                    <option value="expo">Expo</option>
-                    <option value="react-native">Bare React Native</option>
-                  </select>
-                  <ChevronDown
-                    size={13}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
-                  />
-                </div>
-              </div>
+          {/* Search & Category Filter Controls Bar */}
+          <div className="bg-[#07070a]/90 backdrop-blur-md border border-white/[0.08] rounded-2xl p-3 sm:p-4 mb-8 shadow-xl space-y-3.5">
+            {/* Search Input */}
+            <div className="relative">
+              <SearchIcon
+                size={16}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
+              />
+              <input
+                type="text"
+                className="w-full bg-[#040406] border border-white/[0.08] rounded-xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-[#71717a] focus:border-[#32c798]/50 focus:outline-none focus:ring-1 focus:ring-[#32c798]/30 transition-all duration-150 font-mono"
+                placeholder="Search blocks by name, category, or functionality (chart, calendar, dock, auth)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#71717a] hover:text-white rounded-md hover:bg-white/[0.08] transition-colors cursor-pointer"
+                  title="Clear search"
+                  aria-label="Clear search"
+                >
+                  <X size={14} />
+                </button>
+              )}
             </div>
 
-            {/* Category Filter Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto pt-3 mt-3 border-t border-white/[0.06] scrollbar-none">
-              {categories.map((cat) => {
-                const isActive = selectedCategory === cat.id;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
-                    className={cn(
-                      "px-3.5 py-1.5 rounded-full text-xs font-medium font-mono whitespace-nowrap transition-all duration-150 cursor-pointer",
-                      isActive
-                        ? "bg-[#32c798]/15 border border-[#32c798]/50 text-[#32c798] shadow-[0_0_12px_rgba(50,199,152,0.18)] font-semibold"
-                        : "bg-white/[0.03] border border-white/[0.08] text-[#9ca3af] hover:text-white hover:bg-white/[0.06] hover:border-white/[0.15]"
-                    )}
-                  >
-                    {cat.label}
-                  </button>
-                );
-              })}
+            {/* Category Filter Pills & Reset */}
+            <div className="flex items-center justify-between gap-2 overflow-x-auto pt-2 border-t border-white/[0.06] no-scrollbar">
+              <div className="flex items-center gap-2 shrink-0">
+                {categories.map((cat) => {
+                  const isActive = selectedCategory === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={cn(
+                        "px-3.5 py-1.5 rounded-full text-xs font-medium font-mono whitespace-nowrap transition-all duration-150 cursor-pointer",
+                        isActive
+                          ? "bg-[#32c798]/15 border border-[#32c798]/50 text-[#32c798] shadow-[0_0_12px_rgba(50,199,152,0.18)] font-semibold"
+                          : "bg-white/[0.03] border border-white/[0.08] text-[#9ca3af] hover:text-white hover:bg-white/[0.06] hover:border-white/[0.15]"
+                      )}
+                    >
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
 
               {hasActiveFilters && (
                 <button
                   onClick={resetFilters}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono text-[#ef4444] bg-[#ef4444]/10 border border-[#ef4444]/25 hover:bg-[#ef4444]/20 transition-all cursor-pointer whitespace-nowrap ml-auto"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono text-[#ef4444] bg-[#ef4444]/10 border border-[#ef4444]/25 hover:bg-[#ef4444]/20 transition-all cursor-pointer whitespace-nowrap shrink-0 ml-auto"
                 >
                   <span>Reset filters</span>
                   <X size={12} />
