@@ -510,10 +510,6 @@ export function GroupedBarChart({
       }) => { // platform:web-safe
         const rect = e?.currentTarget?.getBoundingClientRect?.(); // platform:web-safe
         if (!rect || rect.width <= 0) return;
-        if (Math.abs(rect.width - chartWidthRef.current) > 1) {
-          chartWidthRef.current = Math.round(rect.width);
-          setChartWidth(Math.round(rect.width));
-        }
         const relX = (e.clientX ?? 0) - rect.left;
         const clampedX = Math.max(0, Math.min(rect.width, relX));
         const sw = rect.width / groupCount;
@@ -535,6 +531,7 @@ export function GroupedBarChart({
   const onChartLayout = useCallback((e: LayoutChangeEvent) => {
     const w = Math.round(e.nativeEvent.layout.width);
     if (w > 0 && Math.abs(w - chartWidthRef.current) > 1) {
+      chartWidthRef.current = w;
       setChartWidth(w);
     }
   }, []);
