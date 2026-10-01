@@ -65,8 +65,13 @@ npx @rnblocks/cli list
 RNBlocks Registry — Available Components
 
 Blocks:
+  bar-chart                Interactive Bar Chart                by Ashwin Khowala
+  comparison-chart         Dual Series Comparison Chart         by Ashwin Khowala
+  donut-chart              Radial Donut Chart                   by Ashwin Khowala
   floating-docker          Floating Glassmorphic Docker         by Ashwin Khowala
+  grouped-bar-chart        Interactive Grouped Bar Chart        by Ashwin Khowala
   interactive-calendar     Interactive Calendar                 by Ashwin Khowala
+  pie-chart                Exploding Pie Chart                  by Ashwin Khowala
   social-auth-buttons      Social OAuth Authentication Buttons  by Ashwin Khowala
   trend-chart              SVG Gradient Area Trend Line Chart   by Ashwin Khowala
 

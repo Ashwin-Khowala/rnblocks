@@ -13,14 +13,19 @@ Production-ready React Native and Expo UI components, delivered as clean source 
 
 ---
 
-## Featured Components
+## Available Components
 
 | Component | Category | Preview | CLI Install Command |
 |---|---|---|---|
+| **[Interactive Grouped Bar Chart](https://rnblocks.vercel.app/blocks/grouped-bar-chart)** | Charts & Analytics | [Inspect](https://rnblocks.vercel.app/blocks/grouped-bar-chart) | `npx @rnblocks/cli add grouped-bar-chart` |
+| **[Interactive Bar Chart](https://rnblocks.vercel.app/blocks/bar-chart)** | Charts & Analytics | [Inspect](https://rnblocks.vercel.app/blocks/bar-chart) | `npx @rnblocks/cli add bar-chart` |
+| **[SVG Gradient Trend Chart](https://rnblocks.vercel.app/blocks/trend-chart)** | Charts & Analytics | [Inspect](https://rnblocks.vercel.app/blocks/trend-chart) | `npx @rnblocks/cli add trend-chart` |
+| **[Dual Series Comparison Chart](https://rnblocks.vercel.app/blocks/comparison-chart)** | Charts & Analytics | [Inspect](https://rnblocks.vercel.app/blocks/comparison-chart) | `npx @rnblocks/cli add comparison-chart` |
+| **[Radial Donut Chart](https://rnblocks.vercel.app/blocks/donut-chart)** | Charts & Analytics | [Inspect](https://rnblocks.vercel.app/blocks/donut-chart) | `npx @rnblocks/cli add donut-chart` |
+| **[Exploding Pie Chart](https://rnblocks.vercel.app/blocks/pie-chart)** | Charts & Analytics | [Inspect](https://rnblocks.vercel.app/blocks/pie-chart) | `npx @rnblocks/cli add pie-chart` |
+| **[Interactive Calendar](https://rnblocks.vercel.app/blocks/interactive-calendar)** | Date & Calendars | [Inspect](https://rnblocks.vercel.app/blocks/interactive-calendar) | `npx @rnblocks/cli add interactive-calendar` |
 | **[Floating Glassmorphic Docker](https://rnblocks.vercel.app/blocks/floating-docker)** | Navigation & Docks | [Inspect](https://rnblocks.vercel.app/blocks/floating-docker) | `npx @rnblocks/cli add floating-docker` |
-| **[Interactive Calendar](https://rnblocks.vercel.app/blocks/interactive-calendar)** | Data Display & Scheduling | [Inspect](https://rnblocks.vercel.app/blocks/interactive-calendar) | `npx @rnblocks/cli add interactive-calendar` |
 | **[Social OAuth Buttons](https://rnblocks.vercel.app/blocks/social-auth-buttons)** | Authentication | [Inspect](https://rnblocks.vercel.app/blocks/social-auth-buttons) | `npx @rnblocks/cli add social-auth-buttons` |
-| **[SVG Gradient Trend Chart](https://rnblocks.vercel.app/blocks/trend-chart)** | Analytics & Data Viz | [Inspect](https://rnblocks.vercel.app/blocks/trend-chart) | `npx @rnblocks/cli add trend-chart` |
 
 ---
 
