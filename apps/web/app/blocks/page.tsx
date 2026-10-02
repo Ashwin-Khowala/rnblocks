@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { BLOCKS_DATA } from "@/data/blocks";
 import { BlockCard } from "@/components/BlockCard";
-import { Layers, X, ChevronDown, Sparkles, Filter } from "lucide-react";
+import { Layers, X } from "lucide-react";
 import { SearchIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
@@ -85,16 +85,6 @@ export default function BlocksGalleryPage() {
         <div className="mb-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 mb-3">
-                <span className="inline-flex items-center gap-1.5 h-[24px] px-3 rounded-full font-mono text-[11px] font-bold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 uppercase tracking-wider">
-                  <Sparkles size={12} />
-                  <span>Component Registry</span>
-                </span>
-                <span className="hidden sm:inline-flex items-center gap-1 font-mono text-[11px] text-[#71717a] bg-white/[0.03] border border-white/[0.08] px-2.5 py-0.5 rounded-full">
-                  <span>Zero Runtime Providers</span>
-                </span>
-              </div>
-
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3">
                 Explore Blocks
               </h1>

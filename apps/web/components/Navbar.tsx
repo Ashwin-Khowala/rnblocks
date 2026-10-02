@@ -12,7 +12,7 @@ export function Navbar() {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [starCount, setStarCount] = useState<number>(2);
+  const [starCount, setStarCount] = useState<number | null>(null);
   const [isMac, setIsMac] = useState(false);
 
   // Platform detection for keyboard shortcut display
@@ -22,7 +22,7 @@ export function Navbar() {
     }
   }, []);
 
-  // Fetch latest GitHub stars with cached fallback
+  // Fetch latest GitHub stars
   useEffect(() => {
     fetch("/api/github-stars")
       .then((res) => res.json())
@@ -163,12 +163,14 @@ export function Navbar() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-[#d1d5db] hover:text-white hover:bg-white/[0.06] transition-colors duration-150 select-none"
             title="RNBlocks on GitHub"
-            aria-label={`GitHub repository - ${starCount} stars`}
+            aria-label={starCount !== null ? `GitHub repository - ${starCount} stars` : "GitHub repository"}
           >
             <GitHubIcon size={15} />
-            <span className="font-mono text-[12.5px] font-medium text-[#d1d5db]">
-              {starCount}
-            </span>
+            {starCount !== null && (
+              <span className="font-mono text-[12.5px] font-medium text-[#d1d5db]">
+                {starCount}
+              </span>
+            )}
           </a>
 
           {/* Mobile Menu Toggle Button */}
@@ -250,9 +252,11 @@ export function Navbar() {
                   <GitHubIcon size={16} />
                   <span>GitHub Repository</span>
                 </div>
-                <span className="font-mono text-xs font-semibold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/25 px-2 py-0.5 rounded-full">
-                  ★ {starCount}
-                </span>
+                {starCount !== null && (
+                  <span className="font-mono text-xs font-semibold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/25 px-2 py-0.5 rounded-full">
+                   {starCount}
+                  </span>
+                )}
               </a>
 
               {/* Mobile Primary Explore Button */}
