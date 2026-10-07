@@ -26,7 +26,7 @@ function validateRegistry() {
 
     const subdirs = fs
       .readdirSync(typeDir, { withFileTypes: true })
-      .filter((d) => d.isDirectory())
+      .filter((d) => d.isDirectory() && !d.name.startsWith("_") && !d.name.startsWith("."))
       .map((d) => d.name);
 
     for (const slug of subdirs) {
@@ -128,6 +128,12 @@ function validateRegistry() {
                     );
                     errorCount++;
                   } else {
+                    const isSharedImport =
+                      resolvedFile.includes(path.join(REGISTRY_DIR, "blocks", "_shared")) ||
+                      resolvedFile.includes(path.join(REGISTRY_DIR, "_shared"));
+                    if (isSharedImport) {
+                      continue;
+                    }
                     const relToItem = path.relative(itemDir, resolvedFile).replace(/\\/g, "/");
                     const isRegistered = parsed.data.files.some(
                       (f) => f.path.replace(/\\/g, "/") === relToItem

@@ -25,6 +25,11 @@ const UNIVERSAL_VIOLATIONS: { regex: RegExp; label: string }[] = [
     label:
       'Hardcoded displayPct percentage literal detected. Percentage must always be dynamically computed from data, never hardcoded.',
   },
+  {
+    regex: /from ["']lucide-react["']|from ["']@expo\/vector-icons["']/,
+    label:
+      'External icon library import detected. Use project internal icons or react-native-svg primitives instead.',
+  },
 ];
 
 /** Violations that apply when a block claims ios or android support */
@@ -111,7 +116,7 @@ function checkPlatformCompat() {
 
     const slugs = fs
       .readdirSync(typeDir, { withFileTypes: true })
-      .filter((d) => d.isDirectory())
+      .filter((d) => d.isDirectory() && !d.name.startsWith("_") && !d.name.startsWith("."))
       .map((d) => d.name);
 
     for (const slug of slugs) {
