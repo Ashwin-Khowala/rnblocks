@@ -2,8 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { BackIcon, GitHubIcon } from "@/components/icons";
-import { CopyButton } from "@/components/CopyButton";
+import { BackIcon, GitHubIcon, CopyButton } from "@/components";
 
 export function WhyRNBlocksIsDifferentArticle() {
   return (
