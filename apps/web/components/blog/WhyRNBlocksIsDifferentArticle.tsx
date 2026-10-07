@@ -1,574 +1,502 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import {
-  Check,
-  X,
-  Layers,
-  ArrowRight,
-  Sparkles,
-  Zap,
-  ShieldCheck,
-  Code2,
-  Copy,
-  Terminal,
-  ExternalLink,
-  Share2,
-  Bookmark,
-  ChevronRight,
-} from "lucide-react";
-import { GitHubIcon } from "@/components/icons/GitHubIcon";
-import { cn } from "@/lib/utils";
+import { BackIcon, GitHubIcon } from "@/components/icons";
+import { CopyButton } from "@/components/CopyButton";
 
 export function WhyRNBlocksIsDifferentArticle() {
-  const [copiedCli, setCopiedCli] = useState(false);
-  const [copiedLink, setCopiedLink] = useState(false);
-
-  const copyCliCommand = () => {
-    navigator.clipboard.writeText("npx @rnblocks/cli add floating-docker");
-    setCopiedCli(true);
-    setTimeout(() => setCopiedCli(false), 2000);
-  };
-
-  const copyArticleLink = () => {
-    if (typeof window !== "undefined") {
-      navigator.clipboard.writeText(window.location.href);
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 2000);
-    }
-  };
-
-  const toc = [
-    { id: "the-misconception", title: "1. The Fundamental Misconception" },
-    { id: "monolithic-trap", title: "2. The 'Installed Library' Trap" },
-    { id: "zero-runtime", title: "3. Zero Runtime Providers & Zero Context Tax" },
-    { id: "new-architecture", title: "4. Built for the New Architecture & Bridgeless" },
-    { id: "mobile-vs-web", title: "5. Mobile Ergonomics vs. Lazy Web Ports" },
-    { id: "blocks-not-atoms", title: "6. Production Blocks, Not Just Micro-Atoms" },
-    { id: "comparison-matrix", title: "7. The Side-by-Side Comparison Matrix" },
-    { id: "when-to-use", title: "8. When You Should (and Shouldn't) Use RNBlocks" },
-  ];
-
   return (
-    <article className="w-full text-[#e4e4e7]">
-      {/* Article Header */}
-      <header className="mb-10 sm:mb-14 border-b border-white/[0.08] pb-10 sm:pb-12">
-        <div className="flex flex-wrap items-center gap-2.5 mb-5">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold uppercase tracking-wider text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30">
-            <Sparkles size={12} />
-            Architecture & Philosophy
-          </span>
-          <span className="text-xs font-mono text-[#71717a]">•</span>
-          <span className="text-xs font-mono text-[#a1a1aa]">October 7, 2026</span>
-          <span className="text-xs font-mono text-[#71717a]">•</span>
-          <span className="text-xs font-mono text-[#a1a1aa]">7 min read</span>
+    <article className="max-w-[720px] w-full min-w-0 mx-auto text-zinc-300 font-sans leading-relaxed">
+      {/* Back Link */}
+      <div className="mb-6 sm:mb-8">
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-zinc-400 hover:text-white transition-colors"
+        >
+          <BackIcon size={14} className="sm:w-[15px] sm:h-[15px]" />
+          <span>Back to blog</span>
+        </Link>
+      </div>
+
+      {/* Header */}
+      <header className="mb-8 sm:mb-10 pb-6 sm:pb-8 border-b border-zinc-800">
+        <div className="text-xs sm:text-sm font-mono text-zinc-500 mb-2 sm:mb-3">
+          October 7, 2026 · 6 min read
         </div>
 
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-[1.15] mb-5">
-          Why RNBlocks is Built Different: Stop Comparing Us to Traditional UI Libraries
+        <h1 className="text-[25px] sm:text-3xl md:text-4xl font-extrabold sm:font-bold text-white tracking-tight leading-[1.25] mb-2.5 sm:mb-4">
+          RNBlocks Isn&apos;t a UI Library. It&apos;s a UI Source Registry.
         </h1>
 
-        <p className="text-lg sm:text-xl text-[#a1a1aa] leading-relaxed max-w-3xl mb-8 font-normal">
-          The architectural flaw of monolithic mobile packages, the hidden tax of global runtime providers, and why owning your component source code is the only sustainable strategy in modern React Native.
+        <p className="text-[13.5px] sm:text-[16px] md:text-lg text-zinc-400 leading-relaxed mb-5 sm:mb-6">
+          Why traditional component libraries struggle in React Native, the hidden friction of global runtime providers, and how direct source ownership changes mobile development.
         </p>
 
-        {/* Author Card + Social Action Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-white/[0.06]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#32c798]/30 to-white/10 border border-white/15 overflow-hidden flex items-center justify-center text-white font-bold text-sm">
-              AK
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-white">Ashwin Khowala</span>
-                <span className="text-[11px] font-mono text-[#71717a] bg-white/[0.04] px-1.5 py-0.5 rounded border border-white/[0.06]">Author</span>
-              </div>
-              <p className="text-xs text-[#71717a]">Creator of RNBlocks</p>
-            </div>
+        <div className="flex items-center gap-3 text-xs sm:text-sm text-zinc-400">
+          <div className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center font-semibold text-xs text-white shrink-0">
+            AK
           </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={copyArticleLink}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono text-[#a1a1aa] hover:text-white bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] transition-all cursor-pointer"
-              title="Copy article link"
-            >
-              {copiedLink ? <Check size={13} className="text-[#32c798]" /> : <Share2 size={13} />}
-              <span>{copiedLink ? "Link Copied" : "Share"}</span>
-            </button>
-            <a
-              href="https://github.com/Ashwin-Khowala/rnblocks"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono text-[#a1a1aa] hover:text-white bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] transition-all"
-            >
-              <GitHubIcon size={13} />
-              <span>Star on GitHub</span>
-            </a>
+          <div>
+            <span className="font-medium text-white">Ashwin Khowala</span>
+            <span className="text-zinc-500"> · Creator of RNBlocks</span>
           </div>
         </div>
       </header>
 
-      {/* Main Grid: Sticky Table of Contents & Article Body */}
-      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-10 items-start">
-        {/* Table of Contents (Desktop Sidebar) */}
-        <aside className="hidden lg:block sticky top-24 bg-[#0a0a0e]/80 backdrop-blur-md border border-white/[0.08] rounded-xl p-4.5 space-y-3">
-          <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#f5f5f5] uppercase tracking-wider pb-2 border-b border-white/[0.06]">
-            <Bookmark size={13} className="text-[#32c798]" />
-            <span>Table of Contents</span>
+      {/* Body Content */}
+      <div className="space-y-6 sm:space-y-8 text-[15px] sm:text-[17px] leading-[1.75] sm:leading-[1.8] text-zinc-300">
+        {/* Intro */}
+        <p>
+          Whenever developers first discover RNBlocks, their default instinct is to compare it to tools they already know:
+        </p>
+
+        <blockquote className="border-l-2 border-zinc-700 pl-3.5 sm:pl-4 py-1 italic text-zinc-400 text-sm sm:text-base my-5 sm:my-6">
+          &ldquo;Is this like NativeBase? Tamagui? React Native Paper? Or is it just another paid template pack?&rdquo;
+        </blockquote>
+
+        <p>
+          The answer is none of the above. Comparing RNBlocks to a traditional UI library misunderstands where the code lives and how it is consumed.
+        </p>
+
+        <p>
+          A traditional UI library sells you an <em>abstraction layer</em> packaged inside <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-200 break-words">node_modules</code>. RNBlocks is an open-source <strong>Component Registry</strong> that distributes production-oriented source code directly into your repository.
+        </p>
+
+        <p className="text-white font-medium">
+          A dependency gives you an API. A source registry gives you an implementation.
+        </p>
+
+        {/* Visual Architecture Diagram */}
+        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3.5 sm:p-5 font-mono text-[11px] sm:text-xs md:text-[13px] text-zinc-300 overflow-x-auto leading-relaxed my-5 sm:my-6 w-full">
+          <div className="text-zinc-500 uppercase tracking-wider text-[10px] sm:text-[11px] mb-2 sm:mb-3 font-semibold">
+            Architecture: Where Abstractions Live
           </div>
-          <nav className="flex flex-col gap-1">
-            {toc.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className="text-[12.5px] text-[#9ca3af] hover:text-white hover:translate-x-0.5 transition-all py-1 leading-snug"
-              >
-                {item.title}
-              </a>
-            ))}
-          </nav>
-        </aside>
+          <pre className="text-zinc-300 whitespace-pre">
+{`TRADITIONAL UI LIBRARY
+Your App
+  └── node_modules
+        └── UI Framework
+              ├── Theme System
+              ├── Global Providers
+              ├── Hidden Dependencies
+              └── Internal Abstractions
 
-        {/* Article Body Content */}
-        <div className="space-y-12 sm:space-y-16 max-w-3xl leading-relaxed text-[15.5px] sm:text-[16.5px] text-[#d4d4d8]">
-          {/* Executive Summary Callout */}
-          <div className="bg-gradient-to-r from-[#32c798]/10 via-[#32c798]/5 to-transparent border-l-2 border-[#32c798] p-5 sm:p-6 rounded-r-xl">
-            <h4 className="text-sm font-mono font-bold text-[#32c798] uppercase tracking-wider mb-2">
-              The TL;DR Thesis
-            </h4>
-            <p className="text-sm sm:text-base text-[#e4e4e7] leading-relaxed">
-              RNBlocks is <strong>not</strong> another monolithic component library you install via <code className="text-[#32c798] font-mono text-xs bg-black/40 px-1 py-0.5 rounded">npm i</code>. It is an open-source <strong>Component Registry</strong>. You copy production-ready React Native blocks directly into your codebase with zero runtime dependencies, zero root providers, and 100% code ownership.
+RNBLOCKS SOURCE REGISTRY
+Registry Manifest (GitHub)
+  └── CLI (npx @rnblocks/cli add <block>)
+        ▼
+Your Repository
+  └── components/rnblocks/
+        ├── block.tsx
+        ├── block.types.ts
+        └── block.utils.ts
+        ▼
+Your App (You own the source code)`}
+          </pre>
+        </div>
+
+        {/* Section 1 */}
+        <h2 className="text-xl sm:text-2xl font-bold text-white pt-6 border-t border-zinc-800 tracking-tight">
+          1. What Happens When You Add a Block?
+        </h2>
+
+        <p>
+          When you install a component with the RNBlocks CLI, the flow is transparent and concrete:
+        </p>
+
+        <ol className="list-decimal pl-5 space-y-2 text-zinc-400">
+          <li>
+            <strong className="text-zinc-200">Metadata resolution</strong>: The CLI resolves the block&apos;s manifest and validated Zod schema from the open registry.
+          </li>
+          <li>
+            <strong className="text-zinc-200">Source download</strong>: It fetches the unbundled, readable TypeScript files.
+          </li>
+          <li>
+            <strong className="text-zinc-200">File placement</strong>: It writes the files directly into your project&apos;s <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-200 break-words">components/rnblocks/</code> folder.
+          </li>
+          <li>
+            <strong className="text-zinc-200">Explicit dependencies</strong>: If a block requires a peer package (such as <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-200 break-words">react-native-svg</code> for charting), the CLI explicitly prompts you to install it.
+          </li>
+          <li>
+            <strong className="text-zinc-200">Source ownership</strong>: The code is now yours. There is no upstream lock-in.
+          </li>
+        </ol>
+
+        <p>
+          For example, running <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-200 break-words">npx @rnblocks/cli add pie-chart</code> produces a clean, self-contained file structure in your repo:
+        </p>
+
+        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3 sm:p-4 font-mono text-[11px] sm:text-xs md:text-[13px] text-zinc-300 overflow-x-auto my-4 w-full">
+          <pre className="whitespace-pre">
+{`components/
+└── rnblocks/
+    └── pie-chart/
+        ├── pie-chart.tsx                // Main interactive component
+        ├── pie-chart.types.ts           // Strict TypeScript definitions
+        ├── pie-chart.utils.ts           // Math & geometry calculation
+        └── pie-chart.rolling-number.tsx // Odometer number transition`}
+          </pre>
+        </div>
+
+        {/* Section 2 */}
+        <h2 className="text-xl sm:text-2xl font-bold text-white pt-6 border-t border-zinc-800 tracking-tight">
+          2. Why Source Ownership Matters
+        </h2>
+
+        <p>
+          When you consume a UI library as a black-box dependency, you are bound to its constraints:
+        </p>
+
+        <ul className="list-disc pl-5 space-y-2 text-zinc-400">
+          <li>
+            <strong className="text-zinc-200">Need a different animation curve?</strong> You edit the spring physics directly in your file, rather than fighting an opinionated theme prop.
+          </li>
+          <li>
+            <strong className="text-zinc-200">Need custom styling or tokens?</strong> Swap out colors or convert standard <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-200 break-words">StyleSheet</code> properties to NativeWind classes in 30 seconds.
+          </li>
+          <li>
+            <strong className="text-zinc-200">Need custom analytics or accessibility tags?</strong> Add your tracking hooks directly into the component.
+          </li>
+          <li>
+            <strong className="text-zinc-200">Encounter a bug or edge-case?</strong> Fix it immediately in your codebase. You never have to submit an upstream issue and wait weeks for a maintainer to publish a patch.
+          </li>
+        </ul>
+
+        {/* Section 3 */}
+        <h2 className="text-xl sm:text-2xl font-bold text-white pt-6 border-t border-zinc-800 tracking-tight">
+          3. No Global RNBlocks Runtime
+        </h2>
+
+        <p>
+          Some UI frameworks require application-level providers, theme context, portal infrastructure, or global configuration that your project otherwise wouldn&apos;t need.
+        </p>
+
+        <p>
+          For example, NativeBase requires a root <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-200 break-words">&lt;NativeBaseProvider&gt;</code> to make theme context available across the application:
+        </p>
+
+        {/* Traditional Provider code with syntax colors */}
+        <div className="bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden my-4 w-full">
+          <div className="px-3.5 sm:px-4 py-2 border-b border-zinc-800 text-[11px] sm:text-xs font-mono text-zinc-500 bg-zinc-900/50">
+            App.tsx (Framework with Global Provider)
+          </div>
+          <pre className="p-3.5 sm:p-4 font-mono text-[11px] sm:text-xs md:text-[13px] overflow-x-auto leading-relaxed whitespace-pre">
+            <span className="text-purple-400">import</span> React <span className="text-purple-400">from</span> <span className="text-emerald-300">&quot;react&quot;</span>;<br />
+            <span className="text-purple-400">import</span> &#123; <span className="text-cyan-400">NativeBaseProvider</span> &#125; <span className="text-purple-400">from</span> <span className="text-emerald-300">&quot;native-base&quot;</span>;<br />
+            <span className="text-purple-400">import</span> &#123; <span className="text-cyan-400">RootNavigator</span> &#125; <span className="text-purple-400">from</span> <span className="text-emerald-300">&quot;./navigation&quot;</span>;<br /><br />
+            <span className="text-purple-400">export default function</span> <span className="text-yellow-200">App</span>() &#123;<br />
+            &nbsp;&nbsp;<span className="text-purple-400">return</span> (<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className="text-cyan-400">NativeBaseProvider</span>&gt;<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span className="text-cyan-400">RootNavigator</span> /&gt;<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span className="text-cyan-400">NativeBaseProvider</span>&gt;<br />
+            &nbsp;&nbsp;);<br />
+            &#125;
+          </pre>
+        </div>
+
+        <p>
+          With RNBlocks, there is <strong>no mandatory global runtime or root provider</strong>:
+        </p>
+
+        {/* RNBlocks code with syntax colors */}
+        <div className="bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden my-4 w-full">
+          <div className="px-3.5 sm:px-4 py-2 border-b border-zinc-800 text-[11px] sm:text-xs font-mono text-zinc-400 bg-zinc-900/50">
+            App.tsx (With RNBlocks)
+          </div>
+          <pre className="p-3.5 sm:p-4 font-mono text-[11px] sm:text-xs md:text-[13px] overflow-x-auto leading-relaxed whitespace-pre">
+            <span className="text-purple-400">import</span> React <span className="text-purple-400">from</span> <span className="text-emerald-300">&quot;react&quot;</span>;<br />
+            <span className="text-purple-400">import</span> &#123; <span className="text-cyan-400">RootNavigator</span> &#125; <span className="text-purple-400">from</span> <span className="text-emerald-300">&quot;./navigation&quot;</span>;<br /><br />
+            <span className="text-purple-400">export default function</span> <span className="text-yellow-200">App</span>() &#123;<br />
+            &nbsp;&nbsp;<span className="text-purple-400">return</span> &lt;<span className="text-cyan-400">RootNavigator</span> /&gt;; <span className="text-zinc-500">// Zero global wrappers</span><br />
+            &#125;
+          </pre>
+        </div>
+
+        <p>
+          You simply import the block from your project folder:
+        </p>
+
+        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3 sm:p-3.5 font-mono text-xs sm:text-[13px] text-zinc-200 overflow-x-auto w-full">
+          <span className="text-purple-400">import</span> &#123; <span className="text-cyan-400">FloatingDocker</span> &#125; <span className="text-purple-400">from</span> <span className="text-emerald-300">&quot;@/components/rnblocks/floating-docker&quot;</span>;
+        </div>
+
+        <p>
+          Blocks are self-contained. They utilize core React Native primitives (<code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-zinc-300 break-words">View</code>, <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-zinc-300 break-words">Text</code>, <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-zinc-300 break-words">Pressable</code>) and standard <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-zinc-300 break-words">StyleSheet.create</code>, with explicit per-block dependencies when required.
+        </p>
+
+        {/* Section 4 */}
+        <h2 className="text-xl sm:text-2xl font-bold text-white pt-6 border-t border-zinc-800 tracking-tight">
+          4. Built for React Native, Not Adapted from the Web
+        </h2>
+
+        <p>
+          Some projects attempt to make web UI libraries cross-platform by compiling them through <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-zinc-300 break-words">react-native-web</code>.
+        </p>
+
+        <p>
+          While web compilation is valuable for previews, mobile interfaces require fundamentally different ergonomics:
+        </p>
+
+        <div className="space-y-3 sm:space-y-4 my-4">
+          <div className="border border-zinc-800 rounded-lg p-3.5 sm:p-4 bg-zinc-950">
+            <h3 className="font-semibold text-white text-sm sm:text-base mb-1">Touch Targets &amp; Thumb Ergonomics</h3>
+            <p className="text-xs sm:text-sm text-zinc-400 leading-normal">
+              Mobile components require hit targets of at least 44x44 points and active hit-slops to prevent missed taps during one-handed use.
             </p>
           </div>
 
-          {/* Section 1 */}
-          <section id="the-misconception" className="scroll-mt-24 space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              1. The Fundamental Misconception
-            </h2>
-            <p>
-              Whenever developers first encounter RNBlocks, their default reflex is to place it in the same bucket as tools they have used before:
+          <div className="border border-zinc-800 rounded-lg p-3.5 sm:p-4 bg-zinc-950">
+            <h3 className="font-semibold text-white text-sm sm:text-base mb-1">Native Animation Capabilities</h3>
+            <p className="text-xs sm:text-sm text-zinc-400 leading-normal">
+              RNBlocks favors React Native-native interaction and animation primitives rather than assuming browser CSS behavior. Animations that can run independently of the JavaScript thread are implemented using React Native&apos;s native animation driver.
             </p>
-            <blockquote className="border-l border-white/20 pl-4 py-1 italic text-[#a1a1aa] text-base">
-              &ldquo;Is this like NativeBase? Is it like Tamagui? React Native Paper? Or is it just another paid template pack?&rdquo;
-            </blockquote>
-            <p>
-              The short answer is: <strong>none of the above</strong>. Comparing RNBlocks to a traditional UI library misunderstands the architecture at the most basic level.
+          </div>
+
+          <div className="border border-zinc-800 rounded-lg p-3.5 sm:p-4 bg-zinc-950">
+            <h3 className="font-semibold text-white text-sm sm:text-base mb-1">Container-Relative Layouts</h3>
+            <p className="text-xs sm:text-sm text-zinc-400 leading-normal">
+              Blocks size themselves relative to their parent container rather than assuming a particular hardcoded device width, flexing naturally across different screen sizes.
             </p>
-            <p>
-              Traditional UI libraries sell you an <em>abstraction layer</em> packaged inside <code className="bg-white/[0.08] px-1.5 py-0.5 rounded font-mono text-xs text-white">node_modules</code>. RNBlocks distributes <em>production-tested source code</em> that lives directly in your repository.
-            </p>
-            <p>
-              That single difference reshapes how your team builds, debugs, upgrades, and ships mobile apps.
-            </p>
-          </section>
+          </div>
+        </div>
 
-          {/* Section 2 */}
-          <section id="monolithic-trap" className="scroll-mt-24 space-y-5">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              2. The &ldquo;Installed Library&rdquo; Trap in Mobile
-            </h2>
-            <p>
-              In the web world, installing a giant UI package was already painful. But in the <strong>React Native &amp; Expo ecosystem</strong>, it is frequently catastrophic.
-            </p>
-            <p>
-              Here is what happens on every major React Native project that commits to a monolithic UI framework:
-            </p>
+        {/* Section 5 */}
+        <h2 className="text-xl sm:text-2xl font-bold text-white pt-6 border-t border-zinc-800 tracking-tight">
+          5. Production Blocks, Not Just Primitives
+        </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-6">
-              <div className="bg-[#0e0e13] border border-red-500/20 rounded-xl p-4.5 space-y-2">
-                <div className="flex items-center gap-2 text-red-400 font-semibold text-sm">
-                  <X size={16} />
-                  <span>The Dependency Death Cycle</span>
-                </div>
-                <p className="text-xs sm:text-[13px] text-[#a1a1aa] leading-relaxed">
-                  When Expo releases SDK 52 or React Native updates to 0.76+, your library breaks because of internal NativeModule or Yoga bindings. You cannot upgrade your app until a third-party team patches their library.
-                </p>
-              </div>
+        <p>
+          Most UI libraries focus on primitive elements: a button, a badge, an input field.
+        </p>
 
-              <div className="bg-[#0e0e13] border border-red-500/20 rounded-xl p-4.5 space-y-2">
-                <div className="flex items-center gap-2 text-red-400 font-semibold text-sm">
-                  <X size={16} />
-                  <span>The Prop &amp; Style Cage</span>
-                </div>
-                <p className="text-xs sm:text-[13px] text-[#a1a1aa] leading-relaxed">
-                  Your designer asks for a custom spring curve, a 3px border tweak, or a custom haptic pattern. Because the component is compiled in <code className="text-white font-mono text-[11px]">node_modules</code>, you spend 4 hours monkey-patching or wrapping props.
-                </p>
-              </div>
+        <p>
+          Where engineering teams actually spend days of sprint capacity is on complex, animated, interactive patterns:
+        </p>
 
-              <div className="bg-[#0e0e13] border border-red-500/20 rounded-xl p-4.5 space-y-2">
-                <div className="flex items-center gap-2 text-red-400 font-semibold text-sm">
-                  <X size={16} />
-                  <span>Bundle &amp; Engine Bloat</span>
-                </div>
-                <p className="text-xs sm:text-[13px] text-[#a1a1aa] leading-relaxed">
-                  You only needed an interactive calendar and a comparison chart, but you imported a 650KB package with 40 transitive dependencies, a custom CSS parser, and font loaders.
-                </p>
-              </div>
+        <ul className="list-disc pl-5 space-y-1.5 text-zinc-400">
+          <li><strong>Interactive Charts</strong>: Donut and Pie charts with rolling-number odometer physics and scrub gestures.</li>
+          <li><strong>Interactive Calendars</strong>: Multi-day range selectors and smooth month transitions.</li>
+          <li><strong>Floating Dock Menus</strong>: Liquid spring magnification physics running on the native driver.</li>
+          <li><strong>Social Auth Sheets</strong>: Complete sign-in bottom sheets with OAuth provider layouts.</li>
+        </ul>
 
-              <div className="bg-[#0e0e13] border border-red-500/20 rounded-xl p-4.5 space-y-2">
-                <div className="flex items-center gap-2 text-red-400 font-semibold text-sm">
-                  <X size={16} />
-                  <span>Abandoned Upstream Projects</span>
-                </div>
-                <p className="text-xs sm:text-[13px] text-[#a1a1aa] leading-relaxed">
-                  Open source mobile libraries have notoriously high abandonment rates. When the authors burn out, your entire production UI layer becomes legacy technical debt.
-                </p>
-              </div>
-            </div>
+        <p>
+          RNBlocks focuses specifically on high-value, production-oriented blocks that you can drop straight into your app.
+        </p>
 
-            <p className="font-medium text-white">
-              The shadcn revolution proved on the web that developers don&apos;t want closed dependencies for UI—they want code they can see, own, and adjust. RNBlocks brings that exact paradigm to React Native.
-            </p>
-          </section>
+        {/* Section 6: Comparison Table */}
+        <h2 className="text-xl sm:text-2xl font-bold text-white pt-6 border-t border-zinc-800 tracking-tight">
+          6. Architecture Comparison
+        </h2>
 
-          {/* Section 3 */}
-          <section id="zero-runtime" className="scroll-mt-24 space-y-5">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              3. Zero Runtime Providers &amp; Zero Context Tax
-            </h2>
-            <p>
-              Look at the root layout of a typical React Native app using popular mobile UI kits:
-            </p>
+        <div className="my-6 w-full">
+          <div className="text-[11px] text-zinc-500 font-mono sm:hidden mb-2 flex items-center justify-between">
+            <span>Architecture Matrix</span>
+            <span>Scroll horizontally →</span>
+          </div>
+          <div className="overflow-x-auto border border-zinc-800 rounded-lg w-full">
+            <table className="w-full min-w-[560px] text-left border-collapse">
+              <thead>
+                <tr className="border-b border-zinc-800 bg-zinc-900/60 text-zinc-400 font-mono text-[11px] sm:text-xs">
+                  <th className="p-2.5 sm:p-3 font-medium">Dimension</th>
+                  <th className="p-2.5 sm:p-3 font-semibold text-white">RNBlocks</th>
+                  <th className="p-2.5 sm:p-3 font-normal text-zinc-400">Installed UI Framework</th>
+                  <th className="p-2.5 sm:p-3 font-normal text-zinc-400">Web-Oriented Port</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800/80 text-zinc-300 text-xs sm:text-sm">
+                <tr>
+                  <td className="p-2.5 sm:p-3 font-medium text-white">Distribution</td>
+                  <td className="p-2.5 sm:p-3 text-white">Source copied into your repo</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Package dependency in node_modules</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Source or package varies</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 sm:p-3 font-medium text-white">Source Ownership</td>
+                  <td className="p-2.5 sm:p-3 text-white">You own the source code</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Framework-owned implementation</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Depends on library</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 sm:p-3 font-medium text-white">Global Provider</td>
+                  <td className="p-2.5 sm:p-3 text-white">Not required</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Depends on library (e.g. NativeBaseProvider)</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Depends on setup</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 sm:p-3 font-medium text-white">Styling Model</td>
+                  <td className="p-2.5 sm:p-3 text-white">Direct source (StyleSheet / NativeWind)</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Framework API / theme tokens</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Framework-dependent</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 sm:p-3 font-medium text-white">Dependencies</td>
+                  <td className="p-2.5 sm:p-3 text-white">Explicit per block</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Framework dependency graph</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Varies</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 sm:p-3 font-medium text-white">Upgrade Model</td>
+                  <td className="p-2.5 sm:p-3 text-white">You control copied code</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Follow package releases</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Varies</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 sm:p-3 font-medium text-white">React Native Primitives</td>
+                  <td className="p-2.5 sm:p-3 text-white">Yes (View, Text, Animated)</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Depends on architecture</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Often web abstraction layer</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 sm:p-3 font-medium text-white">Complex Blocks</td>
+                  <td className="p-2.5 sm:p-3 text-white">Yes (Charts, Docks, Calendars)</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Varies (often primitives only)</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Often web-first</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 sm:p-3 font-medium text-white">CLI Installation</td>
+                  <td className="p-2.5 sm:p-3 text-white">Yes (@rnblocks/cli)</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Package manager (npm / yarn)</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Varies</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 sm:p-3 font-medium text-white">Registry Architecture</td>
+                  <td className="p-2.5 sm:p-3 text-white">Open schema-validated registry</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Single library package</td>
+                  <td className="p-2.5 sm:p-3 text-zinc-400">Varies</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-            <div className="bg-[#050508] border border-white/[0.08] rounded-xl overflow-hidden font-mono text-xs sm:text-[13px]">
-              <div className="px-4 py-2 bg-white/[0.03] border-b border-white/[0.06] text-[#71717a] flex items-center justify-between">
-                <span>App.tsx (Traditional Mobile UI Library)</span>
-                <span className="text-red-400/80">⚠️ Provider Waterfall</span>
-              </div>
-              <pre className="p-4 text-[#a1a1aa] overflow-x-auto leading-relaxed">
-{`export default function App() {
-  return (
-    <GluestackUIProvider config={customConfig}>
-      <ThemeProvider theme={mobileTheme}>
-        <PortalProvider>
-          <OverlayProvider>
-            <IconConfigProvider icons={icons}>
-              <RootNavigator />
-            </IconConfigProvider>
-          </OverlayProvider>
-        </PortalProvider>
-      </ThemeProvider>
-    </GluestackUIProvider>
-  );
-}`}
-              </pre>
-            </div>
+        {/* Section 7 */}
+        <h2 className="text-xl sm:text-2xl font-bold text-white pt-6 border-t border-zinc-800 tracking-tight">
+          7. Is RNBlocks Just &ldquo;shadcn for React Native&rdquo;?
+        </h2>
 
-            <p>
-              Every single provider adds a layer to your React context tree. In React Native—where every frame counts and JS thread performance directly dictates whether an animation stutters—context updates and deep provider re-renders trigger subtle frame drops on budget Android devices.
-            </p>
+        <p>
+          It is natural to draw that comparison, and we embrace it directly.
+        </p>
 
-            <p className="font-semibold text-white">
-              With RNBlocks, there is ZERO root provider:
-            </p>
+        <p>
+          The copy-paste source ownership philosophy was popularized on the web by shadcn/ui. We share that exact foundational philosophy:
+        </p>
 
-            <div className="bg-[#050508] border border-[#32c798]/30 rounded-xl overflow-hidden font-mono text-xs sm:text-[13px]">
-              <div className="px-4 py-2 bg-[#32c798]/10 border-b border-[#32c798]/20 text-[#32c798] flex items-center justify-between">
-                <span>App.tsx (With RNBlocks)</span>
-                <span className="text-[#32c798] font-bold">✓ 0 Runtime Overhead</span>
-              </div>
-              <pre className="p-4 text-[#e4e4e7] overflow-x-auto leading-relaxed">
-{`export default function App() {
-  return <RootNavigator />;
-}`}
-              </pre>
-            </div>
+        <ul className="list-disc pl-5 space-y-1.5 text-zinc-400">
+          <li>Source ownership over black-box npm packages.</li>
+          <li>Copying code into your project so you can modify it freely.</li>
+          <li>No hidden runtime framework.</li>
+        </ul>
 
-            <p>
-              You simply import the component from your own directory and render it:
-            </p>
+        <p>
+          Where RNBlocks specializes is in the reality of the <strong>mobile ecosystem</strong>:
+        </p>
 
-            <div className="bg-[#050508] border border-white/[0.08] rounded-xl p-4 font-mono text-xs text-[#32c798]">
-              <code>import &#123; FloatingDocker &#125; from &quot;@/components/rnblocks/floating-docker&quot;;</code>
-            </div>
+        <ul className="list-disc pl-5 space-y-1.5 text-zinc-400">
+          <li><strong>Mobile-first patterns</strong>: Native gesture arbitration, spring physics, and thumb ergonomics.</li>
+          <li><strong>Higher-level blocks</strong>: Focusing on complex UI blocks (charts, calendars, docks) rather than only low-level micro-primitives.</li>
+          <li><strong>An open, multi-author registry</strong>: Enabling community developers to submit and validate blocks via GitHub.</li>
+        </ul>
 
-            <p>
-              Every block is 100% self-sufficient. It uses React Native&apos;s standard <code className="bg-white/[0.08] px-1.5 py-0.5 rounded font-mono text-xs text-white">StyleSheet.create</code>, standard primitives, and optional typed props. No global runtime to configure, no theme provider to wrap.
-            </p>
-          </section>
+        {/* Section 8 */}
+        <h2 className="text-xl sm:text-2xl font-bold text-white pt-6 border-t border-zinc-800 tracking-tight">
+          8. An Open Registry, Not a Vendor Silo
+        </h2>
 
-          {/* Section 4 */}
-          <section id="new-architecture" className="scroll-mt-24 space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              4. Built for the New Architecture (React Native 0.76+ &amp; Expo SDK 52)
-            </h2>
-            <p>
-              React Native just completed the largest architectural overhaul in its history:
-            </p>
-            <ul className="list-disc pl-5 space-y-2 text-[#a1a1aa]">
-              <li>
-                <strong className="text-white">Bridgeless Mode</strong> is now the default, eliminating the JSON bridge serialization bottlenecks.
-              </li>
-              <li>
-                <strong className="text-white">TurboModules &amp; Fabric Renderer</strong> deliver synchronous native communication and multi-threaded layout calculation.
-              </li>
-              <li>
-                <strong className="text-white">React 19 Baseline</strong> provides modern concurrent features across mobile runtimes.
-              </li>
+        <p>
+          Traditional UI kits are maintained by a single company or author. When priorities change, the library stagnates.
+        </p>
+
+        <p>
+          RNBlocks is designed as community-owned infrastructure:
+        </p>
+
+        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3.5 sm:p-4 font-mono text-[11px] sm:text-xs text-zinc-300 my-4 overflow-x-auto w-full">
+          <pre className="whitespace-pre">
+{`Developer creates block
+  └── Submits GitHub PR (registry/blocks/<name>)
+        ▼
+Automated Schema & Dependency Validation
+  └── Platform compatibility check
+        ▼
+Merged into registry manifest
+  └── Immediately installable by any developer via CLI`}
+          </pre>
+        </div>
+
+        <p>
+          Anyone can author, validate, and publish a block to the registry. The registry belongs to the React Native ecosystem.
+        </p>
+
+        {/* Section 9 */}
+        <h2 className="text-xl sm:text-2xl font-bold text-white pt-6 border-t border-zinc-800 tracking-tight">
+          9. When to Use (and When Not to Use) RNBlocks
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 my-4">
+          <div className="border border-zinc-800 rounded-lg p-4 sm:p-5 bg-zinc-950">
+            <h3 className="font-semibold text-white text-base mb-2">Use RNBlocks If:</h3>
+            <ul className="text-xs sm:text-sm text-zinc-400 space-y-1.5">
+              <li>• You want complete source ownership in your repository.</li>
+              <li>• You want zero runtime bloat and zero global providers.</li>
+              <li>• You need complex, interactive mobile blocks today.</li>
+              <li>• You want the freedom to edit any animation, layout, or style directly.</li>
             </ul>
-            <p>
-              Many legacy libraries written 2 to 5 years ago are actively struggling with this migration because they relied on old native bridge patterns, custom C++ macros, or outdated Yoga layout hacks.
-            </p>
-            <p>
-              RNBlocks was engineered <em>after</em> the New Architecture was stabilized. Every component is validated against <strong className="text-white">React Native 0.76+</strong> and <strong className="text-white">Expo SDK 52+</strong>. There are zero deprecated bridge calls. You get clean, modern TypeScript code ready for production in 2026 and beyond.
-            </p>
-          </section>
+          </div>
 
-          {/* Section 5 */}
-          <section id="mobile-vs-web" className="scroll-mt-24 space-y-5">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              5. Mobile Ergonomics vs. Lazy Web Ports
-            </h2>
-            <p>
-              Some projects try to solve this by taking web shadcn/ui components and compiling them through <code className="bg-white/[0.08] px-1.5 py-0.5 rounded font-mono text-xs text-white">react-native-web</code>.
-            </p>
-            <p>
-              While this sounds enticing on paper, <strong>mobile is fundamentally not the web</strong>:
-            </p>
-
-            <div className="space-y-3 my-4">
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.08] flex items-start gap-3">
-                <div className="w-6 h-6 rounded-md bg-[#32c798]/15 text-[#32c798] flex items-center justify-center shrink-0 mt-0.5">
-                  <Check size={14} />
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-white">Touch Targets &amp; Thumb Ergonomics</h4>
-                  <p className="text-xs text-[#a1a1aa] mt-0.5">
-                    Web interfaces rely on mouse precision (16px buttons). Mobile requires calibrated touch targets of at least 44x44 points with active hit-slops to prevent missed taps.
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.08] flex items-start gap-3">
-                <div className="w-6 h-6 rounded-md bg-[#32c798]/15 text-[#32c798] flex items-center justify-center shrink-0 mt-0.5">
-                  <Check size={14} />
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-white">Hardware-Accelerated Native Driver</h4>
-                  <p className="text-xs text-[#a1a1aa] mt-0.5">
-                    CSS transitions running through web shims drop frames on budget Android devices. RNBlocks uses React Native&apos;s native animation driver and spring physics for fluid 60 to 120 FPS execution.
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.08] flex items-start gap-3">
-                <div className="w-6 h-6 rounded-md bg-[#32c798]/15 text-[#32c798] flex items-center justify-center shrink-0 mt-0.5">
-                  <Check size={14} />
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-white">Container-Relative Flex Layouts</h4>
-                  <p className="text-xs text-[#a1a1aa] mt-0.5">
-                    Web components often hardcode breakpoints or fixed pixel widths. RNBlocks components are strictly container-relative, flexing naturally across an iPhone SE (320px), an iPad, or a foldable screen.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Section 6 */}
-          <section id="blocks-not-atoms" className="scroll-mt-24 space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              6. High-Value &ldquo;Blocks&rdquo;, Not Just Micro &ldquo;Atoms&rdquo;
-            </h2>
-            <p>
-              Almost every UI library gives you the easy things: a <code className="bg-white/[0.08] px-1 py-0.5 rounded font-mono text-xs text-white">&lt;Button&gt;</code>, a <code className="bg-white/[0.08] px-1 py-0.5 rounded font-mono text-xs text-white">&lt;Badge&gt;</code>, or an <code className="bg-white/[0.08] px-1 py-0.5 rounded font-mono text-xs text-white">&lt;Input&gt;</code>.
-            </p>
-            <p>
-              Any senior engineer can write a clean button in 15 minutes.
-            </p>
-            <p>
-              Where mobile engineers actually lose <strong>days and weeks</strong> of sprint capacity is on complex, animated, interactive UI patterns:
-            </p>
-            <ul className="list-disc pl-5 space-y-2 text-[#a1a1aa]">
-              <li>
-                <strong className="text-white">Interactive Charts</strong>: Donut and Pie charts with rolling-number odometer physics, scrubbable touch gestures, and exploded slice animations.
-              </li>
-              <li>
-                <strong className="text-white">Interactive Calendars</strong>: Multi-day range selectors, smooth month transitions, and week schedulers.
-              </li>
-              <li>
-                <strong className="text-white">Floating Dock Menus</strong>: iOS-style liquid spring magnification physics that run on the native driver.
-              </li>
-              <li>
-                <strong className="text-white">Social Auth Bottom Sheets</strong>: Edge-to-edge modals with Google, Apple, and GitHub OAuth styling.
-              </li>
+          <div className="border border-zinc-800 rounded-lg p-4 sm:p-5 bg-zinc-950">
+            <h3 className="font-semibold text-white text-base mb-2">Do Not Use RNBlocks If:</h3>
+            <ul className="text-xs sm:text-sm text-zinc-400 space-y-1.5">
+              <li>• You want an opinionated, off-the-shelf Material Design or Cupertino clone.</li>
+              <li>• You prefer an installed npm package where you never see or touch component code.</li>
+              <li>• You only need a basic button and do not need complex blocks.</li>
             </ul>
-            <p>
-              RNBlocks focuses exclusively on <strong>production blocks</strong>. These are complete, high-fidelity UI blocks ready to paste into your app today.
-            </p>
-          </section>
+          </div>
+        </div>
 
-          {/* Section 7: Comparison Table */}
-          <section id="comparison-matrix" className="scroll-mt-24 space-y-5">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              7. The Side-by-Side Comparison Matrix
-            </h2>
-            <p>
-              Here is how RNBlocks compares against the other options in the mobile ecosystem:
-            </p>
+        {/* Getting Started */}
+        <div className="pt-6 sm:pt-8 border-t border-zinc-800 space-y-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            Try It in Your App
+          </h2>
 
-            <div className="overflow-x-auto rounded-xl border border-white/[0.08] bg-[#07070a]">
-              <table className="w-full text-left text-xs sm:text-[13px] border-collapse">
-                <thead>
-                  <tr className="border-b border-white/[0.08] bg-white/[0.03] text-[#a1a1aa] font-mono">
-                    <th className="p-3.5 sm:p-4 font-semibold">Architectural Feature</th>
-                    <th className="p-3.5 sm:p-4 font-bold text-[#32c798] bg-[#32c798]/10">RNBlocks</th>
-                    <th className="p-3.5 sm:p-4 font-semibold">Monolithic Libraries (NativeBase / Paper)</th>
-                    <th className="p-3.5 sm:p-4 font-semibold">Web Copy-Paste Ports</th>
-                    <th className="p-3.5 sm:p-4 font-semibold">Paid UI Kits</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/[0.05] text-[#d4d4d8]">
-                  <tr>
-                    <td className="p-3.5 sm:p-4 font-medium text-white">Code Location</td>
-                    <td className="p-3.5 sm:p-4 text-[#32c798] font-semibold bg-[#32c798]/5">Your repo (components/)</td>
-                    <td className="p-3.5 sm:p-4 text-[#71717a]">node_modules (Locked)</td>
-                    <td className="p-3.5 sm:p-4 text-[#a1a1aa]">Your repo</td>
-                    <td className="p-3.5 sm:p-4 text-[#71717a]">Monolithic Zip / Clone</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3.5 sm:p-4 font-medium text-white">Root ThemeProvider Required</td>
-                    <td className="p-3.5 sm:p-4 text-[#32c798] font-bold bg-[#32c798]/5">None (0 Context)</td>
-                    <td className="p-3.5 sm:p-4 text-red-400">Yes (Mandatory)</td>
-                    <td className="p-3.5 sm:p-4 text-[#a1a1aa]">Often required</td>
-                    <td className="p-3.5 sm:p-4 text-red-400">Yes (Custom config)</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3.5 sm:p-4 font-medium text-white">Runtime Dependencies</td>
-                    <td className="p-3.5 sm:p-4 text-[#32c798] font-bold bg-[#32c798]/5">0 runtime baggage</td>
-                    <td className="p-3.5 sm:p-4 text-red-400">10 to 40 packages</td>
-                    <td className="p-3.5 sm:p-4 text-[#a1a1aa]">Variable</td>
-                    <td className="p-3.5 sm:p-4 text-red-400">Heavy locked packages</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3.5 sm:p-4 font-medium text-white">React Native 0.76+ &amp; Expo 52 Ready</td>
-                    <td className="p-3.5 sm:p-4 text-[#32c798] font-bold bg-[#32c798]/5">100% Tested</td>
-                    <td className="p-3.5 sm:p-4 text-yellow-400/80">Fragile / Migration delays</td>
-                    <td className="p-3.5 sm:p-4 text-yellow-400/80">Partial web shims</td>
-                    <td className="p-3.5 sm:p-4 text-red-400">Usually outdated</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3.5 sm:p-4 font-medium text-white">Animation Performance</td>
-                    <td className="p-3.5 sm:p-4 text-[#32c798] font-semibold bg-[#32c798]/5">Native driver / 60-120 FPS</td>
-                    <td className="p-3.5 sm:p-4 text-[#a1a1aa]">JS thread or heavy engine</td>
-                    <td className="p-3.5 sm:p-4 text-yellow-400/80">Web CSS shims</td>
-                    <td className="p-3.5 sm:p-4 text-[#a1a1aa]">Basic transitions</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3.5 sm:p-4 font-medium text-white">Customization Freedom</td>
-                    <td className="p-3.5 sm:p-4 text-[#32c798] font-semibold bg-[#32c798]/5">Unlimited (Direct TS)</td>
-                    <td className="p-3.5 sm:p-4 text-red-400">Theme token constrained</td>
-                    <td className="p-3.5 sm:p-4 text-[#a1a1aa]">High</td>
-                    <td className="p-3.5 sm:p-4 text-[#71717a]">Proprietary architecture</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3.5 sm:p-4 font-medium text-white">Licensing &amp; Cost</td>
-                    <td className="p-3.5 sm:p-4 text-[#32c798] font-bold bg-[#32c798]/5">100% MIT Open Source</td>
-                    <td className="p-3.5 sm:p-4 text-[#a1a1aa]">Open source / Tiered upsells</td>
-                    <td className="p-3.5 sm:p-4 text-[#a1a1aa]">Open source</td>
-                    <td className="p-3.5 sm:p-4 text-red-400">$50 to $200+</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3.5 sm:p-4 font-medium text-white">Installation Mechanism</td>
-                    <td className="p-3.5 sm:p-4 text-[#32c798] font-semibold bg-[#32c798]/5">CLI or 1-Click Copy</td>
-                    <td className="p-3.5 sm:p-4 text-[#a1a1aa]">npm / yarn install</td>
-                    <td className="p-3.5 sm:p-4 text-[#a1a1aa]">Manual copy</td>
-                    <td className="p-3.5 sm:p-4 text-[#71717a]">Forking entire starter repo</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
+          <p className="text-zinc-400 text-sm sm:text-base">
+            Add a component to your React Native or Expo project with one command:
+          </p>
 
-          {/* Section 8: When to Use */}
-          <section id="when-to-use" className="scroll-mt-24 space-y-5">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              8. When You Should (and Shouldn&apos;t) Use RNBlocks
-            </h2>
-            <p>
-              We believe in engineering transparency. No tool is the right fit for every single scenario.
-            </p>
+          <div className="flex items-center justify-between bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 sm:p-3 font-mono text-xs sm:text-sm gap-2">
+            <span className="text-zinc-200 truncate min-w-0 pl-1">
+              <span className="text-zinc-500">$ </span>
+              <span className="text-emerald-400">npx</span> @rnblocks/cli add floating-docker
+            </span>
+            <CopyButton text="npx @rnblocks/cli add floating-docker" label="Copy" />
+          </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
-              <div className="bg-[#0b100d] border border-[#32c798]/30 rounded-xl p-5 space-y-3">
-                <div className="flex items-center gap-2 text-[#32c798] font-bold text-sm">
-                  <Check size={16} />
-                  <span>Use RNBlocks If:</span>
-                </div>
-                <ul className="text-xs sm:text-[13px] text-[#d4d4d8] space-y-2 leading-relaxed">
-                  <li>• You want 100% code ownership in your repository.</li>
-                  <li>• You want zero runtime baggage and zero global provider waterfalls.</li>
-                  <li>• You need complex, interactive mobile components (charts, calendars, docks) right now.</li>
-                  <li>• You are building on Expo SDK 52+ or React Native 0.76+ with the New Architecture.</li>
-                  <li>• You want the freedom to tweak any animation, style, or physics property in 10 seconds.</li>
-                </ul>
-              </div>
+          <p className="text-xs sm:text-sm text-zinc-500">
+            The CLI writes clean TypeScript files directly to <code className="text-xs font-mono bg-zinc-900 border border-zinc-800 px-1 py-0.5 rounded text-zinc-300 break-words">components/rnblocks/</code> in your repo.
+          </p>
 
-              <div className="bg-[#120d0e] border border-white/10 rounded-xl p-5 space-y-3">
-                <div className="flex items-center gap-2 text-[#a1a1aa] font-bold text-sm">
-                  <X size={16} />
-                  <span>Do NOT Use RNBlocks If:</span>
-                </div>
-                <ul className="text-xs sm:text-[13px] text-[#a1a1aa] space-y-2 leading-relaxed">
-                  <li>• You want an opinionated, off-the-shelf Material Design or Cupertino clone.</li>
-                  <li>• You prefer an installed npm package where you never see or touch the component files.</li>
-                  <li>• You are maintaining an older React Native project stuck on legacy architecture (0.70 or below).</li>
-                  <li>• You only need 20 variations of a basic button and no interactive blocks.</li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          {/* Conclusion & CTA */}
-          <section className="pt-8 border-t border-white/[0.08] space-y-6">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Get Started in 30 Seconds
-            </h2>
-            <p>
-              You don&apos;t have to take our word for it. Try adding a single block to your Expo or React Native project right now:
-            </p>
-
-            {/* Terminal Command Box */}
-            <div className="bg-[#07070a] border border-white/[0.12] rounded-xl p-4 flex items-center justify-between gap-4 font-mono text-xs sm:text-sm">
-              <div className="flex items-center gap-2.5 text-[#e4e4e7] overflow-x-auto">
-                <Terminal size={16} className="text-[#32c798] shrink-0" />
-                <span>npx @rnblocks/cli add floating-docker</span>
-              </div>
-              <button
-                onClick={copyCliCommand}
-                className="shrink-0 p-2 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-[#a1a1aa] hover:text-white transition-all cursor-pointer"
-                title="Copy command"
-              >
-                {copiedCli ? <Check size={14} className="text-[#32c798]" /> : <Copy size={14} />}
-              </button>
-            </div>
-
-            <p className="text-sm text-[#a1a1aa]">
-              The CLI will copy the standalone TypeScript block into your <code className="text-white font-mono text-xs">components/rnblocks/</code> folder and print the exact import path. No config files, no wrapper providers.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3 pt-3">
-              <Link
-                href="/blocks"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm bg-white text-zinc-950 hover:bg-[#f4f4f5] transition-all shadow-[0_4px_16px_rgba(255,255,255,0.15)]"
-              >
-                <span>Browse All Registry Blocks</span>
-                <ArrowRight size={15} />
-              </Link>
-              <a
-                href="https://github.com/Ashwin-Khowala/rnblocks"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 transition-all"
-              >
-                <GitHubIcon size={15} />
-                <span>View on GitHub</span>
-              </a>
-            </div>
-          </section>
+          <div className="pt-3 sm:pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-4">
+            <Link
+              href="/blocks"
+              className="px-4 py-2.5 bg-white !text-black font-semibold text-sm rounded-md hover:bg-zinc-200 transition-colors text-center inline-flex items-center justify-center"
+              style={{ color: "#000000" }}
+            >
+              Browse All Blocks
+            </Link>
+            <a
+              href="https://github.com/Ashwin-Khowala/rnblocks"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2.5 bg-zinc-900 !text-white border border-zinc-800 font-medium text-sm rounded-md hover:bg-zinc-800 transition-colors text-center inline-flex items-center justify-center gap-2"
+              style={{ color: "#ffffff" }}
+            >
+              <GitHubIcon size={15} />
+              <span>GitHub Repository</span>
+            </a>
+          </div>
         </div>
       </div>
     </article>

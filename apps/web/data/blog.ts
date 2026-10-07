@@ -21,12 +21,12 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "why-rnblocks-is-different",
-    title: "Why RNBlocks is Built Different: Stop Comparing Us to Traditional UI Libraries",
-    subtitle: "The architectural flaw of monolithic mobile packages, the hidden cost of runtime providers, and why owning your UI code is the only sustainable path in React Native.",
-    excerpt: "Why monolithic component packages break in React Native, the hidden costs of runtime providers, and how owning your mobile UI code gives you total freedom without vendor lock-in.",
+    title: "RNBlocks Isn't a UI Library. It's a UI Source Registry.",
+    subtitle: "Why traditional component libraries struggle in React Native, the hidden friction of global runtime providers, and how direct source ownership changes mobile development.",
+    excerpt: "A dependency gives you an API. A source registry gives you an implementation. Here is why changing where UI abstractions live is the most sustainable approach in modern React Native.",
     date: "2026-10-07",
     formattedDate: "October 7, 2026",
-    readTime: "7 min read",
+    readTime: "6 min read",
     category: "Architecture & Philosophy",
     author: {
       name: "Ashwin Khowala",
