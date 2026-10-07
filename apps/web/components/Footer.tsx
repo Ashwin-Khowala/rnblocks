@@ -47,6 +47,9 @@ export function Footer() {
             <Link href="/docs" className="text-[13px] text-[#9ca3af] hover:text-[#f5f5f5] transition-colors">
               Documentation
             </Link>
+            <Link href="/blog" className="text-[13px] text-[#9ca3af] hover:text-[#f5f5f5] transition-colors">
+              Blog &amp; Architecture
+            </Link>
           </div>
 
           <div className="flex flex-col gap-2.5">
