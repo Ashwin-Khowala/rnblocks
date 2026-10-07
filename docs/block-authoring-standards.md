@@ -232,7 +232,26 @@ Every block's TypeScript props interface must include JSDoc comments explaining:
 
 ---
 
-## 8. Validation Gates (must pass before every PR)
+## 8. Animation Contract & Layout Containment
+
+### 8.1 Shared Animation Standards
+Every animated block (especially data visualization charts) must follow the standardized motion contract documented in [`docs/ANIMATION.md`](file:///d:/side-proj/rnblocks/docs/ANIMATION.md):
+- **Core Engine:** Standard React Native `Animated` and `requestAnimationFrame` only (no heavy external runtimes like `reanimated` in registry blocks).
+- **Standard Motion Constants:**
+  - `CHART_ENTER_DURATION_MS = 1100` (deliberate entrance)
+  - `CHART_ENTER_EASING = Easing.bezier(0.16, 1, 0.3, 1)` (smooth deceleration)
+  - `BAR_STAGGER_DELAY_MS = 30` (crisp waterfall cascade)
+- **Accessibility:** Must consume `useReducedMotion()` and support `reduceMotion?: boolean | "system"`. When enabled, animations resolve immediately to final progress (1).
+- **Replay Control:** Support `revealKey?: string | number` to re-trigger reveal animations declaratively on filter or date range change.
+- **Gesture Scrubbing Performance:** Never apply spring physics to 60fps high-frequency touch scrubbing (e.g. `PanResponder`). Scrubbing must be decoupled from entrance transitions.
+
+### 8.2 Layout Containment & Loading / Mount Stability
+- **No Layout Shift (CLS):** Outer cards must specify `width: "100%"` and provide a consistent minimum height (`minHeight` or defined chart area height) so that the card does not collapse or jump in height while measuring layout.
+- **Full Space Utilization:** When `onLayout` measures the actual container width on frame 1, responsive elements must smoothly utilize the full width allocated by the parent viewport without overflow or clipping.
+
+---
+
+## 9. Validation Gates (must pass before every PR)
 
 ```sh
 pnpm generate:registry   # re-generate from source
@@ -264,3 +283,7 @@ Before opening a PR that touches a registry block:
 - [ ] Clean copy-paste usage example provided in JSDoc / documentation
 - [ ] Displayed numbers, badges, and percentages all describe the same data point
 - [ ] Chart supports negative input values without clipping
+- [ ] Conforms to Shared Animation Contract (`reduceMotion`, `revealKey`, decoupled scrubbing)
+- [ ] Zero layout shift on mount/loading; outer container reserves space and fills available width cleanly
+- [ ] No external icon library imports (`lucide-react`, `@expo/vector-icons`); use project icons or `react-native-svg`
+
