@@ -40,6 +40,11 @@ import {
   GROUPED_BAR_THEME_TOKENS,
   getSeriesColors,
 } from "./grouped-bar-chart.utils";
+import {
+  BAR_STAGGER_DELAY_MS,
+  CHART_ENTER_EASING,
+  useReducedMotion,
+} from "../../_shared/animation";
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const TOOLTIP_CARD_WIDTH = 144;
@@ -54,6 +59,9 @@ export function GroupedBarChart({
   valueSuffix = "",
   height = 200,
   animated = true,
+  animationDuration,
+  revealKey,
+  reduceMotion = "system",
   showBackgroundTrack = true,
   showLegend = true,
   showMetricSummary = true,
@@ -125,9 +133,17 @@ export function GroupedBarChart({
     animValues.current = safeData.map(() => new Animated.Value(animated ? 0 : 1));
   }
 
-  // Run staggered spring entrance on data change
+  const prefersReducedMotion = useReducedMotion();
+  const shouldReduceMotion =
+    reduceMotion === "always"
+      ? true
+      : reduceMotion === "never"
+      ? false
+      : prefersReducedMotion;
+
+  // Run staggered spring entrance on data change or revealKey update
   useEffect(() => {
-    if (!animated) {
+    if (!animated || shouldReduceMotion) {
       animValues.current.forEach((val) => val.setValue(1));
       return;
     }
@@ -136,15 +152,15 @@ export function GroupedBarChart({
     const animations = animValues.current.map((val) =>
       Animated.spring(val, {
         toValue: 1,
-        stiffness: 220,
-        damping: 19,
-        mass: 0.8,
+        stiffness: CHART_ENTER_EASING.stiffness,
+        damping: CHART_ENTER_EASING.damping,
+        mass: CHART_ENTER_EASING.mass,
         useNativeDriver: false,
       })
     );
 
-    Animated.stagger(35, animations).start();
-  }, [safeData, animated]);
+    Animated.stagger(BAR_STAGGER_DELAY_MS, animations).start();
+  }, [safeData, animated, shouldReduceMotion, revealKey]);
 
   // ── Mathematical Geometry & Pixel-Exact Bar Proportions ────────────────────
   const groupCount = Math.max(1, safeData.length);
@@ -449,6 +465,12 @@ export function GroupedBarChart({
     [chartWidth, groupCount, setScrubIndex]
   );
 
+  // ── High-Frequency Interaction Rule ──────────────────────────────────────────
+  // Touch-move events fire at 60fps. We NEVER run Animated.spring() or
+  // requestAnimationFrame sweeps during scrubbing. Only direct state
+  // updates: setActiveIndex(), setActiveSliceIndex().
+  // Springs are only used for UI chrome (tooltip position, opacity).
+
   const panResponder = useMemo(
     () =>
       PanResponder.create({
@@ -741,7 +763,12 @@ export function GroupedBarChart({
           {...webPointerProps}
           style={[styles.chartWrapper, { height }]}
         >
-          <Svg width="100%" height={height}>
+          <Svg
+            width="100%"
+            height={height}
+            viewBox={`0 0 ${chartWidth} ${height}`}
+            preserveAspectRatio="none"
+          >
             <Defs>
               {series.map((s, sIdx) => {
                 const { color: startColor, activeColor: endColor } = getSeriesColors(
@@ -901,7 +928,7 @@ export function GroupedBarChart({
                   accessibilityRole="button"
                   accessibilityLabel={`${item.label}, ${item.fullDate || ""}`}
                   accessibilityState={{ selected: isSelected }}
-                  style={[styles.labelCol, { width: slotWidth }]}
+                  style={[styles.labelCol, { flex: 1 }]}
                 >
                   <Text
                     numberOfLines={1}

@@ -116,6 +116,18 @@ export interface DonutChartProps {
    */
   animated?: boolean;
   /**
+   * Duration in milliseconds for the entrance reveal animation (default: 900).
+   */
+  animationDuration?: number;
+  /**
+   * Key that triggers a replay of the reveal animation when changed without remounting.
+   */
+  revealKey?: string | number;
+  /**
+   * Accessibility reduced motion preference: 'system' reads OS settings, 'always' disables motion, 'never' forces animation.
+   */
+  reduceMotion?: "system" | "always" | "never";
+  /**
    * Starting rotation offset in degrees (0 = 12 o'clock, 270 = 9 o'clock horizontal left).
    * Defaults to 270 (matching the technical quadrant layout).
    */

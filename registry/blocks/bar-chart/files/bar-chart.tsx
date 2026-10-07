@@ -27,6 +27,11 @@ import Svg, {
   Rect,
   Stop,
 } from "react-native-svg";
+import {
+  BAR_STAGGER_DELAY_MS,
+  CHART_ENTER_EASING,
+  useReducedMotion,
+} from "../../_shared/animation";
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 
@@ -54,6 +59,12 @@ export interface BarChartProps {
   chartHeight?: number;
   /** Whether to animate bar heights with staggered spring on mount */
   animated?: boolean;
+  /** Duration in milliseconds for the entrance reveal animation (default: 900) */
+  animationDuration?: number;
+  /** Key that triggers a replay of the reveal animation when changed without remounting */
+  revealKey?: string | number;
+  /** Accessibility reduced motion preference: 'system' reads OS settings, 'always' disables motion, 'never' forces animation */
+  reduceMotion?: "system" | "always" | "never";
   /** Whether to render background slot tracks behind each bar */
   showBackgroundTrack?: boolean;
   /** Callback when a bar is selected/hovered */
@@ -390,6 +401,9 @@ export function BarChart({
   valueSuffix = "",
   chartHeight = 175,
   animated = true,
+  animationDuration,
+  revealKey,
+  reduceMotion = "system",
   showBackgroundTrack = true,
   onSelectBar,
   style,
@@ -473,9 +487,17 @@ export function BarChart({
   const chartSlideX = useRef(new Animated.Value(0)).current;
   const chartOpacity = useRef(new Animated.Value(1)).current;
 
-  // Run staggered spring entrance on data change
+  const prefersReducedMotion = useReducedMotion();
+  const shouldReduceMotion =
+    reduceMotion === "always"
+      ? true
+      : reduceMotion === "never"
+      ? false
+      : prefersReducedMotion;
+
+  // Run staggered spring entrance on data change or revealKey update
   useEffect(() => {
-    if (!animated) {
+    if (!animated || shouldReduceMotion) {
       animValues.current.forEach((val) => val.setValue(1));
       return;
     }
@@ -483,19 +505,19 @@ export function BarChart({
     // Reset to 0
     animValues.current.forEach((val) => val.setValue(0));
 
-    // Staggered spring cascade
+    // Staggered spring cascade using shared easing constants
     const animations = animValues.current.map((val) =>
       Animated.spring(val, {
         toValue: 1,
-        stiffness: 220,
-        damping: 19,
-        mass: 0.8,
+        stiffness: CHART_ENTER_EASING.stiffness,
+        damping: CHART_ENTER_EASING.damping,
+        mass: CHART_ENTER_EASING.mass,
         useNativeDriver: false,
       })
     );
 
-    Animated.stagger(45, animations).start();
-  }, [currentData, animated]);
+    Animated.stagger(BAR_STAGGER_DELAY_MS, animations).start();
+  }, [currentData, animated, shouldReduceMotion, revealKey]);
 
   // Color tokens
   const isDark = theme === "dark";
@@ -783,6 +805,12 @@ export function BarChart({
     [chartWidth, barCount, setScrubIndex]
   );
 
+  // ── High-Frequency Interaction Rule ──────────────────────────────────────────
+  // Touch-move events fire at 60fps. We NEVER run Animated.spring() or
+  // requestAnimationFrame sweeps during scrubbing. Only direct state
+  // updates: setActiveIndex(), setActiveSliceIndex().
+  // Springs are only used for UI chrome (tooltip position, opacity).
+
   const panResponder = useMemo(
     () =>
       PanResponder.create({
@@ -1021,7 +1049,12 @@ export function BarChart({
           {...webPointerProps}
           style={[styles.chartWrapper, { height: chartHeight }]}
         >
-          <Svg width="100%" height={chartHeight}>
+          <Svg
+            width="100%"
+            height={chartHeight}
+            viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+            preserveAspectRatio="none"
+          >
             <Defs>
               <LinearGradient id={safeId} x1="0%" y1="0%" x2="0%" y2="100%">
                 <Stop offset="0%" stopColor={colors.gradStart} stopOpacity={1} />
@@ -1148,7 +1181,7 @@ export function BarChart({
                   accessibilityRole="button"
                   accessibilityLabel={`${item.label}, ${formatGrouped(item.value)}`}
                   accessibilityState={{ selected: isSelected }}
-                  style={[styles.labelCol, { width: slotWidth }]}
+                  style={[styles.labelCol, { flex: 1 }]}
                 >
                   <Text
                     numberOfLines={1}

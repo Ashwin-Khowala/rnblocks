@@ -23,6 +23,10 @@ import Svg, {
   Stop,
   Line,
 } from "react-native-svg";
+import {
+  CHART_ENTER_EASING,
+  useReducedMotion,
+} from "../../_shared/animation";
 
 // ─── Types & Interfaces ────────────────────────────────────────────────────────
 
@@ -41,6 +45,14 @@ export interface TrendChartProps {
   data?: TrendDataPoint[];
   /** Height of the SVG chart canvas in pixels. Defaults to 150. */
   height?: number;
+  /** Whether to animate the entrance of the chart. Defaults to true. */
+  animated?: boolean;
+  /** Duration in milliseconds for the entrance reveal animation (default: 900) */
+  animationDuration?: number;
+  /** Key that triggers a replay of the reveal animation when changed without remounting */
+  revealKey?: string | number;
+  /** Accessibility reduced motion preference: 'system' reads OS settings, 'always' disables motion, 'never' forces animation */
+  reduceMotion?: "system" | "always" | "never";
   /** Color theme. Defaults to "dark". */
   theme?: Theme;
   /** Accent color for the chart line, gradient, and indicator. Defaults to "#10B981". */
@@ -477,6 +489,10 @@ function XAxisPill({
 export function TrendChart({
   data = DEMO_CHART_DATA,
   height = 150,
+  animated = true,
+  animationDuration,
+  revealKey,
+  reduceMotion = "system",
   theme = "dark",
   accentColor = "#10B981",
   title = "7-Day Activity Trend",
@@ -486,6 +502,34 @@ export function TrendChart({
 }: TrendChartProps) {
   const safeData = data && data.length >= 2 ? data : DEMO_CHART_DATA;
   const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
+
+  const prefersReducedMotion = useReducedMotion();
+  const shouldReduceMotion =
+    reduceMotion === "always"
+      ? true
+      : reduceMotion === "never"
+      ? false
+      : prefersReducedMotion;
+
+  // Entrance spring animation for the trend chart container
+  const entranceAnim = useRef(
+    new Animated.Value(animated && !shouldReduceMotion ? 0 : 1)
+  ).current;
+
+  useEffect(() => {
+    if (!animated || shouldReduceMotion) {
+      entranceAnim.setValue(1);
+      return;
+    }
+    entranceAnim.setValue(0);
+    Animated.spring(entranceAnim, {
+      toValue: 1,
+      stiffness: CHART_ENTER_EASING.stiffness,
+      damping: CHART_ENTER_EASING.damping,
+      mass: CHART_ENTER_EASING.mass,
+      useNativeDriver: true,
+    }).start();
+  }, [animated, shouldReduceMotion, revealKey]);
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [overlayWidth, setOverlayWidth] = useState(0);
@@ -677,6 +721,12 @@ export function TrendChart({
     [overlayWidth, safeData, onPointSelect]
   );
 
+  // ── High-Frequency Interaction Rule ──────────────────────────────────────────
+  // Touch-move events fire at 60fps. We NEVER run Animated.spring() or
+  // requestAnimationFrame sweeps during scrubbing. Only direct state
+  // updates: setActiveIndex(), setActiveSliceIndex().
+  // Springs are only used for UI chrome (tooltip position, opacity).
+
   const panResponder = useMemo(
     () =>
       PanResponder.create({
@@ -725,10 +775,22 @@ export function TrendChart({
   }, default: {} }) as object;
 
   return (
-    <View
+    <Animated.View
       style={[
         styles.card,
-        { backgroundColor: colors.bg, borderColor: colors.border },
+        {
+          backgroundColor: colors.bg,
+          borderColor: colors.border,
+          opacity: entranceAnim,
+          transform: [
+            {
+              translateY: entranceAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [8, 0],
+              }),
+            },
+          ],
+        },
       ]}
     >
       {/* ── Header: Title + Big Value Display + Supporting Metric Row (Top Left) ── */}
@@ -966,7 +1028,7 @@ export function TrendChart({
           }}
         />
       </View>
-    </View>
+    </Animated.View>
   );
 }
 

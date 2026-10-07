@@ -30,6 +30,14 @@ export interface ComparisonChartProps {
   valueSuffix?: string;
   /** Height of the chart visualization in pixels. Defaults to 220. */
   height?: number;
+  /** Whether to animate the entrance of the chart. Defaults to true. */
+  animated?: boolean;
+  /** Duration in milliseconds for the entrance reveal animation (default: 900) */
+  animationDuration?: number;
+  /** Key that triggers a replay of the reveal animation when changed without remounting */
+  revealKey?: string | number;
+  /** Accessibility reduced motion preference: 'system' reads OS settings, 'always' disables motion, 'never' forces animation */
+  reduceMotion?: "system" | "always" | "never";
   /** Whether to show the floating glassmorphic tooltip card. Defaults to true. */
   showTooltip?: boolean;
   /** Strategy for handling null/missing data points in series lines. 'interpolate' estimates missing points smoothly; 'zero' plots missing points at 0; 'gap' currently interpolates smoothly as a fallback until multi-segment rendering is finalized. Defaults to 'interpolate'. */

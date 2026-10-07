@@ -35,6 +35,12 @@ import {
   computePieSlices,
   describePieSlice,
 } from "./pie-chart.utils";
+import {
+  CHART_ENTER_DURATION_MS,
+  CHART_ENTER_EASING,
+  useChartReveal,
+  useReducedMotion,
+} from "../../_shared/animation";
 
 export function PieChart({
   data = DEFAULT_PIE_DATA,
@@ -49,6 +55,9 @@ export function PieChart({
   explosionDistance = 10,
   startAngleOffset = 270,
   animated = true,
+  animationDuration,
+  revealKey,
+  reduceMotion = "system",
   loading = false,
   centerLabel = "Total",
   initialIndex = null,
@@ -156,79 +165,45 @@ export function PieChart({
     );
   }, []);
 
-  // ── Circular Sweep Animation for Each Pie Slice ───────────────────────────
-  const [animProgress, setAnimProgress] = useState(animated && !loading ? 0 : 1);
-  const [isLoaded, setIsLoaded] = useState(!animated || loading);
-  const animFrameRef = useRef<number | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const shouldReduceMotion =
+    reduceMotion === "always"
+      ? true
+      : reduceMotion === "never"
+      ? false
+      : prefersReducedMotion;
 
-  const startCircularLoading = useCallback(() => {
-    if (animFrameRef.current !== null) {
-      cancelAnimationFrame(animFrameRef.current);
-      animFrameRef.current = null;
-    }
-    if (!animated) {
-      setAnimProgress(1);
-      setIsLoaded(true);
-      return;
-    }
-    setAnimProgress(0);
-    setIsLoaded(false);
-
-    const startTime = Date.now();
-    const duration = 950; // Total sweep duration in ms
-
-    const tick = () => {
-      const elapsed = Date.now() - startTime;
-      const t = Math.min(1, elapsed / duration);
-      setAnimProgress(t);
-
-      if (t < 1) {
-        animFrameRef.current = requestAnimationFrame(tick);
-      } else {
-        setIsLoaded(true);
-        animFrameRef.current = null;
-      }
-    };
-
-    animFrameRef.current = requestAnimationFrame(tick);
-  }, [animated]);
-
-  useEffect(() => {
-    if (!loading) {
-      startCircularLoading();
-    } else {
-      if (animFrameRef.current !== null) {
-        cancelAnimationFrame(animFrameRef.current);
-        animFrameRef.current = null;
-      }
-      setAnimProgress(0);
-      setIsLoaded(false);
-    }
-    return () => {
-      if (animFrameRef.current !== null) {
-        cancelAnimationFrame(animFrameRef.current);
-        animFrameRef.current = null;
-      }
-    };
-  }, [loading, safeData, startCircularLoading]);
+  // ── Circular Sweep Reveal Animation for Each Pie Slice ─────────────────────
+  const {
+    progress: animProgress,
+    isComplete: isLoaded,
+    replay,
+  } = useChartReveal({
+    enabled: animated && !loading,
+    duration: animationDuration ?? CHART_ENTER_DURATION_MS,
+    revealKey,
+    reduceMotion: shouldReduceMotion,
+  });
 
   // Entrance spring animation value for whole container
-  const entranceAnim = useRef(new Animated.Value(animated ? 0 : 1)).current;
+  const entranceAnim = useRef(
+    new Animated.Value(animated && !shouldReduceMotion ? 0 : 1)
+  ).current;
 
   useEffect(() => {
-    if (!animated) {
+    if (!animated || shouldReduceMotion) {
       entranceAnim.setValue(1);
       return;
     }
     entranceAnim.setValue(0);
     Animated.spring(entranceAnim, {
       toValue: 1,
-      stiffness: 220,
-      damping: 22,
-      mass: 0.8,
+      stiffness: CHART_ENTER_EASING.stiffness,
+      damping: CHART_ENTER_EASING.damping,
+      mass: CHART_ENTER_EASING.mass,
       useNativeDriver: true,
     }).start();
-  }, [animated, safeData, entranceAnim]);
+  }, [animated, shouldReduceMotion, entranceAnim]);
 
   // Active slice info
   const activeSlice = activeSliceIndex !== null ? slices[activeSliceIndex] : null;
@@ -256,9 +231,9 @@ export function PieChart({
     if (activeSliceIndexRef.current !== null || pinnedSliceIndexRef.current !== null) {
       handleSelectIndex(null, true);
     } else {
-      startCircularLoading();
+      replay();
     }
-  }, [handleSelectIndex, startCircularLoading]);
+  }, [handleSelectIndex, replay]);
 
   // Find slice index from touch coordinates relative to chart center
   const getSliceIndexFromCoords = useCallback(
@@ -347,6 +322,12 @@ export function PieChart({
     },
     [effectiveSize]
   );
+
+  // ── High-Frequency Interaction Rule ──────────────────────────────────────────
+  // Touch-move events fire at 60fps. We NEVER run Animated.spring() or
+  // requestAnimationFrame sweeps during scrubbing. Only direct state
+  // updates: setActiveIndex(), setActiveSliceIndex().
+  // Springs are only used for UI chrome (tooltip position, opacity).
 
   // Mobile PanResponder for touch scrubbing (non-aggressive: lets parent ScrollView scroll, claims only on active scrub)
   const panResponder = useMemo(

@@ -49,6 +49,10 @@ import {
 import { createMonotoneCubicSpline } from "./comparison-chart.spline";
 import { buildA11ySummary } from "./comparison-chart.a11y";
 import { RollingNumber } from "./comparison-chart.rolling-number";
+import {
+  CHART_ENTER_EASING,
+  useReducedMotion,
+} from "../../_shared/animation";
 
 // Re-export types and defaults for convenience
 export type { Theme, SeriesConfig, ComparisonDataPoint, ComparisonChartProps } from "./comparison-chart.types";
@@ -65,6 +69,10 @@ export function ComparisonChart({
   valuePrefix = "$",
   valueSuffix = "",
   height = 220,
+  animated = true,
+  animationDuration,
+  revealKey,
+  reduceMotion = "system",
   showTooltip = true,
   missingData = "interpolate",
   accessibilityLabel: userA11yLabel,
@@ -102,6 +110,34 @@ export function ComparisonChart({
   const isScrubbingRef = useRef(false);
   const [isScrubbing, setIsScrubbing] = useState(false);
   const tooltipSideRef = useRef<"left" | "right">("right");
+
+  const prefersReducedMotion = useReducedMotion();
+  const shouldReduceMotion =
+    reduceMotion === "always"
+      ? true
+      : reduceMotion === "never"
+      ? false
+      : prefersReducedMotion;
+
+  // Entrance spring animation for the comparison chart container
+  const entranceAnim = useRef(
+    new Animated.Value(animated && !shouldReduceMotion ? 0 : 1)
+  ).current;
+
+  useEffect(() => {
+    if (!animated || shouldReduceMotion) {
+      entranceAnim.setValue(1);
+      return;
+    }
+    entranceAnim.setValue(0);
+    Animated.spring(entranceAnim, {
+      toValue: 1,
+      stiffness: CHART_ENTER_EASING.stiffness,
+      damping: CHART_ENTER_EASING.damping,
+      mass: CHART_ENTER_EASING.mass,
+      useNativeDriver: true,
+    }).start();
+  }, [animated, shouldReduceMotion, revealKey]);
 
   // Keep persistent index in bounds if safeData length changes
   useEffect(() => {
@@ -460,6 +496,12 @@ export function ComparisonChart({
   const measureOverlayRef = useRef(measureOverlay);
   measureOverlayRef.current = measureOverlay;
 
+  // ── High-Frequency Interaction Rule ──────────────────────────────────────────
+  // Touch-move events fire at 60fps. We NEVER run Animated.spring() or
+  // requestAnimationFrame sweeps during scrubbing. Only direct state
+  // updates: setActiveIndex(), setActiveSliceIndex().
+  // Springs are only used for UI chrome (tooltip position, opacity).
+
   const panResponder = useMemo(
     () =>
       PanResponder.create({
@@ -609,12 +651,21 @@ export function ComparisonChart({
   );
 
   return (
-    <View
+    <Animated.View
       style={[
         styles.cardContainer,
         {
           backgroundColor: colors.bg,
           borderColor: colors.border,
+          opacity: entranceAnim,
+          transform: [
+            {
+              translateY: entranceAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [8, 0],
+              }),
+            },
+          ],
         },
       ]}
     >
@@ -1001,7 +1052,7 @@ export function ComparisonChart({
           </View>
         </Animated.View>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 

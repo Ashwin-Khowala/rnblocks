@@ -54,6 +54,12 @@ export interface GroupedBarChartProps {
   height?: number;
   /** Whether to animate bar heights with a smooth staggered entrance. Defaults to true. */
   animated?: boolean;
+  /** Duration in milliseconds for the entrance reveal animation (default: 900) */
+  animationDuration?: number;
+  /** Key that triggers a replay of the reveal animation when changed without remounting */
+  revealKey?: string | number;
+  /** Accessibility reduced motion preference: 'system' reads OS settings, 'always' disables motion, 'never' forces animation */
+  reduceMotion?: "system" | "always" | "never";
   /** Whether to render subtle background vertical tracks behind each individual bar. Defaults to true. */
   showBackgroundTrack?: boolean;
   /** Whether to display interactive series legend pills in the card header. Defaults to true. */

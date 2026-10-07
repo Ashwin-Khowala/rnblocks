@@ -78,6 +78,12 @@ export interface PieChartProps {
   startAngleOffset?: number;
   /** Enable entrance and sweep animations */
   animated?: boolean;
+  /** Duration in milliseconds for the entrance reveal animation (default: 900) */
+  animationDuration?: number;
+  /** Key that triggers a replay of the reveal animation when changed without remounting */
+  revealKey?: string | number;
+  /** Accessibility reduced motion preference: 'system' reads OS settings, 'always' disables motion, 'never' forces animation */
+  reduceMotion?: "system" | "always" | "never";
   /** Show loading spinner placeholder */
   loading?: boolean;
   /** Label displayed in header readout when no slice is selected (default: "Total") */
