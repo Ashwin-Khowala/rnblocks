@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import { BlockItem } from "@/data/blocks";
 import { CopyButton } from "./CopyButton";
 import {
@@ -95,8 +96,19 @@ export function BlockCard({
     e.stopPropagation();
     setIsReplaying(true);
     setRevealKey((k) => k + 1);
+    try {
+      track("replay_animation", { block: slug });
+    } catch {}
     setTimeout(() => setIsReplaying(false), 800);
-  }, []);
+  }, [slug]);
+
+  const handleInspect = useCallback(() => {
+    if (!onInspect) return;
+    try {
+      track("inspect_block", { block: slug });
+    } catch {}
+    onInspect(block);
+  }, [block, onInspect, slug]);
 
   return (
     <div
@@ -166,7 +178,7 @@ export function BlockCard({
         {/* Inspect (if onInspect passed) */}
         {onInspect && (
           <button
-            onClick={() => onInspect(block)}
+            onClick={handleInspect}
             className={cn(
               "inline-flex items-center justify-center w-7 h-7 rounded-lg text-zinc-400 hover:text-white bg-[#0c0d12]/90 backdrop-blur-md border border-white/[0.1] hover:border-white/[0.25] hover:bg-white/[0.1] transition-colors cursor-pointer shadow-sm",
               isSelected && "bg-white/20 border-white/30 text-white"

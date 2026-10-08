@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Copy, Check } from "lucide-react";
+import { track } from "@vercel/analytics";
+import { CopyIcon, CheckIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 interface CopyButtonProps {
@@ -19,6 +20,17 @@ export function CopyButton({ text, className, label, collapseOnMobile = true }: 
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+
+      // Track copy event in Vercel Analytics
+      try {
+        track("copy_code", {
+          command: text.slice(0, 100),
+          label: label || "copy",
+        });
+      } catch {
+        // Safe no-op if analytics blocked or in dev
+      }
+
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error("Failed to copy:", err);
@@ -38,7 +50,7 @@ export function CopyButton({ text, className, label, collapseOnMobile = true }: 
     >
       {copied ? (
         <>
-          <Check size={13} className="shrink-0 text-[#32c798]" />
+          <CheckIcon size={13} className="shrink-0 text-[#32c798]" />
           {label && (
             <span
               className={cn(
@@ -52,7 +64,7 @@ export function CopyButton({ text, className, label, collapseOnMobile = true }: 
         </>
       ) : (
         <>
-          <Copy size={13} className="shrink-0" />
+          <CopyIcon size={13} className="shrink-0" />
           {label && (
             <span
               className={cn(

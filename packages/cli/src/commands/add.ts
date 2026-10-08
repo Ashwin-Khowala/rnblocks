@@ -59,6 +59,22 @@ export async function addCommand(name: string, options: AddOptions) {
     return;
   }
 
+  // Anonymous, privacy-preserving installation telemetry (fire-and-forget, non-blocking)
+  if (!process.env.DO_NOT_TRACK && !process.env.RNBLOCKS_NO_TELEMETRY) {
+    const telemetryUrl =
+      process.env.RNBLOCKS_TELEMETRY_URL ||
+      "https://rnblocks.vercel.app/api/telemetry";
+    fetch(telemetryUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: "cli_add",
+        block: name,
+        type: item.type,
+      }),
+    }).catch(() => {});
+  }
+
   // Dependencies notification
   if (item.dependencies && item.dependencies.length > 0) {
     console.log(pc.yellow(`\nRequired dependencies:`));

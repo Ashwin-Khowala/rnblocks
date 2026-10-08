@@ -60,12 +60,12 @@ export function Footer() {
               Contribute
             </Link>
             <a
-              href="https://github.com/Ashwin-Khowala/rnblocks/blob/master/CODE_OF_CONDUCT.md"
+              href="https://github.com/Ashwin-Khowala/rnblocks/discussions"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[13px] text-[#9ca3af] hover:text-[#f5f5f5] transition-colors"
             >
-              Code of Conduct
+              GitHub Discussions
             </a>
             <a
               href="https://github.com/Ashwin-Khowala/rnblocks/issues"
@@ -74,6 +74,14 @@ export function Footer() {
               className="text-[13px] text-[#9ca3af] hover:text-[#f5f5f5] transition-colors"
             >
               GitHub Issues
+            </a>
+            <a
+              href="https://github.com/Ashwin-Khowala/rnblocks/blob/master/CODE_OF_CONDUCT.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[13px] text-[#9ca3af] hover:text-[#f5f5f5] transition-colors"
+            >
+              Code of Conduct
             </a>
             <a
               href="https://github.com/Ashwin-Khowala/rnblocks/blob/master/LICENSE"

@@ -229,6 +229,15 @@ export function BlocksSidebar({
           <ChevronRightIcon size={12} className="text-zinc-600" />
         </Link>
         <a
+          href="https://github.com/Ashwin-Khowala/rnblocks/discussions"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between px-2.5 py-2 rounded-md text-xs text-zinc-400 hover:text-zinc-200 hover:bg-[#121318] transition-colors font-medium"
+        >
+          <span>Community Discussions</span>
+          <ChevronRightIcon size={12} className="text-zinc-600" />
+        </a>
+        <a
           href="https://github.com/Ashwin-Khowala/rnblocks"
           target="_blank"
           rel="noopener noreferrer"
