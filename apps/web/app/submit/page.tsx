@@ -39,7 +39,7 @@ export default function SubmitPage() {
 }`;
 
   return (
-    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-24 md:pt-28 pb-24 flex-1">
+    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-4 sm:pt-6 md:pt-8 pb-20 flex-1">
       <div className="container-main max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-12">

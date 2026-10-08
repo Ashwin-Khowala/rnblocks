@@ -1,33 +1,34 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { BLOCKS_DATA } from "@/data/blocks";
+import React, { useState, useMemo, useCallback } from "react";
+import { BLOCKS_DATA, BlockItem } from "@/data/blocks";
+import {
+  BlocksSidebar,
+  BlockInspector,
+  FeatureFilter,
+} from "@/components/blocks";
 import { BlockCard } from "@/components/BlockCard";
-import { Layers, X } from "lucide-react";
-import { SearchIcon } from "@/components/icons";
-import { cn } from "@/lib/utils";
+import {
+  FilterIcon,
+  LayersIcon,
+} from "@/components/icons";
 
 export default function BlocksGalleryPage() {
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedFeature, setSelectedFeature] = useState<FeatureFilter>("all");
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  const categories = [
-    { id: "all", label: "All Blocks" },
-    { id: "charts", label: "Charts & Analytics" },
-    { id: "navigation", label: "Navigation & Docks" },
-    { id: "calendar", label: "Date & Calendars" },
-    { id: "auth", label: "Authentication" },
-  ];
+  // Inspected block for the right pane inspector
+  const [inspectedBlock, setInspectedBlock] = useState<BlockItem | null>(null);
+  const [isSplitView, setIsSplitView] = useState(false);
 
-  // Filtering logic
+  // Filter logic (pure derived values in render)
   const filteredBlocks = useMemo(() => {
     return BLOCKS_DATA.filter((block) => {
-      // Only include blocks in the blocks gallery
-      if (block.type !== "block") {
-        return false;
-      }
+      // 1. Only blocks
+      if (block.type !== "block") return false;
 
-      // Category match
+      // 2. Category match
       if (selectedCategory !== "all") {
         if (selectedCategory === "charts" || selectedCategory === "analytics") {
           if (block.category !== "analytics" && block.category !== "charts" && !block.slug.includes("chart")) {
@@ -50,145 +51,119 @@ export default function BlocksGalleryPage() {
         }
       }
 
-      // Search query
-      if (searchQuery.trim() !== "") {
-        const q = searchQuery.toLowerCase();
-        const matchesTitle = block.title.toLowerCase().includes(q);
-        const matchesDesc = block.description.toLowerCase().includes(q);
-        const matchesSlug = block.slug.toLowerCase().includes(q);
-        const matchesAuthor = block.author.toLowerCase().includes(q);
-        const matchesCategory = block.category.toLowerCase().includes(q);
-        return matchesTitle || matchesDesc || matchesSlug || matchesAuthor || matchesCategory;
+      // 3. Feature / Capability match
+      if (selectedFeature !== "all") {
+        if (selectedFeature === "pure-svg") {
+          if (!block.dependencies.every((d) => d === "react-native-svg")) return false;
+        } else if (selectedFeature === "interactive") {
+          if (!block.tags?.some((t) => ["gestures", "interactive", "panresponder"].includes(t.toLowerCase()))) {
+            return false;
+          }
+        } else if (selectedFeature === "animated") {
+          if (!block.tags?.some((t) => ["animated", "spring", "chart"].includes(t.toLowerCase()))) {
+            return false;
+          }
+        } else if (selectedFeature === "themeable") {
+          if (!block.themes || block.themes.length < 2) return false;
+        }
       }
 
       return true;
     });
-  }, [searchQuery, selectedCategory]);
+  }, [selectedCategory, selectedFeature]);
 
-  const hasActiveFilters = selectedCategory !== "all" || searchQuery !== "";
-
-  const resetFilters = () => {
-    setSearchQuery("");
+  const resetFilters = useCallback(() => {
     setSelectedCategory("all");
-  };
+    setSelectedFeature("all");
+  }, []);
+
+  const handleInspect = useCallback((block: BlockItem) => {
+    setInspectedBlock(block);
+    setIsSplitView((prev) => (inspectedBlock?.slug === block.slug ? !prev : true));
+  }, [inspectedBlock]);
 
   return (
-    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-24 md:pt-28 pb-24 flex-1 relative overflow-hidden">
-      {/* Ambient Glow in Background */}
-      <div
-        className="pointer-events-none absolute top-12 left-1/2 -translate-x-1/2 w-[700px] h-[320px] bg-[#32c798]/[0.05] blur-[120px] rounded-full"
-        aria-hidden="true"
-      />
-
-      <div className="container-main relative z-10">
-        {/* Gallery Hero Header */}
-        <div className="mb-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
-            <div className="max-w-2xl">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3">
-                Explore Blocks
-              </h1>
-
-              <p className="text-sm sm:text-base text-[#9ca3af] leading-relaxed">
-                Production-ready, accessible React Native components. Copy directly into your codebase with one-click CLI commands and live interactive previews.
-              </p>
-            </div>
-
-            {/* Quick Metrics Badge */}
-            <div className="flex items-center gap-3 self-start md:self-auto shrink-0">
-              <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl font-mono text-xs bg-[#0a0a0f] border border-white/[0.1] text-[#9ca3af] shadow-sm">
-                <span className="text-[#32c798] font-bold text-sm">{filteredBlocks.length}</span>
-                <span>{filteredBlocks.length === 1 ? "block displayed" : "blocks displayed"}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Search & Category Filter Controls Bar */}
-          <div className="bg-[#07070a]/90 backdrop-blur-md border border-white/[0.08] rounded-2xl p-3 sm:p-4 mb-8 shadow-xl space-y-3.5">
-            {/* Search Input */}
-            <div className="relative">
-              <SearchIcon
-                size={16}
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717a] pointer-events-none"
-              />
-              <input
-                type="text"
-                className="w-full bg-[#040406] border border-white/[0.08] rounded-xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-[#71717a] focus:border-[#32c798]/50 focus:outline-none focus:ring-1 focus:ring-[#32c798]/30 transition-all duration-150 font-mono"
-                placeholder="Search blocks by name, category, or functionality (chart, calendar, dock, auth)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#71717a] hover:text-white rounded-md hover:bg-white/[0.08] transition-colors cursor-pointer"
-                  title="Clear search"
-                  aria-label="Clear search"
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </div>
-
-            {/* Category Filter Pills & Reset */}
-            <div className="flex items-center justify-between gap-2 overflow-x-auto pt-2 border-t border-white/[0.06] no-scrollbar">
-              <div className="flex items-center gap-2 shrink-0">
-                {categories.map((cat) => {
-                  const isActive = selectedCategory === cat.id;
-                  return (
-                    <button
-                      key={cat.id}
-                      onClick={() => setSelectedCategory(cat.id)}
-                      className={cn(
-                        "px-3.5 py-1.5 rounded-full text-xs font-medium font-mono whitespace-nowrap transition-all duration-150 cursor-pointer",
-                        isActive
-                          ? "bg-[#32c798]/15 border border-[#32c798]/50 text-[#32c798] shadow-[0_0_12px_rgba(50,199,152,0.18)] font-semibold"
-                          : "bg-white/[0.03] border border-white/[0.08] text-[#9ca3af] hover:text-white hover:bg-white/[0.06] hover:border-white/[0.15]"
-                      )}
-                    >
-                      {cat.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {hasActiveFilters && (
-                <button
-                  onClick={resetFilters}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono text-[#ef4444] bg-[#ef4444]/10 border border-[#ef4444]/25 hover:bg-[#ef4444]/20 transition-all cursor-pointer whitespace-nowrap shrink-0 ml-auto"
-                >
-                  <span>Reset filters</span>
-                  <X size={12} />
-                </button>
-              )}
-            </div>
-          </div>
+    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-2 sm:pt-3 pb-16 relative">
+      <div className="w-full max-w-[1540px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Mobile Filter Trigger Button (only visible on small screens where sidebar is hidden) */}
+        <div className="lg:hidden flex items-center justify-between pb-3 mb-3 border-b border-white/[0.06]">
+          <span className="text-xs font-mono uppercase tracking-wider text-zinc-400">
+            {selectedCategory === "all" ? "All Blocks" : selectedCategory}
+          </span>
+          <button
+            onClick={() => setIsMobileSidebarOpen(true)}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium bg-[#121318] border border-white/[0.08] text-zinc-300 hover:text-white"
+            aria-label="Open filter sidebar"
+          >
+            <FilterIcon size={13} className="text-zinc-400" />
+            <span>Filters</span>
+          </button>
         </div>
 
-        {/* 2-Column Grid: Maximum 2 blocks per row on desktop for spacious, high-fidelity rendering */}
-        {filteredBlocks.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-            {filteredBlocks.map((block) => (
-              <BlockCard key={block.slug} block={block} />
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-20 px-4 text-center border border-white/[0.08] bg-[#07070a]/60 rounded-2xl max-w-lg mx-auto">
-            <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#71717a] mb-4">
-              <Layers size={24} />
-            </div>
-            <h3 className="text-base font-semibold text-white mb-1.5">No blocks match your filter</h3>
-            <p className="text-xs sm:text-sm text-[#9ca3af] max-w-sm mb-6 leading-relaxed">
-              We couldn&apos;t find any blocks matching &ldquo;{searchQuery || selectedCategory}&rdquo;. Try clearing filters or searching for another term.
-            </p>
-            <button
-              onClick={resetFilters}
-              className="btn-secondary !text-xs !py-2 !px-4"
-            >
-              Reset all filters
-            </button>
-          </div>
-        )}
+        {/* ── Main Layout: Left Categories Pane + Center Blocks Cards (ALIGNED ON SAME LINE) ── */}
+        <div className="flex items-start gap-6 lg:gap-8">
+          {/* ── 1. LEFT PANE (Sticky Desktop Sidebar / Mobile Drawer) ── */}
+          <BlocksSidebar
+            blocks={BLOCKS_DATA}
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+            selectedFeature={selectedFeature}
+            onSelectFeature={setSelectedFeature}
+            isOpenMobile={isMobileSidebarOpen}
+            onCloseMobile={() => setIsMobileSidebarOpen(false)}
+          />
+
+          {/* ── 2. CENTER CONTENT AREA (Blocks aligned with left pane categories) ── */}
+          <main className="flex-1 min-w-0">
+            {filteredBlocks.length > 0 ? (
+              <div className="flex items-start gap-6 lg:gap-8">
+                {/* 1. Blocks Cards Grid */}
+                <div
+                  className={`flex-1 grid grid-cols-1 ${
+                    isSplitView ? "xl:grid-cols-2" : "md:grid-cols-2"
+                  } gap-6 lg:gap-8 min-w-0`}
+                >
+                  {filteredBlocks.map((block) => (
+                    <BlockCard
+                      key={block.slug}
+                      block={block}
+                      isSelected={isSplitView && inspectedBlock?.slug === block.slug}
+                      onInspect={handleInspect}
+                    />
+                  ))}
+                </div>
+
+                {/* 2. Right Pane Inspector (appears when user clicks Inspect) */}
+                {isSplitView && inspectedBlock && (
+                  <BlockInspector
+                    block={inspectedBlock}
+                    onClose={() => setIsSplitView(false)}
+                    className="hidden lg:block"
+                  />
+                )}
+              </div>
+            ) : (
+              /* Empty State */
+              <div className="flex flex-col items-center justify-center py-20 px-4 text-center border border-white/[0.08] bg-[#07070a] rounded-2xl max-w-lg mx-auto">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-zinc-500 mb-4">
+                  <LayersIcon size={24} />
+                </div>
+                <h3 className="text-base font-semibold text-white mb-1.5">
+                  No matching blocks found
+                </h3>
+                <p className="text-xs sm:text-sm text-zinc-400 max-w-sm mb-6 leading-relaxed">
+                  We couldn&apos;t find any blocks matching your filters.
+                </p>
+                <button
+                  onClick={resetFilters}
+                  className="btn-primary !bg-white !text-black !rounded-md !text-xs !py-2 !px-4 hover:!bg-zinc-200 font-semibold cursor-pointer"
+                >
+                  Reset filters
+                </button>
+              </div>
+            )}
+          </main>
+        </div>
       </div>
     </div>
   );

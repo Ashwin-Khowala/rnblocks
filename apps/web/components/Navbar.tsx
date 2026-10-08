@@ -3,8 +3,14 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, ArrowUpRight, Layers } from "lucide-react";
-import { GitHubIcon, SearchIcon } from "./icons";
+import {
+  GitHubIcon,
+  SearchIcon,
+  LayersIcon,
+  MenuIcon,
+  CloseIcon,
+  ArrowUpRightIcon,
+} from "./icons";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -73,7 +79,7 @@ export function Navbar() {
 
   const handleSearchClick = () => {
     if (pathname === "/blocks") {
-      const existingInput = document.querySelector<HTMLInputElement>(".search-input");
+      const existingInput = document.querySelector<HTMLInputElement>("input[type='text']");
       if (existingInput) {
         existingInput.focus();
         existingInput.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -97,23 +103,23 @@ export function Navbar() {
         className={cn(
           "pointer-events-auto w-full mx-auto flex items-center justify-between transition-all duration-300",
           isScrolled
-            ? "max-w-[calc(100%-16px)] sm:max-w-[calc(100%-24px)] lg:max-w-[1140px] h-12 md:h-[52px] mt-2 md:mt-3.5 px-3 md:px-4.5 bg-[#060609]/95 backdrop-blur-xl border border-white/[0.09] rounded-xl md:rounded-[14px] shadow-[0_16px_40px_-6px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.05)]"
-            : "max-w-[1280px] h-[58px] px-4 md:px-6 bg-transparent border border-transparent shadow-none"
+            ? "max-w-[calc(100%-20px)] sm:max-w-[calc(100%-32px)] lg:max-w-[1240px] h-14 sm:h-[60px] md:h-[64px] mt-2 sm:mt-3 px-3.5 sm:px-5 md:px-6 bg-[#060609]/95 backdrop-blur-xl border border-white/[0.09] rounded-xl sm:rounded-2xl shadow-[0_16px_40px_-6px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.05)]"
+            : "max-w-[1360px] h-16 sm:h-[68px] md:h-[72px] px-4 sm:px-6 md:px-8 bg-transparent border border-transparent shadow-none"
         )}
       >
         {/* Left Section: Brand Logo + Desktop Nav Links */}
-        <div className="flex items-center gap-3.5">
+        <div className="flex items-center gap-4 sm:gap-5">
           <Link href="/" className="group inline-flex items-center gap-2.5 select-none" aria-label="RNBlocks Registry Homepage">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#1f1f27] to-[#101014] border border-white/[0.12] inline-flex items-center justify-center text-white shrink-0 shadow-[0_0_10px_rgba(50,199,152,0.12)] transition-all duration-200 group-hover:-translate-y-0.5 group-hover:scale-105 group-hover:border-[#32c798]/40 group-hover:shadow-[0_0_14px_rgba(50,199,152,0.25)]">
-              <Layers size={16} />
+            <div className="w-8 h-8 rounded-lg bg-[#0e0e13] border border-white/[0.12] inline-flex items-center justify-center text-white shrink-0 transition-all duration-200 group-hover:border-white/30 group-hover:bg-[#14141c]">
+              <LayersIcon size={17} />
             </div>
-            <span className="font-bold text-[15px] sm:text-[15.5px] tracking-[-0.025em] text-white whitespace-nowrap">
+            <span className="font-bold text-[15.5px] sm:text-[16px] tracking-[-0.025em] text-white whitespace-nowrap">
               RN<span className="text-[#d4d4d8] font-semibold">Blocks</span>
             </span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-0.5 ml-3" aria-label="Main Navigation">
+          <nav className="hidden lg:flex items-center gap-1 ml-2" aria-label="Main Navigation">
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.href ||
@@ -123,16 +129,13 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "inline-flex items-center gap-1.5 text-[13.5px] font-medium px-3 py-1.5 rounded-lg transition-colors duration-150 whitespace-nowrap",
+                    "inline-flex items-center text-[13.5px] font-medium px-3.5 py-2 rounded-lg transition-colors duration-150 whitespace-nowrap",
                     isActive
-                      ? "text-white font-semibold bg-white/[0.08]"
-                      : "text-[#a1a1aa] hover:text-white hover:bg-white/[0.05]"
+                      ? "text-white font-semibold bg-white/[0.09]"
+                      : "text-zinc-400 hover:text-white hover:bg-white/[0.05]"
                   )}
                 >
                   <span>{link.label}</span>
-                  {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#32c798] shadow-[0_0_6px_rgba(50,199,152,0.9)]" />
-                  )}
                 </Link>
               );
             })}
@@ -140,35 +143,35 @@ export function Navbar() {
         </div>
 
         {/* Right Section: Search Trigger, Divider, GitHub Stars, Mobile Toggle */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           {/* Search Trigger Button */}
           <button
             type="button"
-            className="hidden lg:inline-flex items-center gap-2 h-8 px-2.5 bg-white/[0.035] hover:bg-white/[0.07] border border-white/[0.09] hover:border-white/[0.18] rounded-lg text-[#9ca3af] hover:text-white text-[12.5px] cursor-pointer transition-all duration-150 select-none"
+            className="hidden lg:inline-flex items-center gap-2 h-9 px-3 bg-white/[0.035] hover:bg-white/[0.07] border border-white/[0.09] hover:border-white/[0.18] rounded-lg text-zinc-400 hover:text-white text-xs cursor-pointer transition-all duration-150 select-none"
             onClick={handleSearchClick}
             aria-label="Search blocks (Ctrl+K)"
           >
-            <SearchIcon size={14} className="text-[#9ca3af]" />
-            <span className="font-normal">Search...</span>
-            <kbd className="font-mono text-[10px] font-semibold text-[#71717a] bg-white/[0.06] border border-white/10 rounded px-1.5 py-0.5 leading-tight">
+            <SearchIcon size={14} className="text-zinc-400" />
+            <span className="font-normal">Search blocks...</span>
+            <kbd className="font-mono text-[10px] font-semibold text-zinc-500 bg-white/[0.06] border border-white/10 rounded px-1.5 py-0.5 leading-tight">
               {isMac ? "⌘K" : "Ctrl K"}
             </kbd>
           </button>
 
-          <span className="hidden lg:block w-px h-4 bg-white/[0.12] mx-1" />
+          <span className="hidden lg:block w-px h-4 bg-white/[0.12] mx-0.5" />
 
-          {/* GitHub Star Pill Button */}
+          {/* GitHub Star Button */}
           <a
             href="https://github.com/Ashwin-Khowala/rnblocks"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-[#d1d5db] hover:text-white hover:bg-white/[0.06] transition-colors duration-150 select-none"
+            className="inline-flex items-center gap-2 h-9 px-3 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors duration-150 select-none"
             title="RNBlocks on GitHub"
             aria-label={starCount !== null ? `GitHub repository - ${starCount} stars` : "GitHub repository"}
           >
-            <GitHubIcon size={15} />
+            <GitHubIcon size={16} />
             {starCount !== null && (
-              <span className="font-mono text-[12.5px] font-medium text-[#d1d5db]">
+              <span className="font-mono text-xs font-medium text-zinc-300">
                 {starCount}
               </span>
             )}
@@ -176,40 +179,43 @@ export function Navbar() {
 
           {/* Mobile Menu Toggle Button */}
           <button
-            className="lg:hidden inline-flex items-center justify-center w-[34px] h-[34px] text-[#d1d5db] hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/[0.22] rounded-lg cursor-pointer transition-colors duration-150 p-0"
+            className="lg:hidden inline-flex items-center justify-center w-9 h-9 text-zinc-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/[0.22] rounded-lg cursor-pointer transition-colors duration-150 p-0"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            {mobileMenuOpen ? <CloseIcon size={18} /> : <MenuIcon size={18} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu Drawer Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-black/65 backdrop-blur-md z-[999] animate-fade-in pointer-events-auto flex justify-center px-3.5" onClick={() => setMobileMenuOpen(false)}>
+        <div
+          className="fixed inset-0 bg-black/75 backdrop-blur-md z-[999] animate-fade-in pointer-events-auto flex justify-center px-3.5"
+          onClick={() => setMobileMenuOpen(false)}
+        >
           <div
             className={cn(
-              "w-full max-w-[480px] bg-[#060609]/98 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-[0_20px_48px_rgba(0,0,0,0.92)] animate-slide-down h-fit",
-              isScrolled ? "mt-[72px]" : "mt-[68px]"
+              "w-full max-w-[480px] bg-[#07070a] border border-white/10 rounded-2xl p-4 shadow-[0_20px_48px_rgba(0,0,0,0.92)] animate-slide-down h-fit",
+              isScrolled ? "mt-[76px]" : "mt-[80px]"
             )}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Quick Search Button in Mobile Drawer */}
             <button
               type="button"
-              className="flex items-center justify-between w-full h-[38px] px-3 bg-white/[0.04] border border-white/[0.09] rounded-xl text-[#9ca3af] text-[13px] mb-3 cursor-pointer"
+              className="flex items-center justify-between w-full h-[40px] px-3 bg-white/[0.04] border border-white/[0.09] rounded-xl text-zinc-400 text-xs mb-3 cursor-pointer"
               onClick={() => {
                 setMobileMenuOpen(false);
                 handleSearchClick();
               }}
             >
               <div className="flex items-center gap-2">
-                <SearchIcon size={15} className="text-[#71717a]" />
+                <SearchIcon size={15} className="text-zinc-500" />
                 <span>Search blocks & components...</span>
               </div>
-              <kbd className="font-mono text-[10px] font-semibold text-[#71717a] bg-white/[0.06] border border-white/10 rounded px-1.5 py-0.5 leading-tight">
+              <kbd className="font-mono text-[10px] font-semibold text-zinc-500 bg-white/[0.06] border border-white/10 rounded px-1.5 py-0.5 leading-tight">
                 {isMac ? "⌘K" : "Ctrl K"}
               </kbd>
             </button>
@@ -226,16 +232,13 @@ export function Navbar() {
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      "flex items-center justify-between p-2.5 px-3.5 rounded-xl text-[14.5px] font-medium transition-colors duration-150",
+                      "flex items-center justify-between p-2.5 px-3.5 rounded-xl text-sm font-medium transition-colors duration-150",
                       isActive
                         ? "bg-white/10 text-white font-semibold"
-                        : "text-[#d1d5db] hover:bg-white/[0.06] hover:text-white"
+                        : "text-zinc-300 hover:bg-white/[0.06] hover:text-white"
                     )}
                   >
                     <span>{link.label}</span>
-                    {isActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#32c798] shadow-[0_0_8px_rgba(50,199,152,0.9)]" />
-                    )}
                   </Link>
                 );
               })}
@@ -247,15 +250,15 @@ export function Navbar() {
                 href="https://github.com/Ashwin-Khowala/rnblocks"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-2.5 px-3.5 rounded-xl text-sm text-[#d1d5db] hover:text-white bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.15] mb-2.5 transition-colors duration-150"
+                className="flex items-center justify-between p-2.5 px-3.5 rounded-xl text-xs text-zinc-300 hover:text-white bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.15] mb-2.5 transition-colors duration-150"
               >
                 <div className="flex items-center gap-2.5">
                   <GitHubIcon size={16} />
                   <span>GitHub Repository</span>
                 </div>
                 {starCount !== null && (
-                  <span className="font-mono text-xs font-semibold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/25 px-2 py-0.5 rounded-full">
-                   {starCount}
+                  <span className="font-mono text-xs font-semibold text-zinc-300 bg-white/[0.06] border border-white/[0.1] px-2 py-0.5 rounded-md">
+                    {starCount}
                   </span>
                 )}
               </a>
@@ -264,10 +267,10 @@ export function Navbar() {
               <Link
                 href="/blocks"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-1.5 w-full h-10 text-sm font-semibold rounded-xl bg-white text-zinc-950 shadow-[0_4px_16px_rgba(255,255,255,0.18)] hover:bg-[#f4f4f5] transition-colors duration-150"
+                className="flex items-center justify-center gap-1.5 w-full h-10 text-xs font-semibold rounded-xl bg-white text-black shadow-md hover:bg-zinc-200 transition-colors duration-150"
               >
-                <span className="text-zinc-950 font-bold">Explore All Blocks</span>
-                <ArrowUpRight size={15} className="text-zinc-950" />
+                <span className="font-bold">Explore All Blocks</span>
+                <ArrowUpRightIcon size={14} />
               </Link>
             </div>
           </div>

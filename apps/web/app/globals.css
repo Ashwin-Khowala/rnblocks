@@ -109,6 +109,12 @@ main:not(:has(.landing-root)) {
   padding-top: 64px;
 }
 
+@media (min-width: 640px) {
+  main:not(:has(.landing-root)) {
+    padding-top: 68px;
+  }
+}
+
 /* Scrollbar Styling - Technical & Minimal */
 ::-webkit-scrollbar {
   width: 8px;

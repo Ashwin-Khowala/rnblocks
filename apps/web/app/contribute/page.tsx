@@ -73,7 +73,7 @@ export default function ContributePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-24 md:pt-28 pb-24 flex-1">
+    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-4 sm:pt-6 md:pt-8 pb-20 flex-1">
       <div className="container-main max-w-5xl mx-auto">
         {/* Hero Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
