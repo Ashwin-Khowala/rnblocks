@@ -105,7 +105,7 @@ export function BlockCard({
   const handleInspect = useCallback(() => {
     if (!onInspect) return;
     try {
-      track("inspect_block", { block: slug });
+      track("inspect_block", { block: slug, source: "card" });
     } catch {}
     onInspect(block);
   }, [block, onInspect, slug]);

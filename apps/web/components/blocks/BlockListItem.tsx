@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import { BlockItem } from "@/data/blocks";
 import { CopyButton } from "@/components/CopyButton";
 import {
@@ -67,7 +68,10 @@ export function BlockListItem({
         />
 
         <button
-          onClick={() => onInspect(block)}
+          onClick={() => {
+            try { track("inspect_block", { block: slug, source: "list" }); } catch {}
+            onInspect(block);
+          }}
           className={cn(
             "inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer",
             isSelected

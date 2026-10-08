@@ -6,6 +6,8 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { FlagValues } from "flags/react";
+import { getDefaultFlagValues } from "@/flags";
 import { ReactNativeWebRegistry } from "@/components/ReactNativeWebRegistry";
 
 const nunitoSans = Nunito_Sans({
@@ -138,6 +140,7 @@ export default function RootLayout({
           <Footer />
           <Analytics />
           <SpeedInsights />
+          <FlagValues values={getDefaultFlagValues()} />
         </ReactNativeWebRegistry>
       </body>
     </html>
