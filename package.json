@@ -23,7 +23,8 @@
     "validate:deps": "tsx scripts/validate-dependencies.ts",
     "validate:native": "tsc --noEmit -p packages/native-check/tsconfig.json",
     "check:platform-compat": "tsx scripts/check-platform-compat.ts",
-    "validate:all": "pnpm validate:registry && pnpm validate:deps && pnpm validate:native",
+    "check:agent-rules": "tsx scripts/check-agent-rules.ts",
+    "validate:all": "pnpm check:agent-rules && pnpm validate:registry && pnpm validate:deps && pnpm validate:native",
     "generate:registry": "tsx scripts/generate-registry.ts"
   },
   "devDependencies": {

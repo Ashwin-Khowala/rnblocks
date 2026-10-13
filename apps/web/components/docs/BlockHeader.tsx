@@ -38,18 +38,7 @@ export function BlockHeader({ block }: BlockHeaderProps) {
   return (
     <div className="space-y-3">
       <div className="flex items-start justify-between gap-3">
-        <div className="space-y-1.5 min-w-0">
-          {/* Category & Version Badges */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-[#32c798] uppercase tracking-wider font-semibold">
-              {block.category}
-            </span>
-            <span className="text-[#71717a] font-mono text-xs">•</span>
-            <span className="text-xs font-mono text-[#9ca3af]">
-              v{block.version || "1.0.0"}
-            </span>
-          </div>
-
+        <div className="min-w-0">
           {/* Clean Main Title */}
           <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
             {displayTitle}
