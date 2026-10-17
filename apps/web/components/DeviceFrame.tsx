@@ -47,7 +47,7 @@ export function DeviceFrame({
 
         {/* Home Indicator */}
         <div className="pt-2 pb-2.5 bg-black flex justify-center items-center z-10">
-          <div className="w-28 h-1 bg-white/30 rounded-full" />
+          <div className="w-28 h-1 bg-white/30 rounded-[2px]" />
         </div>
       </div>
     </div>

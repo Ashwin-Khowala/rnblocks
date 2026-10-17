@@ -18,22 +18,20 @@ export default function ScreensPage() {
   const screens = BLOCKS_DATA.filter((b) => b.type === "screen");
 
   return (
-    <div className="min-h-screen bg-[#030305] text-[#ededed] pt-4 sm:pt-6 md:pt-8 pb-20 flex-1">
-      <div className="container-main">
+    <div className="min-h-screen bg-transparent text-[#ededed] pt-6 sm:pt-10 pb-20 flex-1 relative">
+      <div className="container-main max-w-5xl mx-auto px-4 sm:px-6">
         {/* Header */}
-        <div className="mb-10">
-          <div className="inline-flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-mono text-[10.5px] font-bold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 uppercase tracking-wider">
-              <Sparkles size={12} />
-              <span>Full-Flow Mobile Screens</span>
-            </span>
+        <div className="mb-10 pb-6 border-b border-white/[0.08]">
+          <div className="inline-flex items-center gap-2 font-mono text-[11px] text-[#32c798] mb-2.5">
+            <span className="w-1.5 h-1.5 rounded-[1px] bg-[#32c798] shadow-[0_0_6px_#32c798]" />
+            <span>// FULL-FLOW MOBILE SCREENS</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
-            Screens Directory
+          <h1 className="text-[26px] sm:text-[34px] md:text-[40px] font-extrabold text-white tracking-[-0.6px]">
+            Screens <span className="font-editorial italic font-normal text-white">Directory</span>
           </h1>
-          <p className="text-xs sm:text-sm text-[#9ca3af] max-w-xl">
+          <p className="mt-2 text-[14px] sm:text-[15px] text-[#9ca3af] leading-relaxed max-w-2xl">
             Complete, interconnected mobile screen experiences ready to drop into your
-            Expo Router app. Fully functional with state, interactions, and native styling.
+            Expo Router app. Fully functional with state, gestures, and native styling.
           </p>
         </div>
 
@@ -44,21 +42,21 @@ export default function ScreensPage() {
               return (
                 <div
                   key={screen.slug}
-                  className="bg-[#050508] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-white/20 transition-all duration-200"
+                  className="bg-[#0a0a0f] border border-white/[0.08] rounded-[16px] overflow-hidden flex flex-col justify-between hover:border-white/[0.18] transition-all duration-200 shadow-sm"
                 >
                   <div className="p-6">
                     <div className="flex flex-wrap items-center gap-2 mb-3">
-                      <span className="inline-flex items-center gap-1.5 font-mono text-[10px] font-semibold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 px-2 py-0.5 rounded-full uppercase">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#32c798] animate-pulse" />
+                      <span className="inline-flex items-center gap-1.5 font-mono text-[10.5px] font-semibold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 px-2.5 py-0.5 rounded-[4px] uppercase">
+                        <span className="w-1.5 h-1.5 rounded-[1px] bg-[#32c798] animate-pulse" />
                         Live Screen
                       </span>
-                      <span className="font-mono text-[10px] font-medium text-[#a1a1aa] bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded">
+                      <span className="font-mono text-[10.5px] font-medium text-[#a1a1aa] bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded-[4px]">
                         {screen.framework}
                       </span>
                       {screen.styling.map((s) => (
                         <span
                           key={s}
-                          className="font-mono text-[10px] font-medium text-[#a1a1aa] bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded"
+                          className="font-mono text-[10.5px] font-medium text-[#a1a1aa] bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded-[4px]"
                         >
                           {s}
                         </span>
@@ -71,19 +69,19 @@ export default function ScreensPage() {
                     </p>
 
                     <div className="mb-4">
-                      <div className="inline-flex items-center gap-2 bg-[#040406] border border-white/[0.08] rounded-xl px-3 py-1.5 text-xs font-mono text-[#d1d5db]">
+                      <div className="inline-flex items-center gap-2 bg-[#060608] border border-white/[0.08] rounded-[8px] px-3 py-1.5 text-xs font-mono text-[#d1d5db]">
                         <Terminal size={13} className="text-[#32c798]" />
                         <code>npx @rnblocks/cli add {screen.name}</code>
                       </div>
                     </div>
 
-                    <Link href={`/blocks/${screen.slug}`} className="btn-primary inline-flex items-center gap-2 text-xs">
+                    <Link href={`/blocks/${screen.slug}`} className="btn-primary inline-flex items-center gap-2 text-xs !rounded-[8px]">
                       <span>View Source Code</span>
                       <Code2 size={14} />
                     </Link>
                   </div>
 
-                  <div className="p-6 bg-[#030305] border-t border-white/[0.06] flex items-center justify-center">
+                  <div className="p-6 bg-[#060609] border-t border-white/[0.06] flex items-center justify-center">
                     {ScreenComp && <ScreenComp />}
                   </div>
                 </div>
@@ -92,9 +90,9 @@ export default function ScreensPage() {
           </div>
         ) : (
           /* Curation & Roadmap State */
-          <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 sm:p-10 max-w-4xl mx-auto mb-12 shadow-[0_20px_40px_-20px_rgba(0,0,0,0.6)]">
+          <div className="bg-[#0a0a0f] border border-white/[0.08] rounded-[20px] p-6 sm:p-10 max-w-4xl mx-auto mb-12 shadow-[0_20px_40px_-20px_rgba(0,0,0,0.6)]">
             <div>
-              <div className="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/30 px-2.5 py-1 rounded-full uppercase tracking-wider mb-3">
+              <div className="inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold text-[#32c798] bg-[#32c798]/10 border border-[#32c798]/25 px-2.5 py-1 rounded-[6px] uppercase tracking-wider mb-3">
                 <Compass size={13} />
                 <span>Active Curation</span>
               </div>
@@ -108,8 +106,8 @@ export default function ScreensPage() {
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 mb-8">
-                <div className="bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] rounded-xl p-4 flex items-start gap-3.5 transition-colors">
-                  <div className="w-10 h-10 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-[#32c798] shrink-0">
+                <div className="bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] rounded-[12px] p-4 flex items-start gap-3.5 transition-colors">
+                  <div className="w-10 h-10 rounded-[8px] bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-[#32c798] shrink-0">
                     <Smartphone size={18} />
                   </div>
                   <div>
@@ -122,8 +120,8 @@ export default function ScreensPage() {
                   </div>
                 </div>
 
-                <div className="bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] rounded-xl p-4 flex items-start gap-3.5 transition-colors">
-                  <div className="w-10 h-10 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-[#32c798] shrink-0">
+                <div className="bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] rounded-[12px] p-4 flex items-start gap-3.5 transition-colors">
+                  <div className="w-10 h-10 rounded-[8px] bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-[#32c798] shrink-0">
                     <Layers size={18} />
                   </div>
                   <div>
@@ -136,8 +134,8 @@ export default function ScreensPage() {
                   </div>
                 </div>
 
-                <div className="bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] rounded-xl p-4 flex items-start gap-3.5 transition-colors">
-                  <div className="w-10 h-10 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-[#32c798] shrink-0">
+                <div className="bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] rounded-[12px] p-4 flex items-start gap-3.5 transition-colors">
+                  <div className="w-10 h-10 rounded-[8px] bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-[#32c798] shrink-0">
                     <Sparkles size={18} />
                   </div>
                   <div>
@@ -150,8 +148,8 @@ export default function ScreensPage() {
                   </div>
                 </div>
 
-                <div className="bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] rounded-xl p-4 flex items-start gap-3.5 transition-colors">
-                  <div className="w-10 h-10 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-[#32c798] shrink-0">
+                <div className="bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] rounded-[12px] p-4 flex items-start gap-3.5 transition-colors">
+                  <div className="w-10 h-10 rounded-[8px] bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-[#32c798] shrink-0">
                     <FolderPlus size={18} />
                   </div>
                   <div>
@@ -166,11 +164,11 @@ export default function ScreensPage() {
               </div>
 
               <div className="flex flex-wrap items-center gap-3">
-                <Link href="/blocks" className="btn-primary inline-flex items-center gap-2 text-xs">
+                <Link href="/blocks" className="btn-primary inline-flex items-center gap-2 text-xs !rounded-[8px]">
                   <span>Explore UI Blocks</span>
                   <ArrowRight size={14} />
                 </Link>
-                <Link href="/submit" className="btn-secondary inline-flex items-center gap-2 text-xs">
+                <Link href="/submit" className="btn-secondary inline-flex items-center gap-2 text-xs !rounded-[8px]">
                   <span>Propose a Screen</span>
                 </Link>
               </div>
@@ -179,7 +177,7 @@ export default function ScreensPage() {
         )}
 
         {/* Contribution Banner */}
-        <div className="bg-gradient-to-r from-[#07070a] to-[#0c0c14] border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 max-w-4xl mx-auto">
+        <div className="bg-[#0a0a0f] border border-white/[0.08] rounded-[16px] p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 max-w-4xl mx-auto">
           <div>
             <h3 className="text-base sm:text-lg font-bold text-white mb-1">Contribute Screen Flows</h3>
             <p className="text-xs sm:text-sm text-[#9ca3af] max-w-lg">
@@ -187,11 +185,11 @@ export default function ScreensPage() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <Link href="/submit" className="btn-primary inline-flex items-center gap-2 text-xs whitespace-nowrap">
+            <Link href="/submit" className="btn-primary inline-flex items-center gap-2 text-xs !rounded-[8px] whitespace-nowrap">
               <span>Contribution Guide</span>
               <ArrowRight size={14} />
             </Link>
-            <Link href="/blocks" className="btn-secondary inline-flex items-center gap-2 text-xs whitespace-nowrap">
+            <Link href="/blocks" className="btn-secondary inline-flex items-center gap-2 text-xs !rounded-[8px] whitespace-nowrap">
               <span>Browse Blocks</span>
             </Link>
           </div>

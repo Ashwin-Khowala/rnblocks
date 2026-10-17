@@ -7,7 +7,7 @@ import { GitHubIcon } from "./icons/GitHubIcon";
 
 export function Footer() {
   return (
-    <footer className="bg-[#070709] border-t border-white/[0.08] mt-auto">
+    <footer className="bg-[#070709]/80 backdrop-blur-sm border-t border-white/[0.08] mt-auto relative z-10">
       <div className="container-main py-10 md:py-14 grid grid-cols-1 md:grid-cols-[1.5fr_2.5fr] gap-10 md:gap-14">
         {/* Brand Column */}
         <div>

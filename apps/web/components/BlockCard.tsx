@@ -27,41 +27,16 @@ export function BlockCard({
   onInspect,
   className,
 }: BlockCardProps) {
-  const { slug, title, category, Component, dependencies } = block;
+  const { slug, title, category, Component, dependencies, description } = block;
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState<number>(1);
   const [revealKey, setRevealKey] = useState<number>(0);
   const [isReplaying, setIsReplaying] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-
-  // Lazy viewport intersection: only mount component when approaching viewport
-  useEffect(() => {
-    const el = canvasRef.current;
-    if (!el) return;
-
-    if (typeof IntersectionObserver === "undefined") {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "350px" } // Pre-mount 350px before entering viewport for seamless scrolling
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const [isVisible, setIsVisible] = useState<boolean>(true); // Eagerly visible to prevent blank box lag
 
   // Dynamic responsive auto-fit scaling for natural preview dimensions
   useEffect(() => {
-    if (!isVisible) return;
     const el = canvasRef.current;
     if (!el) return;
 
@@ -70,11 +45,11 @@ export function BlockCard({
       const containerHeight = el.clientHeight;
       if (containerWidth <= 0 || containerHeight <= 0) return;
 
-      const availW = Math.max(120, containerWidth - 28);
-      const availH = Math.max(120, containerHeight - 56);
+      const availW = Math.max(120, containerWidth - 32);
+      const availH = Math.max(120, containerHeight - 32);
 
-      const targetW = 390;
-      const targetH = 365;
+      const targetW = 380;
+      const targetH = 340;
 
       const scaleW = availW < targetW ? availW / targetW : 1;
       const scaleH = availH < targetH ? availH / targetH : 1;
@@ -90,7 +65,7 @@ export function BlockCard({
     resizeObserver.observe(el);
 
     return () => resizeObserver.disconnect();
-  }, [isVisible]);
+  }, []);
 
   const handleReplay = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -110,25 +85,58 @@ export function BlockCard({
     onInspect(block);
   }, [block, onInspect, slug]);
 
+  const isBentoCell = className?.includes("rounded-none");
+
   return (
     <div
       className={cn(
-        "group relative bg-[#07070a] hover:bg-[#09090e] flex flex-col overflow-hidden transition-all duration-300 h-full border rounded-2xl select-none [content-visibility:auto] [contain-intrinsic-size:0_450px]",
-        isSelected
-          ? "border-white/30 shadow-lg shadow-black/60 bg-[#0a0a0f]"
-          : "border-white/10 hover:border-white/20",
+        "group relative flex flex-col overflow-hidden transition-all duration-200 select-none bg-[#0a0a0f]",
+        isBentoCell
+          ? "border-0"
+          : "border border-white/[0.08] hover:border-white/[0.18] rounded-[16px] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)]",
+        isSelected && "border-white/30 bg-[#0d0d14] ring-1 ring-white/20",
         className
       )}
     >
-      {/* ── Main Preview Canvas (Seamless Natural Canvas like Home Page) ── */}
+      {/* ── Card Header: Title, Category Badge, Platform Indicators ── */}
+      <div className="flex items-center justify-between px-4 py-3 bg-[#08080c] border-b border-white/[0.06] z-10">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <Link
+            href={`/blocks/${slug}`}
+            className="text-[13.5px] font-semibold text-white/95 hover:text-white truncate transition-colors"
+          >
+            {title}
+          </Link>
+          <span className="font-mono text-[10px] uppercase tracking-wider text-[#9ca3af] bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded-[4px] shrink-0">
+            {category}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="hidden lg:inline-block font-mono text-[10px] text-[#71717a]">
+            iOS • Android • Web
+          </span>
+          {/* Quick External Link */}
+          <Link
+            href={`/blocks/${slug}`}
+            className="text-[#71717a] hover:text-white transition-colors p-1"
+            title={`View ${title} code and docs`}
+            aria-label={`View ${title}`}
+          >
+            <ArrowUpRightIcon size={13} />
+          </Link>
+        </div>
+      </div>
+
+      {/* ── Main Preview Canvas ── */}
       <div
         ref={canvasRef}
-        className="relative w-full h-[370px] sm:h-[400px] md:h-[430px] flex items-center justify-center bg-[#050508] bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:16px_16px] overflow-hidden px-3 sm:px-4 py-6"
+        className="relative w-full h-[320px] sm:h-[350px] md:h-[370px] flex items-center justify-center bg-[#060609] bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:18px_18px] overflow-hidden p-4"
       >
         <div
           className="flex items-center justify-center origin-center transition-transform duration-150 w-full"
           style={{
-            maxWidth: "460px",
+            maxWidth: "440px",
             transform: scale < 1 ? `scale(${scale})` : undefined,
           }}
         >
@@ -138,74 +146,64 @@ export function BlockCard({
               /* @ts-expect-error Component may optionally take revealKey */
               <Component key={revealKey} revealKey={revealKey} />
             ) : (
-              <div className="w-full h-[280px]" aria-hidden="true" />
+              <div className="w-full h-[240px]" aria-hidden="true" />
             )}
           </div>
         </div>
       </div>
 
-      {/* ── Bottom-Left: Title & Category (Clean overlay like Home Page) ── */}
-      <div className="absolute bottom-3 sm:bottom-4 left-3.5 sm:left-4.5 z-20 flex items-center gap-2 max-w-[55%] sm:max-w-[60%] opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
-        <Link
-          href={`/blocks/${slug}`}
-          className="text-xs sm:text-sm font-semibold text-white/90 hover:text-white truncate transition-colors drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
-        >
-          {title}
-        </Link>
-        <span className="hidden sm:inline-block font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-[#0c0d12]/90 border border-white/[0.08] px-2 py-0.5 rounded-md backdrop-blur-md shrink-0">
-          {category}
-        </span>
-      </div>
-
-      {/* ── Bottom-Right: Actions (Replay, Inspect, CLI, Docs Link) ── */}
-      <div className="absolute bottom-3 sm:bottom-4 right-3.5 sm:right-4.5 z-20 flex items-center gap-1.5 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
-        {/* Replay */}
-        <button
-          onClick={handleReplay}
-          className={cn(
-            "inline-flex items-center justify-center w-7 h-7 rounded-lg text-zinc-400 hover:text-white bg-[#0c0d12]/90 backdrop-blur-md border border-white/[0.1] hover:border-white/[0.25] hover:bg-white/[0.1] transition-all cursor-pointer shadow-sm",
-            isReplaying && "text-white bg-white/20 border-white/30"
-          )}
-          title="Replay animation"
-          aria-label="Replay animation"
-        >
-          <RotateCwIcon
-            size={12}
-            className={cn("transition-transform duration-700", isReplaying && "rotate-180")}
-          />
-        </button>
-
-        {/* Inspect (if onInspect passed) */}
-        {onInspect && (
+      {/* ── Dedicated Action Footer ── */}
+      <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#08080c] border-t border-white/[0.06] z-10 gap-2">
+        <div className="flex items-center gap-1.5">
+          {/* Replay */}
           <button
-            onClick={handleInspect}
+            onClick={handleReplay}
             className={cn(
-              "inline-flex items-center justify-center w-7 h-7 rounded-lg text-zinc-400 hover:text-white bg-[#0c0d12]/90 backdrop-blur-md border border-white/[0.1] hover:border-white/[0.25] hover:bg-white/[0.1] transition-colors cursor-pointer shadow-sm",
-              isSelected && "bg-white/20 border-white/30 text-white"
+              "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-zinc-400 hover:text-white bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.08] transition-all cursor-pointer font-mono text-[11px]",
+              isReplaying && "text-white bg-white/20 border-white/30"
             )}
-            title="Inspect block"
-            aria-label="Inspect block"
+            title="Replay animation"
+            aria-label="Replay animation"
           >
-            <SlidersIcon size={12} />
+            <RotateCwIcon
+              size={11}
+              className={cn("transition-transform duration-700", isReplaying && "rotate-180")}
+            />
+            <span className="hidden sm:inline">Replay</span>
           </button>
-        )}
+
+          {/* Inspect / Split View (if onInspect passed) */}
+          {onInspect && (
+            <button
+              onClick={handleInspect}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-zinc-400 hover:text-white bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.08] transition-colors cursor-pointer font-mono text-[11px]",
+                isSelected && "bg-white/20 border-white/30 text-white font-medium"
+              )}
+              title="Inspect block source"
+              aria-label="Inspect block"
+            >
+              <SlidersIcon size={11} />
+              <span className="hidden sm:inline">Inspect</span>
+            </button>
+          )}
+        </div>
 
         {/* Copy CLI */}
-        <CopyButton
-          text={`npx @rnblocks/cli add ${slug}`}
-          className="!bg-[#0c0d12]/90 !backdrop-blur-md !border-white/[0.1] hover:!border-white/[0.25] hover:!bg-white/[0.1] !rounded-lg !px-2.5 !py-1 !font-mono !text-[11px] !text-zinc-300 hover:!text-white shadow-sm"
-          label="CLI"
-        />
-
-        {/* View docs Link */}
-        <Link
-          href={`/blocks/${slug}`}
-          className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-[#0c0d12]/90 backdrop-blur-md border border-white/[0.1] text-zinc-400 hover:text-white hover:bg-white/[0.1] hover:border-white/[0.25] transition-colors shadow-sm"
-          title={`View ${title}`}
-          aria-label={`View ${title} documentation`}
-        >
-          <ArrowUpRightIcon size={13} />
-        </Link>
+        <div className="flex items-center gap-2">
+          <CopyButton
+            text={`npx @rnblocks/cli add ${slug}`}
+            className="!bg-white/[0.04] !border-white/[0.08] hover:!border-white/[0.2] hover:!bg-white/[0.08] !rounded-[6px] !px-2.5 !py-1 !font-mono !text-[11px] !text-zinc-300 hover:!text-white shadow-sm"
+            label="CLI"
+          />
+          <Link
+            href={`/blocks/${slug}`}
+            className="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono text-zinc-400 hover:text-white px-2 py-1 rounded-[6px] hover:bg-white/[0.05] transition-colors"
+          >
+            <span>Code</span>
+            <ArrowUpRightIcon size={11} />
+          </Link>
+        </div>
       </div>
     </div>
   );
