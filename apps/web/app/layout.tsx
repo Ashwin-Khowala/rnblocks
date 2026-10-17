@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Nunito_Sans, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { Navbar, Footer, SiteGridBackground } from "@/components";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { FlagValues } from "flags/react";
@@ -133,6 +132,7 @@ export default function RootLayout({
       </head>
       <body className={nunitoSans.className}>
         <ReactNativeWebRegistry>
+          <SiteGridBackground />
           <Navbar />
           <main style={{ minHeight: "calc(100vh - 60px - 280px)", display: "flex", flexDirection: "column" }}>
             {children}
