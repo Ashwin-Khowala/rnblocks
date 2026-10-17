@@ -8,7 +8,7 @@ import { FinalCTA } from "./sections/FinalCTA";
 
 export default function HomePage() {
   return (
-    <div className="landing-root flex flex-col bg-[#070709]">
+    <div className="landing-root flex flex-col bg-transparent relative">
       <Hero />
       <ShowcaseGrid />
       <HowItWorks />

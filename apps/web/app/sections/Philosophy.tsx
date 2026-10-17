@@ -1,73 +1,125 @@
 "use client";
 
 import React from "react";
-import { Code2, Zap, Box, Sparkles } from "lucide-react";
+import { Check, X, ShieldAlert, ShieldCheck } from "lucide-react";
+import { CadCornerScale, PhilosophyBackground } from "@/components";
 
 export function Philosophy() {
-  const pillars = [
+  const comparison = [
     {
-      icon: Code2,
-      title: "100% Code Ownership",
-      desc: (
-        <>
-          Components install straight into your <code className="bg-white/10 px-1 py-0.5 rounded font-mono text-xs text-white">components/</code> folder. Modify styling, swap icons, and tune animation parameters directly in your codebase.
-        </>
-      ),
+      feature: "Code Delivery",
+      monolith: "npm package trapped inside node_modules",
+      rnblocks: "Direct copy into your components/ directory",
     },
     {
-      icon: Zap,
-      title: "Zero Runtime Baggage",
-      desc: "Engineered with standard React Native primitives. No mandatory root ThemeProvider or CSS-in-JS runtime engine required.",
+      feature: "Runtime Overhead",
+      monolith: "Heavy ThemeProvider & CSS-in-JS interpreter",
+      rnblocks: "Zero extra runtime weight — pure StyleSheet",
     },
     {
-      icon: Box,
-      title: "Fluid & Adaptive Layouts",
-      desc: "Designed with container-relative dimensions and standard spacing tokens. Never breaks due to arbitrary hardcoded screen width assumptions.",
+      feature: "Upgrade Safety",
+      monolith: "Breaks on Expo / React Native version bumps",
+      rnblocks: "Immune to upstream breaking changes",
     },
     {
-      icon: Sparkles,
-      title: "Native 60-120 FPS Physics",
-      desc: "Smooth cubic-bezier animations using React Native's native driver for butter-smooth performance across iOS, Android, and Web.",
+      feature: "Customization",
+      monolith: "Limited to exposed props & arbitrary theme overrides",
+      rnblocks: "100% freedom to modify every line, SVG path & style",
+    },
+    {
+      feature: "Motion Physics",
+      monolith: "Unoptimized JS-thread animations that drop frames",
+      rnblocks: "Native-driver 60–120 FPS Animated & RAF curves",
     },
   ];
 
   return (
-    <section className="bg-[#070709] border-t border-white/[0.06] py-16 md:py-24">
-      <div className="container-main">
-        {/* Header Center */}
-        <div className="text-center mb-10 md:mb-14">
-          <span className="font-mono text-xs uppercase tracking-[0.08em] text-[#32c798] block mb-2">
-            Engineering Philosophy
-          </span>
-          <h2 className="text-[24px] sm:text-[30px] md:text-[36px] font-extrabold text-white tracking-[-0.4px] md:tracking-[-0.8px] mb-3">
-            Built for <span className="font-editorial italic font-normal">developer</span> ownership
+    <section id="manifesto" className="bg-transparent border-t border-white/[0.08] py-20 md:py-28 relative overflow-hidden">
+      <PhilosophyBackground />
+      <div className="container-main max-w-[1180px] mx-auto relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-14">
+          <div className="inline-flex items-center gap-2 font-mono text-[11px] text-[#32c798] mb-2.5">
+            <span className="w-1.5 h-1.5 rounded-[1px] bg-[#32c798] shadow-[0_0_6px_#32c798]" />
+            <span>// ARCHITECTURAL MANIFESTO</span>
+          </div>
+          <h2 className="text-[26px] sm:text-[34px] md:text-[42px] font-extrabold text-white tracking-[-0.8px] md:tracking-[-1.2px]">
+            Built for <span className="font-editorial italic font-normal text-white">developer</span> ownership
           </h2>
-          <p className="text-sm md:text-base text-[#9ca3af] max-w-[580px] mx-auto leading-relaxed">
-            Eliminate the frustration of bloated npm dependencies, rigid wrappers, and abandoned UI libraries.
+          <p className="mt-2 text-[14px] text-[#9ca3af] leading-relaxed">
+            Stop fighting npm library version locks. Own your UI code directly with clean, copy-paste React Native components.
           </p>
         </div>
 
-        {/* Pillars Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-          {pillars.map((pillar, i) => {
-            const Icon = pillar.icon;
-            return (
-              <div
-                key={i}
-                className="bg-[#0d0d10] border border-white/[0.08] hover:border-[#32c798]/30 rounded-2xl p-4.5 sm:p-6 md:p-7 flex flex-col gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_rgba(50,199,152,0.15),0_14px_30px_-8px_rgba(0,0,0,0.65)]"
-              >
-                <div className="w-10 h-10 md:w-[42px] md:h-[42px] rounded-[10px] bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#32c798] mb-1">
-                  <Icon size={20} />
+        {/* Side-by-Side Comparison Matrix */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {/* Card 1: Monolithic Library Trap (Warning State) */}
+          <div className="bg-[#0a0a0f] border border-white/[0.08] rounded-[16px] p-6 sm:p-7 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-white/[0.06]">
+                <div className="w-8 h-8 rounded-[6px] bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
+                  <ShieldAlert size={16} />
                 </div>
-                <h3 className="text-[15.5px] md:text-[17px] font-bold text-white tracking-[-0.2px]">
-                  {pillar.title}
-                </h3>
-                <p className="text-[12.5px] md:text-[13.5px] leading-[1.4] md:leading-[1.55] text-[#9ca3af]">
-                  {pillar.desc}
-                </p>
+                <div>
+                  <h3 className="text-[15.5px] font-bold text-white">The Monolithic Library Trap</h3>
+                  <span className="text-[11px] font-mono text-zinc-500">npm package dependencies</span>
+                </div>
               </div>
-            );
-          })}
+
+              <div className="space-y-4">
+                {comparison.map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-3 text-[13px]">
+                    <div className="w-5 h-5 rounded-[3px] bg-red-500/10 text-red-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <X size={12} strokeWidth={2.5} />
+                    </div>
+                    <div>
+                      <span className="font-mono text-[11px] text-zinc-500 block">{item.feature}</span>
+                      <span className="text-zinc-400 leading-snug">{item.monolith}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-white/[0.06] text-[11.5px] font-mono text-zinc-500 text-center">
+              Result: Bloated bundles, upgrade lock-in, and abandoned repos.
+            </div>
+          </div>
+
+          {/* Card 2: The RNBlocks Standard (Success State) */}
+          <div className="relative bg-[#0a0a0f] border border-[#32c798]/30 rounded-[16px] p-6 sm:p-7 flex flex-col justify-between shadow-[0_20px_48px_-12px_rgba(50,199,152,0.1)] [background:radial-gradient(circle_at_top,rgba(50,199,152,0.06),#0a0a0f_70%)] overflow-hidden">
+            <CadCornerScale position="top-right" label="MANIFESTO.04" />
+            <CadCornerScale position="bottom-left" label="OWNED" />
+            <div>
+              <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-white/[0.08]">
+                <div className="w-8 h-8 rounded-[6px] bg-[#32c798]/10 border border-[#32c798]/30 flex items-center justify-center text-[#32c798]">
+                  <ShieldCheck size={16} />
+                </div>
+                <div>
+                  <h3 className="text-[15.5px] font-bold text-white">The RNBlocks Standard</h3>
+                  <span className="text-[11px] font-mono text-[#32c798]">Direct code ownership</span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {comparison.map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-3 text-[13px]">
+                    <div className="w-5 h-5 rounded-[3px] bg-[#32c798]/15 text-[#32c798] flex items-center justify-center shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={2.5} />
+                    </div>
+                    <div>
+                      <span className="font-mono text-[11px] text-[#32c798] block">{item.feature}</span>
+                      <span className="text-zinc-200 leading-snug font-medium">{item.rnblocks}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-white/[0.08] text-[11.5px] font-mono text-[#32c798] text-center font-medium">
+              Result: Zero runtime overhead, 60 FPS speed, and infinite longevity.
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -8,3 +8,8 @@ export * from "./CodeViewer";
 export * from "./DashboardTabs";
 export * from "./LiveBlockPreview";
 export * from "./blocks";
+export * from "./HeroBackground";
+export * from "./HeroWorkbench";
+export * from "./CadCornerScale";
+export * from "./SiteGridBackground";
+export * from "./section-backgrounds";
