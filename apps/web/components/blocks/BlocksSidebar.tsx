@@ -120,8 +120,8 @@ export function BlocksSidebar({
       {/* Category Section */}
       <div>
         <div className="flex items-center justify-between mb-2 px-1">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 font-semibold">
-            Categories
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#718087] font-semibold">
+            // CATEGORIES
           </span>
         </div>
 
@@ -137,28 +137,28 @@ export function BlocksSidebar({
                   onCloseMobile?.();
                 }}
                 className={cn(
-                  "w-full flex items-center justify-between px-2.5 py-2 rounded-md text-xs font-medium transition-colors cursor-pointer group text-left",
+                  "w-full flex items-center justify-between px-2.5 py-1.5 rounded-[4px] text-xs font-mono font-medium transition-colors cursor-pointer group text-left",
                   isActive
-                    ? "bg-[#181920] border border-[#272935] text-white font-medium shadow-sm"
-                    : "text-zinc-400 hover:text-zinc-200 hover:bg-[#121318] border border-transparent"
+                    ? "bg-[#151d20] border border-[#00f5c8]/40 text-[#00f5c8] font-semibold shadow-[0_0_10px_rgba(0,245,200,0.12)]"
+                    : "text-[#929da4] hover:text-[#f3f6f5] hover:bg-[#101719] border border-transparent"
                 )}
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <Icon
-                    size={14}
+                    size={13}
                     className={cn(
                       "shrink-0 transition-colors",
-                      isActive ? "text-white" : "text-zinc-500 group-hover:text-zinc-300"
+                      isActive ? "text-[#00f5c8]" : "text-[#718087] group-hover:text-[#929da4]"
                     )}
                   />
                   <span className="truncate">{item.label}</span>
                 </div>
                 <span
                   className={cn(
-                    "text-[10px] font-mono px-1.5 py-0.5 rounded shrink-0 ml-2",
+                    "text-[10px] font-mono px-1.5 py-0.5 rounded-[2px] shrink-0 ml-2",
                     isActive
-                      ? "bg-[#242532] text-zinc-200 border border-white/10"
-                      : "bg-[#101116] text-zinc-500 border border-white/[0.04] group-hover:text-zinc-400"
+                      ? "bg-[#07090b] text-[#00f5c8] border border-[#00f5c8]/30 font-bold"
+                      : "bg-[#07090b] text-[#718087] border border-[#263238] group-hover:text-[#929da4]"
                   )}
                 >
                   {item.count}
@@ -170,12 +170,12 @@ export function BlocksSidebar({
       </div>
 
       {/* Features & Capabilities Filter Section */}
-      <div className="pt-2 border-t border-white/[0.06]">
+      <div className="pt-2 border-t border-[#263238]">
         <div className="flex items-center justify-between mb-2 px-1">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 font-semibold">
-            Capabilities
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#718087] font-semibold">
+            // CAPABILITIES
           </span>
-          <SparklesIcon size={12} className="text-zinc-500" />
+          <SparklesIcon size={12} className="text-[#00f5c8]" />
         </div>
 
         <div className="space-y-1">
@@ -189,19 +189,19 @@ export function BlocksSidebar({
                   onCloseMobile?.();
                 }}
                 className={cn(
-                  "w-full flex items-center justify-between px-2.5 py-2 rounded-md text-xs font-medium transition-colors cursor-pointer group text-left",
+                  "w-full flex items-center justify-between px-2.5 py-1.5 rounded-[4px] text-xs font-mono font-medium transition-colors cursor-pointer group text-left",
                   isActive
-                    ? "bg-[#181920] border border-[#272935] text-white font-medium shadow-sm"
-                    : "text-zinc-400 hover:text-zinc-200 hover:bg-[#121318] border border-transparent"
+                    ? "bg-[#151d20] border border-[#00d9ff]/40 text-[#00d9ff] font-semibold shadow-[0_0_10px_rgba(0,217,255,0.12)]"
+                    : "text-[#929da4] hover:text-[#f3f6f5] hover:bg-[#101719] border border-transparent"
                 )}
               >
                 <span className="truncate">{item.label}</span>
                 <span
                   className={cn(
-                    "text-[10px] font-mono px-1.5 py-0.5 rounded shrink-0 ml-2",
+                    "text-[10px] font-mono px-1.5 py-0.5 rounded-[2px] shrink-0 ml-2",
                     isActive
-                      ? "bg-[#242532] text-zinc-200 border border-white/10"
-                      : "bg-[#101116] text-zinc-500 border border-white/[0.04] group-hover:text-zinc-400"
+                      ? "bg-[#07090b] text-[#00d9ff] border border-[#00d9ff]/30 font-bold"
+                      : "bg-[#07090b] text-[#718087] border border-[#263238] group-hover:text-[#929da4]"
                   )}
                 >
                   {item.count}
@@ -213,41 +213,32 @@ export function BlocksSidebar({
       </div>
 
       {/* Resource Links */}
-      <div className="pt-2 border-t border-white/[0.06] space-y-1">
+      <div className="pt-2 border-t border-[#263238] space-y-1 font-mono text-[11.5px]">
         <Link
           href="/docs"
-          className="flex items-center justify-between px-2.5 py-2 rounded-md text-xs text-zinc-400 hover:text-zinc-200 hover:bg-[#121318] transition-colors font-medium"
+          className="flex items-center justify-between px-2.5 py-1.5 rounded-[4px] text-[#929da4] hover:text-[#00f5c8] hover:bg-[#101719] transition-colors"
         >
-          <span>Documentation</span>
-          <ChevronRightIcon size={12} className="text-zinc-600" />
+          <span>SYSTEM_MANUAL</span>
+          <ChevronRightIcon size={12} className="text-[#718087]" />
         </Link>
         <Link
           href="/blog"
-          className="flex items-center justify-between px-2.5 py-2 rounded-md text-xs text-zinc-400 hover:text-zinc-200 hover:bg-[#121318] transition-colors font-medium"
+          className="flex items-center justify-between px-2.5 py-1.5 rounded-[4px] text-[#929da4] hover:text-[#00f5c8] hover:bg-[#101719] transition-colors"
         >
-          <span>Manifesto & Architecture</span>
-          <ChevronRightIcon size={12} className="text-zinc-600" />
+          <span>MANIFESTO</span>
+          <ChevronRightIcon size={12} className="text-[#718087]" />
         </Link>
-        <a
-          href="https://github.com/Ashwin-Khowala/rnblocks/discussions"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-between px-2.5 py-2 rounded-md text-xs text-zinc-400 hover:text-zinc-200 hover:bg-[#121318] transition-colors font-medium"
-        >
-          <span>Community Discussions</span>
-          <ChevronRightIcon size={12} className="text-zinc-600" />
-        </a>
         <a
           href="https://github.com/Ashwin-Khowala/rnblocks"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-between px-2.5 py-2 rounded-md text-xs text-zinc-400 hover:text-zinc-200 hover:bg-[#121318] transition-colors font-medium"
+          className="flex items-center justify-between px-2.5 py-1.5 rounded-[4px] text-[#929da4] hover:text-[#00d9ff] hover:bg-[#101719] transition-colors"
         >
           <div className="flex items-center gap-2">
             <GitHubIcon size={13} />
-            <span>GitHub Repository</span>
+            <span>GITHUB_REPO</span>
           </div>
-          <ChevronRightIcon size={12} className="text-zinc-600" />
+          <ChevronRightIcon size={12} className="text-[#718087]" />
         </a>
       </div>
     </div>
@@ -275,13 +266,13 @@ export function BlocksSidebar({
         >
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-[#07090b]/80 backdrop-blur-sm transition-opacity"
             onClick={onCloseMobile}
             aria-hidden="true"
           />
 
           {/* Drawer Sheet */}
-          <div className="relative ml-auto w-full max-w-xs sm:max-w-sm bg-[#06060a] border-l border-white/[0.1] p-5 h-full overflow-y-auto shadow-2xl z-10 flex flex-col justify-between">
+          <div className="relative ml-auto w-full max-w-xs sm:max-w-sm bg-[#0b1012] border-l border-[#263238] p-5 h-full overflow-y-auto shadow-2xl z-10 flex flex-col justify-between">
             {sidebarContent}
           </div>
         </div>

@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Nunito_Sans, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { Navbar, Footer, SiteGridBackground } from "@/components";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { FlagValues } from "flags/react";
@@ -75,6 +74,15 @@ export const metadata: Metadata = {
       "Production ready React Native blocks and screens. Discover, inspect live previews, and copy code directly into your Expo or React Native app.",
     siteName: "RNBlocks",
   },
+  icons: {
+    icon: [
+      { url: "/logo-mark.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon.png", sizes: "64x64", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   twitter: {
     card: "summary_large_image",
     title: "RNBlocks | The Open Source React Native & Expo UI Registry",
@@ -133,6 +141,7 @@ export default function RootLayout({
       </head>
       <body className={nunitoSans.className}>
         <ReactNativeWebRegistry>
+          <SiteGridBackground />
           <Navbar />
           <main style={{ minHeight: "calc(100vh - 60px - 280px)", display: "flex", flexDirection: "column" }}>
             {children}

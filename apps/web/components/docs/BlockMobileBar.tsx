@@ -72,14 +72,14 @@ export function BlockMobileBar({ blocks, currentBlock }: BlockMobileBarProps) {
   return (
     <>
       {/* ── Static, In-Flow Mobile Header (Never Floats on Scroll) ───── */}
-      <div className="lg:hidden flex items-center justify-between gap-3 pb-3 mb-4 border-b border-white/[0.06]">
+      <div className="lg:hidden flex items-center justify-between gap-3 pb-3 mb-4 border-b border-[#263238] font-mono">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-1.5 text-xs font-mono min-w-0">
-          <Link href="/blocks" className="text-[#9ca3af] hover:text-white transition-colors shrink-0">
-            Blocks
+        <div className="flex items-center gap-1.5 text-xs min-w-0">
+          <Link href="/blocks" className="text-[#929da4] hover:text-[#00f5c8] transition-colors shrink-0">
+            [BLOCKS]
           </Link>
-          <span className="text-[#71717a]">/</span>
-          <span className="text-white font-medium truncate">
+          <span className="text-[#263238]">/</span>
+          <span className="text-[#00f5c8] font-bold truncate">
             {getShortTitle(currentBlock.slug, currentBlock.title)}
           </span>
         </div>
@@ -87,11 +87,11 @@ export function BlockMobileBar({ blocks, currentBlock }: BlockMobileBarProps) {
         {/* Drawer Trigger Button (Fixed in-flow, scrolls away with page) */}
         <button
           onClick={openDrawer}
-          className="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.09] text-xs font-mono text-[#d1d5db] hover:text-white transition-colors cursor-pointer"
+          className="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] bg-[#101719] hover:bg-[#151d20] border border-[#263238] hover:border-[#00f5c8]/40 text-xs font-mono text-[#f3f6f5] hover:text-[#00f5c8] transition-colors cursor-pointer"
           aria-label="Open components drawer"
         >
-          <Layers size={13} className="text-[#32c798]" />
-          <span>Components ({blocks.length})</span>
+          <Layers size={13} className="text-[#00f5c8]" />
+          <span>UNITS ({blocks.length})</span>
         </button>
       </div>
 
@@ -111,7 +111,7 @@ export function BlockMobileBar({ blocks, currentBlock }: BlockMobileBarProps) {
           {/* Drawer Panel */}
           <aside
             className={cn(
-              "lg:hidden fixed inset-y-0 left-0 w-[310px] max-w-[85vw] h-dvh min-h-[100dvh] max-h-screen z-[101] flex flex-col bg-[#060609] border-r border-white/[0.08] transition-transform duration-300 ease-out",
+              "lg:hidden fixed inset-y-0 left-0 w-[310px] max-w-[85vw] h-dvh min-h-[100dvh] max-h-screen z-[101] flex flex-col bg-[#07090b] border-r border-[#263238] transition-transform duration-300 ease-out font-mono",
               drawerOpen
                 ? "translate-x-0 shadow-[20px_0_50px_rgba(0,0,0,0.95)] pointer-events-auto"
                 : "-translate-x-full shadow-none pointer-events-none"
@@ -119,44 +119,44 @@ export function BlockMobileBar({ blocks, currentBlock }: BlockMobileBarProps) {
             aria-label="Component Navigation Drawer"
           >
             {/* Drawer Header */}
-            <div className="shrink-0 px-4 py-3.5 border-b border-white/[0.08] flex items-center justify-between bg-white/[0.01]">
+            <div className="shrink-0 px-4 py-3.5 border-b border-[#263238] flex items-center justify-between bg-[#0b1012]">
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#1f1f27] to-[#101014] border border-white/[0.12] flex items-center justify-center text-white shadow-[0_0_10px_rgba(50,199,152,0.12)]">
-                  <Layers size={14} className="text-[#32c798]" />
+                <div className="w-7 h-7 rounded-[4px] bg-[#101719] border border-[#263238] flex items-center justify-center text-[#00f5c8] shadow-[0_0_10px_rgba(0,245,200,0.2)]">
+                  <Layers size={14} />
                 </div>
                 <div>
-                  <span className="font-bold text-[14px] text-white tracking-tight block leading-tight">
-                    Registry Blocks
+                  <span className="font-bold text-[13px] text-[#f3f6f5] tracking-tight block leading-tight">
+                    REGISTRY UNITS
                   </span>
-                  <span className="text-[11px] font-mono text-[#71717a] block leading-tight">
-                    React Native & Expo
+                  <span className="text-[10px] text-[#718087] block leading-tight">
+                    SYS // EXP-52 NATIVE
                   </span>
                 </div>
               </div>
               <button
                 onClick={closeDrawer}
-                className="w-8 h-8 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] flex items-center justify-center text-[#9ca3af] hover:text-white transition-colors cursor-pointer"
+                className="w-7 h-7 rounded-[4px] bg-[#101719] hover:bg-[#151d20] border border-[#263238] flex items-center justify-center text-[#929da4] hover:text-[#00f5c8] transition-colors cursor-pointer"
                 aria-label="Close drawer"
               >
-                <X size={15} />
+                <X size={14} />
               </button>
             </div>
 
             {/* Search Input */}
-            <div className="shrink-0 p-3 border-b border-white/[0.06]">
+            <div className="shrink-0 p-3 border-b border-[#263238]">
               <div className="relative flex items-center">
-                <Search size={14} className="absolute left-3 text-[#71717a] pointer-events-none" />
+                <Search size={13} className="absolute left-3 text-[#718087] pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Search components..."
+                  placeholder="FILTER_UNITS..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] focus:border-[#32c798]/50 focus:bg-white/[0.06] rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-[#71717a] focus:outline-none transition-colors font-mono"
+                  className="w-full bg-[#101719] hover:bg-[#151d20] border border-[#263238] focus:border-[#00f5c8]/50 focus:bg-[#151d20] rounded-[4px] pl-9 pr-8 py-2 text-xs text-[#f3f6f5] placeholder-[#718087] focus:outline-none transition-colors font-mono"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 p-0.5 text-[#71717a] hover:text-white cursor-pointer"
+                    className="absolute right-2.5 p-0.5 text-[#718087] hover:text-white cursor-pointer"
                     aria-label="Clear search"
                   >
                     <X size={12} />
@@ -169,33 +169,41 @@ export function BlockMobileBar({ blocks, currentBlock }: BlockMobileBarProps) {
             <div className="flex-1 min-h-0 overflow-y-auto p-3 space-y-5 no-scrollbar">
               {/* Getting Started */}
               <div>
-                <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#71717a] block mb-1.5 px-2">
-                  Getting Started
+                <span className="text-[10px] font-bold text-[#00f5c8] uppercase tracking-wider block mb-1.5 px-2">
+                  // SYSTEM MANUAL
                 </span>
                 <div className="space-y-0.5">
                   <Link
                     href="/docs"
                     onClick={closeDrawer}
-                    className="flex items-center justify-between py-2 px-2.5 rounded-lg text-xs font-medium text-[#a1a1aa] hover:bg-white/[0.04] hover:text-white transition-colors"
+                    className="nav-hud-item flex items-center justify-between py-2 px-2.5 rounded-[4px] text-xs text-[#929da4] hover:bg-[#151d20] transition-colors"
                   >
-                    <span>Documentation</span>
-                    <ChevronRight size={13} className="text-[#52525b]" />
+                    <span>[DOCUMENTATION]</span>
+                    <ChevronRight size={13} className="text-[#718087]" />
                   </Link>
                   <Link
                     href="/blocks"
                     onClick={closeDrawer}
-                    className="flex items-center justify-between py-2 px-2.5 rounded-lg text-xs font-medium text-[#a1a1aa] hover:bg-white/[0.04] hover:text-white transition-colors"
+                    className="nav-hud-item flex items-center justify-between py-2 px-2.5 rounded-[4px] text-xs text-[#929da4] hover:bg-[#151d20] transition-colors"
                   >
-                    <span>All Blocks Gallery</span>
-                    <ChevronRight size={13} className="text-[#52525b]" />
+                    <span>[ALL_BLOCKS]</span>
+                    <ChevronRight size={13} className="text-[#718087]" />
                   </Link>
                   <Link
                     href="/docs/cli"
                     onClick={closeDrawer}
-                    className="flex items-center justify-between py-2 px-2.5 rounded-lg text-xs font-medium text-[#a1a1aa] hover:bg-white/[0.04] hover:text-white transition-colors"
+                    className="nav-hud-item flex items-center justify-between py-2 px-2.5 rounded-[4px] text-xs text-[#929da4] hover:bg-[#151d20] transition-colors"
                   >
-                    <span>CLI Reference</span>
-                    <ChevronRight size={13} className="text-[#52525b]" />
+                    <span>[CLI_TOOLING]</span>
+                    <ChevronRight size={13} className="text-[#718087]" />
+                  </Link>
+                  <Link
+                    href="/contribute"
+                    onClick={closeDrawer}
+                    className="nav-hud-item flex items-center justify-between py-2 px-2.5 rounded-[4px] text-xs text-[#929da4] hover:bg-[#151d20] transition-colors"
+                  >
+                    <span>[CONTRIBUTE]</span>
+                    <ChevronRight size={13} className="text-[#718087]" />
                   </Link>
                 </div>
               </div>
@@ -203,11 +211,8 @@ export function BlockMobileBar({ blocks, currentBlock }: BlockMobileBarProps) {
               {/* Components List */}
               <div>
                 <div className="flex items-center justify-between mb-1.5 px-2">
-                  <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#71717a]">
-                    Components
-                  </span>
-                  <span className="text-[10px] font-mono text-[#52525b] bg-white/[0.04] px-1.5 py-0.5 rounded">
-                    {filteredBlocks.length}
+                  <span className="text-[10px] font-bold text-[#00d9ff] uppercase tracking-wider">
+                    // UNITS [{filteredBlocks.length}]
                   </span>
                 </div>
                 <div className="space-y-0.5">
@@ -219,17 +224,17 @@ export function BlockMobileBar({ blocks, currentBlock }: BlockMobileBarProps) {
                         href={`/blocks/${item.slug}`}
                         onClick={closeDrawer}
                         className={cn(
-                          "flex items-center justify-between py-2 px-2.5 rounded-lg text-xs font-medium transition-colors",
+                          "flex items-center justify-between py-2 px-2.5 rounded-[4px] text-xs transition-colors",
                           isCurrent
-                            ? "bg-white/[0.08] text-white font-semibold shadow-sm"
-                            : "text-[#a1a1aa] hover:bg-white/[0.04] hover:text-white"
+                            ? "bg-[#00f5c8]/15 text-[#00f5c8] font-bold border border-[#00f5c8]/30 shadow-sm"
+                            : "nav-hud-item text-[#929da4] hover:bg-[#151d20]"
                         )}
                       >
                         <span className="truncate">{getShortTitle(item.slug, item.title)}</span>
                         {isCurrent ? (
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#32c798] shadow-[0_0_8px_rgba(50,199,152,0.9)] shrink-0" />
+                          <span className="w-1.5 h-1.5 rounded-[1px] bg-[#00f5c8] shadow-[0_0_6px_#00f5c8] shrink-0" />
                         ) : (
-                          <span className="text-[10px] font-mono text-[#52525b] uppercase shrink-0">
+                          <span className="text-[9.5px] font-mono text-[#718087] uppercase shrink-0">
                             {item.category}
                           </span>
                         )}
@@ -237,8 +242,8 @@ export function BlockMobileBar({ blocks, currentBlock }: BlockMobileBarProps) {
                     );
                   })}
                   {filteredBlocks.length === 0 && (
-                    <div className="py-6 text-center text-xs text-[#71717a] font-mono">
-                      No components match &ldquo;{searchQuery}&rdquo;
+                    <div className="py-6 text-center text-xs text-[#718087] font-mono">
+                      // NO_UNITS_MATCH &ldquo;{searchQuery}&rdquo;
                     </div>
                   )}
                 </div>
@@ -246,15 +251,15 @@ export function BlockMobileBar({ blocks, currentBlock }: BlockMobileBarProps) {
             </div>
 
             {/* Drawer Footer */}
-            <div className="shrink-0 px-4 py-3 pb-[max(14px,env(safe-area-inset-bottom))] border-t border-white/[0.08] bg-[#060609] flex items-center justify-between text-[11px] font-mono text-[#71717a]">
-              <span>RNBlocks Registry</span>
+            <div className="shrink-0 px-4 py-3 pb-[max(14px,env(safe-area-inset-bottom))] border-t border-[#263238] bg-[#0b1012] flex items-center justify-between text-[10.5px] font-mono text-[#718087]">
+              <span>RNBLOCKS // EXP-52</span>
               <a
                 href="https://github.com/Ashwin-Khowala/rnblocks"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#a1a1aa] hover:text-white transition-colors"
+                className="text-[#929da4] hover:text-[#00f5c8] transition-colors"
               >
-                GitHub ↗
+                GITHUB [↗]
               </a>
             </div>
           </aside>

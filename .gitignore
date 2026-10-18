@@ -58,3 +58,7 @@ apps/apps/
 *.tsbuildinfo
 next-env.d.ts
 **/next-env.d.ts
+
+# test screenshots
+shot_*.png
+*.shot.png

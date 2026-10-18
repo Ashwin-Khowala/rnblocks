@@ -1,5 +1,9 @@
 # UI Aesthetics, Mobile Hierarchy & Copy Rules
 
+## 0. Mandatory Design System Contract
+- **Read `DESIGN.md` & `frontend-design` skill**: Before making UI changes, consult `DESIGN.md` for exact typography, border, color, and spacing tokens.
+- **Anti-AI Tells**: Avoid screaming uppercase eyebrow labels (`font-mono text-xs uppercase tracking-wider`), repetitive identical card grids, cream/terracotta cliches, and fade-up animation fatigue. Keep backgrounds disciplined and anchor boldness in one memorable centerpiece.
+
 ## 1. No Pill Shape Overuse
 - **DO NOT indiscriminately apply `rounded-full` / pill styling** to cards, containers, headers, or major structural wrappers.
 - Use intentional, proportional border radii:

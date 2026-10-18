@@ -1,18 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #070709;
-  --color-bg-secondary: #09090c;
-  --color-bg-card: #0d0d12;
-  --color-bg-card-hover: #14141c;
-  --color-bg-elevated: #1a1a24;
+  --color-bg-primary: #07090b;
+  --color-bg-secondary: #0b1012;
+  --color-bg-panel: #101719;
+  --color-bg-elevated: #151d20;
+  --color-bg-card: #0e1417;
+  --color-bg-card-hover: #131c20;
 
-  --color-text-primary: #f5f5f5;
-  --color-text-secondary: #9ca3af;
-  --color-text-muted: #71717a;
+  --color-text-primary: #f3f6f5;
+  --color-text-secondary: #929da4;
+  --color-text-muted: #718087;
 
-  --color-accent-green: #32c798;
-  --color-accent-green-hover: #4ade80;
+  --color-accent-mint: #00f5c8;
+  --color-accent-mint-hover: #2ff9d3;
+  --color-accent-cyan: #00d9ff;
+  --color-accent-cyan-hover: #38e1ff;
+
+  --color-border-subtle: #1b262c;
+  --color-border-tech: #263238;
 
   --font-sans: var(--font-sans), 'Nunito Sans', system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-mono), 'JetBrains Mono', monospace;
@@ -21,43 +27,48 @@
 }
 
 :root {
-  /* Backgrounds */
-  --bg-primary: #070709;
-  --bg-secondary: #09090c;
-  --bg-card: #0d0d12;
-  --bg-card-hover: #14141c;
-  --bg-elevated: #1a1a24;
+  /* Background Surfaces */
+  --bg-primary: #07090b;
+  --bg-secondary: #0b1012;
+  --bg-panel: #101719;
+  --bg-elevated: #151d20;
+  --bg-card: #0e1417;
+  --bg-card-hover: #131c20;
 
-  /* Text */
-  --text-primary: #f5f5f5;
-  --text-secondary: #9ca3af;
-  --text-muted: #71717a;
+  /* Typography Colors */
+  --text-primary: #f3f6f5;
+  --text-secondary: #929da4;
+  --text-muted: #718087;
 
-  /* Accent */
-  --accent-green: #32c798;
-  --accent: #f5f5f5;
-  --accent-hover: #ffffff;
-  --accent-foreground: #0a0a0a;
+  /* Accents */
+  --accent-mint: #00f5c8;
+  --accent-cyan: #00d9ff;
+  --accent: #00f5c8;
+  --accent-hover: #2ff9d3;
+  --accent-foreground: #07090b;
 
-  /* Borders */
-  --border: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.15);
+  /* Precision HUD Borders */
+  --border-subtle: #1b262c;
+  --border-tech: #263238;
+  --border: rgba(0, 245, 200, 0.12);
+  --border-hover: rgba(0, 245, 200, 0.3);
 
   /* Typography */
   --font-sans: var(--font-sans), 'Nunito Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: var(--font-mono), 'JetBrains Mono', monospace;
   --font-brand: var(--font-brand), 'TimesNewRomanMT-Italic', 'Times New Roman', Georgia, serif;
 
-  /* Radii */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 18px;
+  /* Geometric Radii (Strictly Geometric / Chamfered) */
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
   --radius-full: 9999px;
 
-  /* Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* Motion & Transitions */
+  --transition-fast: 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .font-brand,
@@ -71,13 +82,13 @@
 }
 
 ::selection {
-  background-color: #ffffff !important;
-  color: #000000 !important;
+  background-color: #00f5c8 !important;
+  color: #07090b !important;
 }
 
 ::-moz-selection {
-  background-color: #ffffff !important;
-  color: #000000 !important;
+  background-color: #00f5c8 !important;
+  color: #07090b !important;
 }
 
 html, body {
@@ -151,29 +162,34 @@ main:not(:has(.landing-root)) {
   }
 }
 
-/* Standard Button Component Utilities */
+/* Standard Button Component Utilities - Cyberpunk / Robotic Precision */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: #ffffff;
-  color: #09090b;
-  font-weight: 600;
-  font-size: 14px;
+  background: #00f5c8;
+  color: #07090b;
+  font-weight: 700;
+  font-size: 13.5px;
   padding: 10px 18px;
-  border-radius: 8px;
-  transition: background 0.15s ease, transform 0.15s ease;
+  border-radius: var(--radius-md);
+  border: 1px solid #2ff9d3;
+  box-shadow: 0 0 20px -4px rgba(0, 245, 200, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   text-decoration: none;
+  letter-spacing: -0.01em;
 }
 
 .btn-primary:hover {
-  background: #f4f4f5;
+  background: #2ff9d3;
+  box-shadow: 0 0 28px -4px rgba(0, 245, 200, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
 }
 
 .btn-primary:active {
-  transform: scale(0.98);
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-secondary {
@@ -181,25 +197,29 @@ main:not(:has(.landing-root)) {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  color: #f3f4f6;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  font-weight: 500;
-  font-size: 14px;
+  background: rgba(16, 23, 25, 0.85);
+  color: #f3f6f5;
+  border: 1px solid #263238;
+  font-weight: 600;
+  font-size: 13.5px;
   padding: 10px 18px;
-  border-radius: 8px;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  border-radius: var(--radius-md);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   text-decoration: none;
+  backdrop-filter: blur(8px);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(21, 29, 32, 0.95);
+  border-color: rgba(0, 245, 200, 0.4);
+  color: #ffffff;
+  box-shadow: 0 0 16px -4px rgba(0, 245, 200, 0.2);
+  transform: translateY(-1px);
 }
 
 .btn-secondary:active {
-  transform: scale(0.98);
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-ghost {
@@ -208,18 +228,137 @@ main:not(:has(.landing-root)) {
   justify-content: center;
   gap: 8px;
   background: transparent;
-  color: #9ca3af;
+  color: #929da4;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13.5px;
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   transition: color 0.15s ease, background 0.15s ease;
   text-decoration: none;
 }
 
 .btn-ghost:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
+  color: #00f5c8;
+  background: rgba(0, 245, 200, 0.06);
+}
+
+/* Hero Action Deck - Responsive 50/50 Mobile Cockpit Bar */
+.hero-action-deck {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.hero-action-deck > a {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  max-width: calc(50% - 4px) !important;
+  overflow: hidden !important;
+  padding: 10px 6px !important;
+  font-size: 11px !important;
+  gap: 5px !important;
+  letter-spacing: -0.01em;
+  min-height: 44px;
+}
+
+@media (min-width: 640px) {
+  .hero-action-deck {
+    width: auto;
+    max-width: none;
+    gap: 12px;
+  }
+  .hero-action-deck > a {
+    flex: initial !important;
+    width: auto !important;
+    max-width: none !important;
+    overflow: visible !important;
+    padding: 10px 18px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* Cyberpunk / Robotic HUD Utilities */
+.hud-panel {
+  background: #101719;
+  border: 1px solid #263238;
+  position: relative;
+}
+
+.hud-panel-elevated {
+  background: #151d20;
+  border: 1px solid #263238;
+  position: relative;
+}
+
+.hud-crosshair {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  pointer-events: none;
+}
+.hud-crosshair::before,
+.hud-crosshair::after {
+  content: "";
+  position: absolute;
+  background: #00f5c8;
+}
+.hud-crosshair::before {
+  top: 4px;
+  left: 0;
+  width: 9px;
+  height: 1px;
+}
+.hud-crosshair::after {
+  top: 0;
+  left: 4px;
+  width: 1px;
+  height: 9px;
+}
+
+/* Chamfered Corners */
+.hud-chamfer-tr {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+}
+
+.hud-chamfer-bl {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+.hud-chamfer-both {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+/* Subtle Scanline Overlay */
+.hud-scanline {
+  background: linear-gradient(
+    rgba(16, 23, 25, 0) 50%,
+    rgba(0, 245, 200, 0.02) 50%
+  );
+  background-size: 100% 4px;
+}
+
+/* Data Pulse Animation */
+@keyframes hudPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.98); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+@keyframes hudTrace {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Keyframes for smooth animations */
@@ -383,4 +522,41 @@ main:not(:has(.landing-root)) {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Cyberpunk HUD Nav Hover Glitch & Movement */
+@keyframes hud-jitter {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-1px, 0.5px); }
+  50% { transform: translate(1px, -0.5px); }
+  75% { transform: translate(-0.5px, 0.5px); }
+  100% { transform: translate(0, 0); }
+}
+
+.nav-hud-item {
+  position: relative;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-hud-item:hover {
+  color: #00f5c8 !important;
+  text-shadow: 0 0 8px rgba(0, 245, 200, 0.6), 0 0 16px rgba(0, 245, 200, 0.25);
+  background-color: rgba(0, 245, 200, 0.08);
+  border-color: rgba(0, 245, 200, 0.35);
+  animation: hud-jitter 0.18s ease-in-out;
+}
+
+.nav-hud-item:hover .nav-bracket-l {
+  color: #00f5c8 !important;
+  opacity: 1 !important;
+  transform: translateX(-2.5px);
+  transition: transform 0.15s ease-out, color 0.15s ease-out;
+}
+
+.nav-hud-item:hover .nav-bracket-r {
+  color: #00f5c8 !important;
+  opacity: 1 !important;
+  transform: translateX(2.5px);
+  transition: transform 0.15s ease-out, color 0.15s ease-out;
+}
+
 

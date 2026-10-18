@@ -57,8 +57,11 @@ You are an expert full-stack React Native and Next.js engineer pair programming 
 ---
 
 ## 5. UI Design, Aesthetics & Responsiveness
+- **MANDATORY DESIGN SPECS:** Before undertaking ANY UI work (Next.js web pages, components, or React Native registry blocks), **read `DESIGN.md` and `.agents/skills/frontend-design/SKILL.md`** first. Never guess color tokens, radii, or typography scales.
+- **Give the Agent Eyes (Visual Verification):** For any UI modification, verify visually at both mobile (375px) and desktop (1280px+) widths using MCP browser tools or screenshot inspection. Fix layout shifts, awkward wrapping, and contrast issues before completing tasks.
+- **No Generic AI Tells:** Banish the default AI tells: screaming uppercase eyebrow labels, repetitive identical card grids, cream/terracotta cliches, and fade-up animation fatigue. Keep backgrounds disciplined and anchor boldness in one memorable centerpiece.
 - **No Excessive Pill Shapes:** Do not spam `rounded-full` / pill shapes across every UI element or card. Use intentional, proportional border radii (`16-24` for outer cards, `8-12` for buttons).
-- **Color & Border Harmony:** Avoid jarring or mismatched border and background colors. Dark canvas uses `#07070A` or `#0A0A0F` with subtle neutral borders (`rgba(255,255,255,0.08)`).
+- **Color & Border Harmony:** Avoid jarring or mismatched border and background colors. Dark canvas uses `#070709` or `#050508` with subtle neutral borders (`rgba(255,255,255,0.08)`).
 - **Centralized Token Constants:** Every block must define a `const COLORS = { dark: {...}, light: {...} }` block at top of file and accept `theme?: "dark" | "light"`.
 - **Text Selection Styling:** Web text selection (`::selection`) must be clean and high-contrast (e.g., white background with black text or neutral theme-matched contrast).
 - **Mobile & Small Screen Hierarchy:** Always ensure mobile and small screen views (tested from 375px iPhone SE to 1440px desktop) have distinct visual hierarchy:
@@ -103,6 +106,7 @@ Before proposing changes or asking user review, run the complete verification su
 ## 10. Agent Skills & Subagents Directory
 The workspace provides specialized agent skills in `.agents/skills/` and subagent definitions in `.agents/subagents/`:
 - **Skills**:
+  - `frontend-design`: Compact planning, anti-AI tell prevention, and visual inspection checklists.
   - `block-authoring`: Complete authoring guide for self-contained React Native blocks.
   - `chart-and-motion-engine`: 60fps animations, PanResponder scrubbing, and charting.
   - `cross-platform-auditor`: Automated & manual audit against DOM leaks and native crashes.

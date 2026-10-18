@@ -1,129 +1,138 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { Terminal } from "lucide-react";
-import { CopyButton } from "@/components/CopyButton";
-import { NextIcon } from "@/components/icons";
-import { BLOCKS_DATA } from "@/data/blocks";
+import { Terminal, ArrowRight, Cpu, Layers, ShieldCheck, Zap } from "lucide-react";
+import { HeroBackground, HeroWorkbench } from "@/components";
 
 export function Hero() {
-  const [pm, setPm] = useState<"npx" | "pnpm" | "bun">("npx");
-
-  const trendChartItem = BLOCKS_DATA.find((b) => b.slug === "trend-chart");
-  const TrendChartComponent = trendChartItem?.Component || (() => null);
-
-  const cliCommands = {
-    npx: "npx @rnblocks/cli add trend-chart",
-    pnpm: "pnpm dlx @rnblocks/cli add trend-chart",
-    bun: "bunx @rnblocks/cli add trend-chart",
-  };
-
   return (
-    <section className="relative overflow-hidden bg-[#070709] pt-[116px] pb-11 md:pt-[136px] md:pb-[108px]">
-      {/* Continuous Ambient Glow (never clips on viewport edges) */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-90"
-        style={{
-          backgroundImage:
-            "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(50, 199, 152, 0.09) 0%, transparent 80%), radial-gradient(ellipse 40% 60% at 75% 45%, rgba(99, 102, 241, 0.07) 0%, transparent 65%), radial-gradient(ellipse 40% 60% at 25% 45%, rgba(50, 199, 152, 0.06) 0%, transparent 65%)",
-        }}
-        aria-hidden="true"
-      />
+    <section id="hero" className="relative overflow-hidden bg-transparent pt-[90px] pb-14 md:pt-[115px] md:pb-20">
+      {/* ── Silicon Bus Traces & CAD Reticle Engine ── */}
+      <HeroBackground />
 
-      {/* Bottom fade transition */}
-      <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-[140px] bg-gradient-to-b from-transparent to-[#070709]"
-        aria-hidden="true"
-      />
-
-      <div className="container-main relative z-20 grid grid-cols-1 items-center gap-6 md:gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-        {/* Left Column: Headline, Description, CTAs, and CLI */}
-        <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-          {/* Main Title */}
-          <h1 className="max-w-[440px] md:max-w-[640px] text-[35px] sm:text-[40px] md:text-[52px] lg:text-[64px] font-extrabold leading-[1.08] tracking-[-1px] md:tracking-[-2px] text-white text-balance mb-3.5 md:mb-5">
-            UI blocks for{" "}
-            <span className="font-editorial italic font-normal text-white pl-1">
-              React Native.
-            </span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="max-w-[320px] md:max-w-[520px] text-[13.5px] md:text-[16.5px] leading-[1.5] md:leading-[1.6] text-[#9ca3af] mb-5 md:mb-7">
-            <span className="inline md:hidden">
-              Open source copy-paste blocks. Zero dependencies.
-            </span>
-            <span className="hidden md:inline">
-              Explore live previews, copy clean source code, or install directly into your codebase. Zero runtime dependencies and full New Architecture support.
-            </span>
-          </p>
-
-          {/* Actions */}
-          <div className="flex items-center justify-center lg:justify-start gap-2 sm:gap-3.5 w-full md:w-auto mb-5 md:mb-7">
+      <div className="container-main relative z-10">
+        {/* ── Asymmetric Top Command Deck ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-10 md:mb-14">
+          {/* Left Column (7 cols): Headline, Technical Positioning & CTA Deck */}
+          <div className="lg:col-span-7 text-left">
+            {/* Top Announcement Badge (Industrial HUD Tag - Optimized for Mobile & Desktop) */}
             <Link
-              href="/blocks"
-              className="btn-primary h-[35px] md:h-auto px-3.5 md:px-[22px] py-0 md:py-[11px] text-[12px] md:text-[14.5px] font-semibold rounded-full md:rounded-[10px] flex-1 max-w-[135px] md:max-w-none md:flex-initial"
+              href="/docs/getting-started"
+              className="group mb-3 sm:mb-4 inline-flex items-center gap-1.5 xs:gap-2 sm:gap-2.5 rounded-[4px] border border-[#263238] bg-[#0b1012]/90 backdrop-blur-md px-2 xs:px-2.5 sm:px-3 py-0.5 sm:py-1 text-[9.5px] xs:text-[10.5px] sm:text-[11px] font-mono text-[#929da4] transition-all hover:border-[#00f5c8]/40 hover:text-[#f3f6f5] max-w-full"
             >
-              <span>Explore Blocks</span>
-              <NextIcon size={14} className="md:w-4 md:h-4" />
+              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-[1px] bg-[#00f5c8] opacity-75" />
+                <span className="relative inline-flex rounded-[1px] h-1.5 w-1.5 sm:h-2 sm:w-2 bg-[#00f5c8]" />
+              </span>
+              <span className="text-[#00f5c8] font-bold shrink-0 text-[9px] xs:text-[10px] sm:text-[11px]">[LAB.01]</span>
+              <span className="truncate hidden sm:inline">Expo SDK 52 • New Architecture Baseline</span>
+              <span className="truncate inline sm:hidden">Expo SDK 52 • New Architecture</span>
+              <span className="text-[#718087] group-hover:translate-x-0.5 transition-transform duration-150 shrink-0 text-[10px] sm:text-[11px]">→</span>
             </Link>
 
-            <Link
-              href="/docs"
-              className="btn-secondary h-[35px] md:h-auto px-3.5 md:px-[22px] py-0 md:py-[11px] text-[12px] md:text-[14.5px] font-semibold rounded-full md:rounded-[10px] flex-1 max-w-[135px] md:max-w-none md:flex-initial"
-            >
-              <Terminal size={14} />
-              <span>Docs</span>
-            </Link>
+            {/* Headline: Engineered UI. Native by Design. */}
+            <h1 className="text-[34px] sm:text-[48px] md:text-[58px] lg:text-[66px] font-extrabold leading-[1.02] tracking-tight text-[#f3f6f5] mb-4 text-balance">
+              Engineered UI. <br />
+              <span className="text-[#00f5c8] font-mono tracking-tight font-black">
+                Native by Design.
+              </span>
+            </h1>
+
+            {/* Supporting Copy */}
+            <p className="text-[14px] sm:text-[16px] md:text-[17px] leading-[1.6] text-[#929da4] mb-6 max-w-xl text-balance">
+              Explore, inspect, and install reusable React Native and Expo components. Own the source. Build without unnecessary dependencies.
+            </p>
+
+            {/* Primary Action Deck: Responsive 50/50 Mobile Cockpit Bar -> Desktop Bar */}
+            <div className="hero-action-deck">
+              <Link
+                href="/blocks"
+                className="btn-primary font-mono font-bold rounded-[6px] shadow-[0_0_24px_rgba(0,245,200,0.35)]"
+              >
+                <span className="truncate">EXPLORE 9 UNITS</span>
+                <ArrowRight size={13} className="shrink-0" />
+              </Link>
+
+              <Link
+                href="/docs"
+                className="btn-secondary font-mono font-semibold rounded-[6px] hover:border-[#00f5c8]/40 transition-all"
+              >
+                <Terminal size={13} className="text-[#00f5c8] shrink-0" />
+                <span className="truncate">SYSTEM MANUAL</span>
+              </Link>
+            </div>
           </div>
 
-          {/* Quick CLI Bar with Package Manager Switcher (Desktop only) */}
-          <div className="hidden md:flex flex-col w-full max-w-[460px] bg-[#0d0d10] border border-white/10 rounded-[14px] overflow-hidden shadow-[0_16px_32px_-8px_rgba(0,0,0,0.6)]">
-            <div className="flex items-center gap-1 bg-[#09090c] border-b border-white/[0.06] p-1 px-1.5">
-              {(["npx", "pnpm", "bun"] as const).map((tool) => (
-                <button
-                  key={tool}
-                  onClick={() => setPm(tool)}
-                  className={`px-3 py-1 text-xs font-mono font-semibold rounded-md transition-colors ${
-                    pm === tool
-                      ? "text-white bg-white/[0.08]"
-                      : "text-[#71717a] hover:text-white"
-                  }`}
-                >
-                  {tool}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex items-center justify-between p-2.5 px-3.5 gap-3">
-              <div className="flex items-center gap-2.5 font-mono text-[13px]">
-                <span className="text-[#32c798] font-bold select-none">$</span>
-                <span className="text-[#f3f4f6]">{cliCommands[pm]}</span>
+          {/* Right Column (5 cols): Robotic Engineering Diagnostics Schematic HUD (Desktop only to keep mobile hero punchy) */}
+          <div className="hidden lg:block lg:col-span-5 w-full">
+            <div className="relative bg-[#0b1012] border border-[#263238] rounded-[8px] p-5 font-mono text-[11.5px] shadow-[0_20px_48px_rgba(0,0,0,0.85)]">
+              {/* Corner Reticles */}
+              <div className="absolute top-2 left-2 text-[9px] text-[#718087]">┌ SYSTEM.DIAGNOSTICS</div>
+              <div className="absolute top-2 right-2 text-[9px] text-[#00f5c8] flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-[1px] bg-[#00f5c8] animate-pulse" />
+                <span>RUNNING</span> ┐
               </div>
-              <CopyButton text={cliCommands[pm]} label="Copy" />
-            </div>
-          </div>
-        </div>
 
-        {/* Right Column: Live Interactive Line Chart Showcase */}
-        <div className="flex items-center justify-center w-full">
-          <div className="relative w-full max-w-[460px] md:max-w-[540px] flex items-center justify-center">
-            {/* Ambient blur glow under chart */}
-            <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] md:w-[400px] h-[160px] md:h-[220px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.18)_0%,rgba(99,102,241,0.08)_50%,transparent_75%)] blur-[24px] md:blur-[34px] pointer-events-none z-0"
-              aria-hidden="true"
-            />
-            {/* Live Chart container with subtle floating shadow */}
-            <div className="relative z-10 w-full shadow-[0_24px_48px_-12px_rgba(0,0,0,0.8)] rounded-[20px]">
-              <TrendChartComponent
-                {...({
-                  theme: "dark",
-                  accentColor: "#10B981",
-                } as any)}
-              />
+              <div className="pt-5 pb-1 space-y-3">
+                <div className="bg-[#101719] border border-[#263238] rounded-[5px] p-3 space-y-2">
+                  <div className="flex items-center justify-between text-[#718087] text-[10px] border-b border-[#263238] pb-1.5">
+                    <span>SUBSYSTEM</span>
+                    <span>METRIC STATUS</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#929da4] flex items-center gap-2">
+                      <Cpu size={12} className="text-[#00f5c8]" />
+                      <span>RUNTIME OVERHEAD</span>
+                    </span>
+                    <span className="text-[#00f5c8] font-bold">0.00 KB</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#929da4] flex items-center gap-2">
+                      <Zap size={12} className="text-[#00d9ff]" />
+                      <span>TARGET FRAMERATE</span>
+                    </span>
+                    <span className="text-[#00d9ff] font-bold">60–120 FPS</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#929da4] flex items-center gap-2">
+                      <Layers size={12} className="text-[#00f5c8]" />
+                      <span>CODE DELIVERY</span>
+                    </span>
+                    <span className="text-[#f3f6f5] font-semibold">DIRECT COPY</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#929da4] flex items-center gap-2">
+                      <ShieldCheck size={12} className="text-[#00d9ff]" />
+                      <span>UPSTREAM SAFETY</span>
+                    </span>
+                    <span className="text-[#00d9ff] font-bold">LOCK-IN FREE</span>
+                  </div>
+                </div>
+
+                {/* Animated Bus Trace Status */}
+                <div className="bg-[#07090b] border border-[#263238] rounded-[5px] p-2.5 flex items-center justify-between text-[10.5px]">
+                  <span className="text-[#718087]">DISPATCH TARGET:</span>
+                  <span className="text-[#00f5c8] font-bold">@/components/</span>
+                </div>
+              </div>
+
+              <div className="mt-2 text-[9px] text-[#718087] flex items-center justify-between">
+                <span>└ PROTOCOL: SHADCN_FOR_REACT_NATIVE</span>
+                <span>VER: 0.1.6 ┘</span>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* ── Living Centerpiece: Dedicated Modular Split Workbench (Wide Layout) ── */}
+      <div className="w-full max-w-[1380px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 relative z-10">
+        <HeroWorkbench />
       </div>
     </section>
   );

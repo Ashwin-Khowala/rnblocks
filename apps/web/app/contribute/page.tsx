@@ -106,10 +106,15 @@ export default function ContributePage() {
               <span>Fork on GitHub</span>
               <ExternalLink size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
-            <Link href="/submit" className="btn-secondary inline-flex items-center gap-2 text-xs sm:text-sm">
+            <a
+              href="https://github.com/Ashwin-Khowala/rnblocks/blob/master/CONTRIBUTING.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary inline-flex items-center gap-2 text-xs sm:text-sm"
+            >
               <GitPullRequest size={15} />
-              <span>Submit Block Guide</span>
-            </Link>
+              <span>Contribution Guide</span>
+            </a>
             <Link
               href="/docs"
               className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#9ca3af] hover:text-white px-4 py-2 rounded-full border border-white/[0.08] hover:border-white/[0.18] bg-white/[0.03] transition-all"
@@ -140,10 +145,15 @@ export default function ContributePage() {
                   Design self-contained, responsive React Native components like dockers, pricing cards, bottom sheets, or navigation headers using clean TypeScript.
                 </p>
               </div>
-              <Link href="/submit" className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#32c798] hover:text-[#4ade80] transition-colors mt-auto">
+              <a
+                href="https://github.com/Ashwin-Khowala/rnblocks/blob/master/CONTRIBUTING.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#32c798] hover:text-[#4ade80] transition-colors mt-auto"
+              >
                 <span>Block submission format</span>
                 <ArrowRight size={13} />
-              </Link>
+              </a>
             </div>
 
             <div className="bg-[#07070a] border border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-white/20 transition-colors">
@@ -156,8 +166,8 @@ export default function ContributePage() {
                   Build end-to-end mobile screens like authentication carousels, paywalls, onboarding flows, and dashboards that developers can drop into Expo Router.
                 </p>
               </div>
-              <Link href="/screens" className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#38bdf8] hover:text-[#7dd3fc] transition-colors mt-auto">
-                <span>View screens gallery</span>
+              <Link href="/blocks" className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#38bdf8] hover:text-[#7dd3fc] transition-colors mt-auto">
+                <span>View blocks catalog</span>
                 <ArrowRight size={13} />
               </Link>
             </div>

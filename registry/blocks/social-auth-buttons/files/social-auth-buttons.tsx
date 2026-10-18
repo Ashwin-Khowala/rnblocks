@@ -112,7 +112,7 @@ export function SocialAuthButtons({
          * No callback was provided for this provider. In development, this simulates
          * an async authentication delay so you can preview the loading state.
          *
-         * ⚠️ This setTimeout is NEVER executed in production builds.
+         * NOTE: This setTimeout is NEVER executed in production builds.
          * In your app, wire up the real auth handler:
          *   <SocialAuthButtons onApplePress={() => signInWithApple()} />
          */

@@ -65,6 +65,8 @@ export interface TrendChartProps {
   unit?: string;
   /** Callback fired when a data point is hovered or tapped. */
   onPointSelect?: (point: TrendDataPoint, index: number) => void;
+  /** Whether to show the LIVE indicator badge in the top right. Defaults to true. */
+  showLiveBadge?: boolean;
 }
 
 // ─── Default Sample Data ───────────────────────────────────────────────────────
@@ -499,6 +501,7 @@ export function TrendChart({
   subtitle = "growth vs last week",
   unit = "",
   onPointSelect,
+  showLiveBadge = true,
 }: TrendChartProps) {
   const safeData = data && data.length >= 2 ? data : DEMO_CHART_DATA;
   const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
@@ -841,14 +844,16 @@ export function TrendChart({
         </View>
 
         {/* Top Right: Live Badge */}
-        <View
-          style={[
-            styles.liveBadge,
-            { backgroundColor: colors.badgeBg, borderColor: colors.badgeBorder },
-          ]}
-        >
-          <Text style={[styles.liveText, { color: accentColor }]}>LIVE</Text>
-        </View>
+        {showLiveBadge && (
+          <View
+            style={[
+              styles.liveBadge,
+              { backgroundColor: colors.badgeBg, borderColor: colors.badgeBorder },
+            ]}
+          >
+            <Text style={[styles.liveText, { color: accentColor }]}>LIVE</Text>
+          </View>
+        )}
       </View>
 
       {/* ── Chart Main Area: Y-Axis Reference Numbers + SVG Canvas ────── */}

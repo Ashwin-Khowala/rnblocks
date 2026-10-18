@@ -1,77 +1,176 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { BLOCKS_DATA } from "@/data/blocks";
+import { BLOCKS_DATA, BlockItem } from "@/data/blocks";
 import { BlockCard } from "@/components/BlockCard";
+import { CadCornerScale, ShowcaseBackground } from "@/components";
 import { NextIcon } from "@/components/icons";
 
+function getBentoCellClasses(index: number, total: number): string {
+  // Mobile border rule: every card except the last has bottom border on mobile
+  const isLast = index === total - 1;
+  const mobileBorder = isLast ? "" : "max-md:border-b border-[#263238]";
+
+  // Case 1: Exactly 1 card (e.g. Navigation, Calendar, Auth)
+  if (total === 1) {
+    return `md:col-span-12 ${mobileBorder}`;
+  }
+
+  // Case 2: Exactly 2 cards
+  if (total === 2) {
+    if (index === 0) return `md:col-span-6 md:border-r border-[#263238] ${mobileBorder}`;
+    return `md:col-span-6 ${mobileBorder}`;
+  }
+
+  // Case 3: Exactly 3 cards
+  if (total === 3) {
+    if (index === 0) return `md:col-span-6 md:border-r md:border-b border-[#263238] ${mobileBorder}`;
+    if (index === 1) return `md:col-span-6 md:border-b border-[#263238] ${mobileBorder}`;
+    return `md:col-span-12 ${mobileBorder}`;
+  }
+
+  // Case 4+: Alternating 7/5 and 5/7 pairs
+  const pairIndex = Math.floor(index / 2);
+  const isFirstInPair = index % 2 === 0;
+  const hasPartner = index + 1 < total;
+  const isOrphan = isFirstInPair && !hasPartner;
+  const isLastRow = index >= total - (total % 2 === 0 ? 2 : 1);
+
+  if (isOrphan) {
+    // Single remaining block at bottom of odd total (e.g. 5 or 9 items) spans full width
+    return `md:col-span-12 ${mobileBorder}`;
+  }
+
+  const isEvenPair = pairIndex % 2 === 0;
+  const bottomBorder = !isLastRow ? "md:border-b border-[#263238]" : "";
+
+  if (isEvenPair) {
+    // 7 on left, 5 on right
+    if (isFirstInPair) {
+      return `md:col-span-7 md:border-r border-[#263238] ${bottomBorder} ${mobileBorder}`;
+    }
+    return `md:col-span-5 ${bottomBorder} ${mobileBorder}`;
+  } else {
+    // 5 on left, 7 on right
+    if (isFirstInPair) {
+      return `md:col-span-5 md:border-r border-[#263238] ${bottomBorder} ${mobileBorder}`;
+    }
+    return `md:col-span-7 ${bottomBorder} ${mobileBorder}`;
+  }
+}
+
 export function ShowcaseGrid() {
-  const featuredBlocks = BLOCKS_DATA.filter((b) => b.type === "block").slice(0, 4);
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
+
+  const categoryCounts = useMemo(() => {
+    return {
+      all: BLOCKS_DATA.length,
+      charts: BLOCKS_DATA.filter((b) => b.category === "analytics" || b.slug.includes("chart")).length,
+      navigation: BLOCKS_DATA.filter((b) => b.category === "navigation" || b.slug.includes("docker")).length,
+      calendar: BLOCKS_DATA.filter((b) => b.category === "data-display" || b.slug.includes("calendar")).length,
+      auth: BLOCKS_DATA.filter((b) => b.category === "authentication" || b.slug.includes("auth")).length,
+    };
+  }, []);
+
+  const categories = [
+    { id: "all", label: "ALL UNITS", count: categoryCounts.all },
+    { id: "charts", label: "CHARTS", count: categoryCounts.charts },
+    { id: "navigation", label: "NAVIGATION", count: categoryCounts.navigation },
+    { id: "calendar", label: "CALENDAR", count: categoryCounts.calendar },
+    { id: "auth", label: "AUTH", count: categoryCounts.auth },
+  ];
+
+  const filteredBlocks = useMemo(() => {
+    if (selectedFilter === "all") {
+      return BLOCKS_DATA;
+    }
+    return BLOCKS_DATA.filter((b) => {
+      if (selectedFilter === "charts") return b.category === "analytics" || b.slug.includes("chart");
+      if (selectedFilter === "navigation") return b.category === "navigation" || b.slug.includes("docker");
+      if (selectedFilter === "calendar") return b.category === "data-display" || b.slug.includes("calendar");
+      if (selectedFilter === "auth") return b.category === "authentication" || b.slug.includes("auth");
+      return true;
+    });
+  }, [selectedFilter]);
 
   return (
-    <section className="bg-[#070709] border-t border-white/[0.06] pt-16 md:pt-20 pb-20 md:pb-24">
-      <div className="container-main">
+    <section id="components" className="bg-transparent border-t border-[#263238] pt-16 sm:pt-20 md:pt-28 pb-16 sm:pt-20 md:pb-28 relative overflow-hidden">
+      <ShowcaseBackground />
+      <div className="container-main relative z-10">
         {/* Section Header Row */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between max-w-[440px] md:max-w-[960px] mx-auto mb-7 md:mb-9 gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between max-w-[1200px] mx-auto mb-8 md:mb-12 gap-6">
           <div>
-            {/* Title */}
-            <h2 className="text-[21px] sm:text-[28px] md:text-[36px] font-extrabold text-white tracking-[-0.3px] md:tracking-[-0.8px]">
-              Components you <span className="font-editorial italic font-normal">copy</span> and own
+            <div className="inline-flex items-center gap-2 font-mono text-[11px] text-[#00f5c8] mb-2.5">
+              <span className="w-1.5 h-1.5 rounded-[1px] bg-[#00f5c8] shadow-[0_0_6px_#00f5c8]" />
+              <span>// REGISTRY INVENTORY [{BLOCKS_DATA.length} VERIFIED UNITS]</span>
+            </div>
+            <h2 className="text-[26px] sm:text-[34px] md:text-[42px] font-extrabold text-[#f3f6f5] tracking-tight">
+              Components you <span className="text-[#00f5c8] font-mono font-black">copy</span> and own
             </h2>
+            <p className="mt-2 text-[14px] text-[#929da4] max-w-lg leading-relaxed">
+              Drop production-grade blocks straight into your project. Customize colors, SVG paths, and animations with zero lock-in.
+            </p>
           </div>
 
-          {/* View All Pill Button */}
-          <Link
-            href="/blocks"
-            className="group inline-flex items-center justify-center gap-2 text-[12.5px] md:text-[13px] font-semibold text-[#f3f4f6] bg-white/[0.04] border border-white/[0.12] hover:border-[#32c798]/35 hover:bg-[#32c798]/[0.08] hover:text-[#32c798] px-3.5 md:px-4 py-1.5 md:py-2 rounded-full transition-all duration-200 whitespace-nowrap w-fit self-start sm:self-auto hover:-translate-y-0.5"
-          >
-            <span>View all components</span>
-            <NextIcon size={14} className="transition-transform duration-200 group-hover:translate-x-0.5" />
-          </Link>
+          {/* Filter Chips (Robotic Segmented Switches with Mobile Horizontal Track) */}
+          <div className="w-full lg:w-auto overflow-x-auto no-scrollbar scroll-smooth touch-pan-x p-1 bg-[#0b1012] border border-[#263238] rounded-[6px]">
+            <div className="flex items-center gap-1.5 w-max">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedFilter(cat.id)}
+                  className={`px-3 py-1.5 rounded-[4px] text-[11px] font-mono font-semibold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                    selectedFilter === cat.id
+                      ? "bg-[#151d20] text-[#00f5c8] border border-[#00f5c8]/40 shadow-[0_0_10px_rgba(0,245,200,0.15)]"
+                      : "text-[#718087] hover:text-[#f3f6f5] border border-transparent hover:bg-[#151d20]/50"
+                  }`}
+                >
+                  <span>{cat.label}</span>
+                  <span
+                    className={`text-[9.5px] px-1 py-0.2 rounded font-mono ${
+                      selectedFilter === cat.id
+                        ? "bg-[#00f5c8]/20 text-[#00f5c8] font-bold"
+                        : "bg-[#151d20] text-[#718087]"
+                    }`}
+                  >
+                    {cat.count}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Bento Grid Architecture */}
-        <div className="w-full max-w-[1180px] mx-auto mb-7 md:mb-10 px-0 md:px-0">
-          <div className="relative w-full bg-[#050508] border border-white/10">
+        <div className="w-full max-w-[1200px] mx-auto mb-10 md:mb-12">
+          <div className="relative w-full bg-[#07090b] border border-[#263238] rounded-[10px] overflow-hidden shadow-[0_24px_56px_-12px_rgba(0,0,0,0.9)]">
+            {/* CAD Corner Calipers */}
+            <CadCornerScale position="top-left" label="REGISTRY.02" />
+            <CadCornerScale position="bottom-right" label="60FPS.NATIVE" />
+
             {/* Corner Hatch Accent */}
             <div
-              className="absolute -top-px -right-px w-[18px] h-[18px] bg-[#050508] border-l border-b border-white/[0.18] pointer-events-none z-10"
+              className="absolute -top-px -right-px w-[20px] h-[20px] bg-[#07090b] border-l border-b border-[#263238] pointer-events-none z-10"
               style={{
                 backgroundImage:
-                  "repeating-linear-gradient(45deg, rgba(255,255,255,0.22) 0, rgba(255,255,255,0.22) 1px, transparent 0, transparent 4px)",
+                  "repeating-linear-gradient(45deg, rgba(0,245,200,0.2) 0, rgba(0,245,200,0.2) 1px, transparent 0, transparent 4px)",
               }}
               aria-hidden="true"
             />
 
-            {/* Architectural Grid Intersection Node Dots (Desktop only) */}
-            <div className="hidden md:block absolute w-[7px] h-[7px] rounded-full border border-white/40 bg-[#050508] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20 left-[58.333%] top-0" aria-hidden="true" />
-            <div className="hidden md:block absolute w-[7px] h-[7px] rounded-full border border-white/40 bg-[#050508] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20 left-0 top-1/2" aria-hidden="true" />
-            <div className="hidden md:block absolute w-[7px] h-[7px] rounded-full border border-white/40 bg-[#050508] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20 left-[58.333%] top-1/2" aria-hidden="true" />
-            <div className="hidden md:block absolute w-[7px] h-[7px] rounded-full border border-white/40 bg-[#050508] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20 left-[41.667%] top-1/2" aria-hidden="true" />
-            <div className="hidden md:block absolute w-[7px] h-[7px] rounded-full border border-white/40 bg-[#050508] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20 left-full top-1/2" aria-hidden="true" />
-            <div className="hidden md:block absolute w-[7px] h-[7px] rounded-full border border-white/40 bg-[#050508] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20 left-[41.667%] top-full" aria-hidden="true" />
-
-            {/* Grid Cells: 12-column layout on desktop, stacked on mobile */}
+            {/* Grid Cells: 12-column adaptive layout on desktop, stacked on mobile */}
             <div className="grid grid-cols-1 md:grid-cols-12 w-full">
-              {featuredBlocks.map((block, index) => {
-                // Determine desktop col-span and borders based on position
-                const cellClasses =
-                  index === 0
-                    ? "md:col-span-7 md:border-r md:border-b border-white/10 max-md:border-b max-md:border-white/10"
-                    : index === 1
-                    ? "md:col-span-5 md:border-b border-white/10 max-md:border-b max-md:border-white/10"
-                    : index === 2
-                    ? "md:col-span-5 md:border-r border-white/10 max-md:border-b max-md:border-white/10"
-                    : "md:col-span-7";
+              {filteredBlocks.map((block, index) => {
+                const cellClasses = getBentoCellClasses(index, filteredBlocks.length);
 
                 return (
                   <div key={block.slug} className={`grid-block-cell ${cellClasses}`}>
                     <BlockCard
                       block={block}
                       index={index}
-                      total={featuredBlocks.length}
-                      className="border-0 rounded-none"
+                      total={filteredBlocks.length}
+                      className="border-0 rounded-none bg-transparent"
                     />
                   </div>
                 );
@@ -82,12 +181,16 @@ export function ShowcaseGrid() {
 
         {/* Grid Footer CTA */}
         <div className="flex justify-center">
-          <Link href="/blocks" className="btn-secondary group">
-            <span>Explore all {BLOCKS_DATA.length} components in registry</span>
-            <NextIcon size={15} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+          <Link
+            href="/blocks"
+            className="btn-secondary group px-5 py-2.5 rounded-[6px] text-[12.5px] font-mono font-bold border-[#263238] hover:border-[#00f5c8]/40"
+          >
+            <span>EXPLORE ALL {BLOCKS_DATA.length} VERIFIED UNITS</span>
+            <NextIcon size={14} className="transition-transform duration-200 group-hover:translate-x-0.5 text-[#00f5c8]" />
           </Link>
         </div>
       </div>
     </section>
   );
 }
+
