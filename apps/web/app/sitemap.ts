@@ -43,18 +43,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.7,
     },
-    {
-      url: `${baseUrl}/submit`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/dashboard`,
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 0.6,
-    },
   ];
 
   // Documentation pages from DOC_CATEGORIES
@@ -71,8 +59,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Registry blocks
   const blockSlugs = [
+    "bar-chart",
+    "comparison-chart",
+    "donut-chart",
     "floating-docker",
+    "grouped-bar-chart",
     "interactive-calendar",
+    "pie-chart",
     "social-auth-buttons",
     "trend-chart",
   ];
