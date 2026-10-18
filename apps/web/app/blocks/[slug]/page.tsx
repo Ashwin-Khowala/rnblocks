@@ -78,18 +78,20 @@ export default function BlockDetailPage() {
 
   if (!block) {
     return (
-      <div className="min-h-screen bg-[#070709] text-[#ededed] pt-24 pb-20 flex items-center justify-center">
+      <div className="min-h-screen bg-[#07090b] text-[#f3f6f5] pt-24 pb-20 flex items-center justify-center font-mono">
         <div className="container-main flex flex-col items-center justify-center text-center gap-4 py-20">
-          <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[#ef4444] mb-2">
+          <div className="w-14 h-14 rounded-[6px] bg-[#101719] border border-[#263238] flex items-center justify-center text-[#ef4444] mb-2 shadow-[0_0_20px_rgba(239,68,68,0.2)]">
             <AlertCircle size={28} />
           </div>
-          <h2 className="text-2xl font-bold text-white">Block Not Found</h2>
-          <p className="text-[#9ca3af] text-sm max-w-md">
-            The requested block &ldquo;{slug}&rdquo; does not exist in the registry.
+          <h2 className="text-xl sm:text-2xl font-bold text-[#ef4444]">
+            // ERROR: 404_UNIT_NOT_FOUND
+          </h2>
+          <p className="text-[#929da4] text-xs sm:text-sm max-w-md font-sans">
+            The requested component unit &ldquo;{slug}&rdquo; is not registered in the active system catalog.
           </p>
-          <Link href="/blocks" className="btn-primary inline-flex items-center gap-2 mt-2">
+          <Link href="/blocks" className="btn-primary inline-flex items-center gap-2 mt-3 font-mono text-xs">
             <ChevronLeft size={16} />
-            <span>Back to Blocks</span>
+            <span>RETURN TO REGISTRY</span>
           </Link>
         </div>
       </div>
@@ -114,7 +116,7 @@ export default function Screen() {
   const usageSnippet = blockDoc?.usageCode || defaultUsageSnippet;
 
   return (
-    <div className="min-h-screen bg-[#070709] text-[#ededed] pb-24 flex-1">
+    <div className="min-h-screen bg-[#07090b] text-[#f3f6f5] pb-24 flex-1">
       {/* 3-Column Responsive Documentation Layout */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-4 lg:pt-6">
         <div className="flex gap-8 lg:gap-10 items-start">
@@ -132,34 +134,37 @@ export default function Screen() {
             {/* Section 1: Preview */}
             <section id="preview" className="space-y-3 scroll-mt-24">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <h2 className="text-lg font-bold text-white tracking-tight">Preview</h2>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-[1px] bg-[#00f5c8]" />
+                  <h2 className="text-sm font-bold text-[#f3f6f5] tracking-tight font-mono">// SYSTEM.STAGE</h2>
+                </div>
 
                 <div className="flex items-center gap-2">
                   {/* View Switcher: Preview / Code */}
-                  <div className="flex bg-white/[0.04] border border-white/[0.08] p-0.5 rounded-lg">
+                  <div className="flex bg-[#0b1012] border border-[#263238] p-0.5 rounded-[4px]">
                     <button
                       onClick={() => setActiveTab("preview")}
                       className={cn(
-                        "inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md transition-colors cursor-pointer",
+                        "inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-[3px] transition-colors cursor-pointer",
                         activeTab === "preview"
-                          ? "bg-white/[0.1] text-white font-semibold"
-                          : "text-[#71717a] hover:text-white"
+                          ? "bg-[#151d20] text-[#00f5c8] font-bold border border-[#00f5c8]/30 shadow-sm"
+                          : "text-[#718087] hover:text-[#f3f6f5]"
                       )}
                     >
                       <Smartphone size={13} />
-                      <span>Preview</span>
+                      <span>Stage</span>
                     </button>
                     <button
                       onClick={() => setActiveTab("code")}
                       className={cn(
-                        "inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-md transition-colors cursor-pointer",
+                        "inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-[3px] transition-colors cursor-pointer",
                         activeTab === "code"
-                          ? "bg-white/[0.1] text-white font-semibold"
-                          : "text-[#71717a] hover:text-white"
+                          ? "bg-[#151d20] text-[#00d9ff] font-bold border border-[#00d9ff]/30 shadow-sm"
+                          : "text-[#718087] hover:text-[#f3f6f5]"
                       )}
                     >
                       <Code2 size={13} />
-                      <span>Code</span>
+                      <span>Source</span>
                     </button>
                   </div>
 
@@ -168,7 +173,7 @@ export default function Screen() {
                     href={`https://github.com/Ashwin-Khowala/rnblocks/tree/master/registry/blocks/${block.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-[#d1d5db] hover:text-white transition-colors"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-[4px] bg-[#0b1012] hover:bg-[#151d20] border border-[#263238] hover:border-[#00d9ff]/40 text-xs font-mono text-[#929da4] hover:text-[#00d9ff] transition-colors"
                   >
                     <GitHubIcon size={12} />
                     <span>Source</span>
@@ -202,8 +207,11 @@ export default function Screen() {
             <section id="usage" className="space-y-4 scroll-mt-24">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-white tracking-tight">Usage</h2>
-                  <p className="text-xs sm:text-sm text-[#9ca3af] mt-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="w-1.5 h-1.5 rounded-[1px] bg-[#00f5c8]" />
+                    <h2 className="text-xl font-bold text-[#f3f6f5] tracking-tight font-mono">// SYS.USAGE</h2>
+                  </div>
+                  <p className="text-xs sm:text-sm text-[#929da4]">
                     Drop this code into your screen or view:
                   </p>
                 </div>
@@ -229,11 +237,14 @@ export default function Screen() {
             {blockDoc?.a11yFeatures && blockDoc.a11yFeatures.length > 0 && (
               <section id="accessibility" className="space-y-4 scroll-mt-24">
                 <div>
-                  <h2 className="text-xl font-bold text-white tracking-tight">
-                    Accessibility & Performance
-                  </h2>
-                  <p className="text-xs sm:text-sm text-[#9ca3af] mt-1">
-                    Native touch gestures, screen reader attributes, and 60fps frame budgets:
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="w-1.5 h-1.5 rounded-[1px] bg-[#00f5c8]" />
+                    <h2 className="text-xl font-bold text-[#f3f6f5] tracking-tight font-mono">
+                      // PERFORMANCE_&_A11Y
+                    </h2>
+                  </div>
+                  <p className="text-xs sm:text-sm text-[#929da4]">
+                    Native touch gestures, screen reader attributes, and 60–120 FPS frame budgets:
                   </p>
                 </div>
 
@@ -241,10 +252,10 @@ export default function Screen() {
                   {blockDoc.a11yFeatures.map((feat, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start gap-2.5 bg-[#09090d] border border-white/[0.06] rounded-xl p-3.5 text-xs text-[#d1d5db]"
+                      className="flex items-start gap-2.5 bg-[#101719] border border-[#263238] rounded-[6px] p-3.5 text-xs text-[#f3f6f5]"
                     >
-                      <CheckCircle2 size={15} className="text-[#32c798] shrink-0 mt-0.5" />
-                      <span className="leading-relaxed">{feat}</span>
+                      <CheckCircle2 size={15} className="text-[#00f5c8] shrink-0 mt-0.5" />
+                      <span className="leading-relaxed font-sans">{feat}</span>
                     </div>
                   ))}
                 </div>

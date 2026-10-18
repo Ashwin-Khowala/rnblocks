@@ -59,44 +59,44 @@ export function BlockInstallation({ block }: BlockInstallationProps) {
         <h2 className="text-xl font-bold text-white tracking-tight">Installation</h2>
       </div>
 
-      {/* ── Mode Switcher Tabs: Command | Manual (Matches screenshot) ── */}
-      <div className="flex items-center gap-6 border-b border-white/[0.08] text-sm">
+      {/* ── Mode Switcher Tabs: Command | Manual ── */}
+      <div className="flex items-center gap-6 border-b border-[#263238] text-xs font-mono">
         <button
           onClick={() => setActiveTab("command")}
           className={cn(
-            "pb-2 font-medium transition-colors cursor-pointer relative",
+            "pb-2 font-bold transition-colors cursor-pointer relative",
             activeTab === "command"
-              ? "text-white after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-white"
-              : "text-[#71717a] hover:text-[#d1d5db]"
+              ? "text-[#00f5c8] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#00f5c8]"
+              : "text-[#718087] hover:text-[#f3f6f5]"
           )}
         >
-          Command
+          CLI COMMAND
         </button>
         <button
           onClick={() => setActiveTab("manual")}
           className={cn(
-            "pb-2 font-medium transition-colors cursor-pointer relative",
+            "pb-2 font-bold transition-colors cursor-pointer relative",
             activeTab === "manual"
-              ? "text-white after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-white"
-              : "text-[#71717a] hover:text-[#d1d5db]"
+              ? "text-[#00f5c8] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#00f5c8]"
+              : "text-[#718087] hover:text-[#f3f6f5]"
           )}
         >
-          Manual
+          MANUAL DISPATCH
         </button>
       </div>
 
       {/* ── COMMAND TAB ─────────────────────────────────────────────── */}
       {activeTab === "command" && (
         <div className="space-y-3">
-          <p className="text-xs sm:text-sm text-[#9ca3af]">
+          <p className="text-xs sm:text-sm text-[#929da4]">
             Install the component and its peer dependencies automatically via the CLI:
           </p>
 
-          <div className="bg-[#09090d] border border-white/[0.08] rounded-xl overflow-hidden shadow-sm">
+          <div className="bg-[#0b1012] border border-[#263238] rounded-[6px] overflow-hidden shadow-sm">
             {/* Package Manager Selector Header */}
-            <div className="flex items-center justify-between px-3 py-2 border-b border-white/[0.06] bg-white/[0.02]">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-[#263238] bg-[#07090b]">
               <div className="flex items-center gap-4 text-xs font-mono">
-                <span className="text-[#52525b] pl-1">
+                <span className="text-[#00f5c8] pl-1">
                   <Terminal size={13} />
                 </span>
                 {(["pnpm", "npm", "yarn", "bun"] as PackageManager[]).map((pm) => (
@@ -106,8 +106,8 @@ export function BlockInstallation({ block }: BlockInstallationProps) {
                     className={cn(
                       "transition-colors cursor-pointer pb-0.5",
                       pkgManager === pm
-                        ? "text-white font-bold border-b-2 border-white"
-                        : "text-[#71717a] hover:text-white"
+                        ? "text-[#00f5c8] font-bold border-b-2 border-[#00f5c8]"
+                        : "text-[#718087] hover:text-[#f3f6f5]"
                     )}
                   >
                     {pm}
@@ -118,23 +118,23 @@ export function BlockInstallation({ block }: BlockInstallationProps) {
             </div>
 
             {/* Command Text */}
-            <div className="px-4 py-3 font-mono text-xs text-[#e4e4e7] select-all overflow-x-auto whitespace-nowrap">
+            <div className="px-4 py-3 font-mono text-xs text-[#f3f6f5] select-all overflow-x-auto whitespace-nowrap">
               <span>{cliCommand}</span>
             </div>
           </div>
         </div>
       )}
 
-      {/* ── MANUAL TAB (Exact match to User Screenshot) ──────────────── */}
+      {/* ── MANUAL TAB ──────────────────────────────────────────────── */}
       {activeTab === "manual" && (
         <div className="space-y-6">
           {/* Step 1: Install dependencies */}
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full bg-white/[0.08] border border-white/[0.12] flex items-center justify-center font-mono text-xs font-bold text-white shrink-0">
+              <div className="w-6 h-6 rounded-[4px] bg-[#101719] border border-[#263238] flex items-center justify-center font-mono text-xs font-bold text-[#00f5c8] shrink-0">
                 1
               </div>
-              <h3 className="text-sm font-semibold text-white">
+              <h3 className="text-sm font-semibold text-white font-mono">
                 Install the following dependencies:
               </h3>
             </div>
