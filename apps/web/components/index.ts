@@ -5,7 +5,6 @@ export * from "./Navbar";
 export * from "./Footer";
 export * from "./DeviceFrame";
 export * from "./CodeViewer";
-export * from "./DashboardTabs";
 export * from "./LiveBlockPreview";
 export * from "./blocks";
 export * from "./HeroBackground";

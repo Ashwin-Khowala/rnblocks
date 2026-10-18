@@ -74,6 +74,15 @@ export const metadata: Metadata = {
       "Production ready React Native blocks and screens. Discover, inspect live previews, and copy code directly into your Expo or React Native app.",
     siteName: "RNBlocks",
   },
+  icons: {
+    icon: [
+      { url: "/logo-mark.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon.png", sizes: "64x64", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   twitter: {
     card: "summary_large_image",
     title: "RNBlocks | The Open Source React Native & Expo UI Registry",

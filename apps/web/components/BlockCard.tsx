@@ -27,13 +27,13 @@ export function BlockCard({
   onInspect,
   className,
 }: BlockCardProps) {
-  const { slug, title, category, Component, dependencies, description } = block;
+  const { slug, title, category, Component, description } = block;
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState<number>(1);
   const [revealKey, setRevealKey] = useState<number>(0);
   const [isReplaying, setIsReplaying] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(true); // Eagerly visible to prevent blank box lag
+  const [isVisible, setIsVisible] = useState<boolean>(true);
 
   // Dynamic responsive auto-fit scaling for natural preview dimensions
   useEffect(() => {
@@ -90,40 +90,40 @@ export function BlockCard({
   return (
     <div
       className={cn(
-        "group relative flex flex-col overflow-hidden transition-all duration-200 select-none bg-[#0a0a0f]",
+        "group relative flex flex-col overflow-hidden transition-all duration-200 select-none bg-[#0b1012]",
         isBentoCell
           ? "border-0"
-          : "border border-white/[0.08] hover:border-white/[0.18] rounded-[16px] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)]",
-        isSelected && "border-white/30 bg-[#0d0d14] ring-1 ring-white/20",
+          : "border border-[#263238] hover:border-[#00f5c8]/40 rounded-[8px] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.8)] hover:shadow-[0_0_24px_-4px_rgba(0,245,200,0.15)]",
+        isSelected && "border-[#00f5c8] bg-[#101719] ring-1 ring-[#00f5c8]/30",
         className
       )}
     >
       {/* ── Card Header: Title, Category Badge, Platform Indicators ── */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#08080c] border-b border-white/[0.06] z-10">
-        <div className="flex items-center gap-2.5 min-w-0">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[#07090b] border-b border-[#263238] z-10">
+        <div className="flex items-center gap-2 min-w-0">
           <Link
             href={`/blocks/${slug}`}
-            className="text-[13.5px] font-semibold text-white/95 hover:text-white truncate transition-colors"
+            className="text-[13px] font-bold text-[#f3f6f5] hover:text-[#00f5c8] truncate transition-colors font-mono tracking-tight"
           >
             {title}
           </Link>
-          <span className="font-mono text-[10px] uppercase tracking-wider text-[#9ca3af] bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded-[4px] shrink-0">
+          <span className="font-mono text-[9px] uppercase tracking-wider text-[#00f5c8] bg-[#00f5c8]/10 border border-[#00f5c8]/30 px-1.5 py-0.5 rounded-[3px] shrink-0 font-semibold">
             {category}
           </span>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <span className="hidden lg:inline-block font-mono text-[10px] text-[#71717a]">
-            iOS • Android • Web
+          <span className="hidden sm:inline-block font-mono text-[9.5px] text-[#718087]">
+            iOS • ANDROID • WEB
           </span>
           {/* Quick External Link */}
           <Link
             href={`/blocks/${slug}`}
-            className="text-[#71717a] hover:text-white transition-colors p-1"
+            className="text-[#718087] hover:text-[#00f5c8] transition-colors p-1"
             title={`View ${title} code and docs`}
             aria-label={`View ${title}`}
           >
-            <ArrowUpRightIcon size={13} />
+            <ArrowUpRightIcon size={12} />
           </Link>
         </div>
       </div>
@@ -131,7 +131,7 @@ export function BlockCard({
       {/* ── Main Preview Canvas ── */}
       <div
         ref={canvasRef}
-        className="relative w-full h-[320px] sm:h-[350px] md:h-[370px] flex items-center justify-center bg-[#060609] bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:18px_18px] overflow-hidden p-4"
+        className="relative w-full h-[320px] sm:h-[350px] md:h-[370px] flex items-center justify-center bg-[#07090b] bg-[radial-gradient(rgba(0,245,200,0.04)_1px,transparent_1px)] bg-[size:16px_16px] overflow-hidden p-4"
       >
         <div
           className="flex items-center justify-center origin-center transition-transform duration-150 w-full"
@@ -153,14 +153,14 @@ export function BlockCard({
       </div>
 
       {/* ── Dedicated Action Footer ── */}
-      <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#08080c] border-t border-white/[0.06] z-10 gap-2">
+      <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#07090b] border-t border-[#263238] z-10 gap-2">
         <div className="flex items-center gap-1.5">
           {/* Replay */}
           <button
             onClick={handleReplay}
             className={cn(
-              "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-zinc-400 hover:text-white bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.08] transition-all cursor-pointer font-mono text-[11px]",
-              isReplaying && "text-white bg-white/20 border-white/30"
+              "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] text-[#929da4] hover:text-[#f3f6f5] bg-[#101719] border border-[#263238] hover:border-[#00f5c8]/40 transition-all cursor-pointer font-mono text-[10.5px]",
+              isReplaying && "text-[#00f5c8] bg-[#00f5c8]/15 border-[#00f5c8]/40"
             )}
             title="Replay animation"
             aria-label="Replay animation"
@@ -169,7 +169,7 @@ export function BlockCard({
               size={11}
               className={cn("transition-transform duration-700", isReplaying && "rotate-180")}
             />
-            <span className="hidden sm:inline">Replay</span>
+            <span className="hidden sm:inline">REPLAY</span>
           </button>
 
           {/* Inspect / Split View (if onInspect passed) */}
@@ -177,14 +177,14 @@ export function BlockCard({
             <button
               onClick={handleInspect}
               className={cn(
-                "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-zinc-400 hover:text-white bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.08] transition-colors cursor-pointer font-mono text-[11px]",
-                isSelected && "bg-white/20 border-white/30 text-white font-medium"
+                "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] text-[#929da4] hover:text-[#f3f6f5] bg-[#101719] border border-[#263238] hover:border-[#00f5c8]/40 transition-colors cursor-pointer font-mono text-[10.5px]",
+                isSelected && "bg-[#00f5c8]/20 border-[#00f5c8]/40 text-[#00f5c8] font-bold"
               )}
               title="Inspect block source"
               aria-label="Inspect block"
             >
               <SlidersIcon size={11} />
-              <span className="hidden sm:inline">Inspect</span>
+              <span className="hidden sm:inline">INSPECT</span>
             </button>
           )}
         </div>
@@ -193,14 +193,14 @@ export function BlockCard({
         <div className="flex items-center gap-2">
           <CopyButton
             text={`npx @rnblocks/cli add ${slug}`}
-            className="!bg-white/[0.04] !border-white/[0.08] hover:!border-white/[0.2] hover:!bg-white/[0.08] !rounded-[6px] !px-2.5 !py-1 !font-mono !text-[11px] !text-zinc-300 hover:!text-white shadow-sm"
+            className="!bg-[#101719] !border-[#263238] hover:!border-[#00f5c8]/50 hover:!bg-[#151d20] !rounded-[4px] !px-2.5 !py-1 !font-mono !text-[10.5px] !text-[#f3f6f5] shadow-sm"
             label="CLI"
           />
           <Link
             href={`/blocks/${slug}`}
-            className="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono text-zinc-400 hover:text-white px-2 py-1 rounded-[6px] hover:bg-white/[0.05] transition-colors"
+            className="hidden sm:inline-flex items-center gap-1 text-[10.5px] font-mono text-[#718087] hover:text-[#00d9ff] px-2 py-1 rounded-[4px] hover:bg-[#101719] transition-colors"
           >
-            <span>Code</span>
+            <span>CODE</span>
             <ArrowUpRightIcon size={11} />
           </Link>
         </div>

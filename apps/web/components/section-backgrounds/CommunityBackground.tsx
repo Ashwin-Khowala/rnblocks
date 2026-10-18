@@ -21,8 +21,8 @@ export function CommunityBackground() {
       >
         <defs>
           <linearGradient id="mergePulse" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#32c798" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#32c798" stopOpacity="0.9" />
+            <stop offset="0%" stopColor="#00f5c8" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#00f5c8" stopOpacity="0.9" />
           </linearGradient>
         </defs>
 
@@ -52,22 +52,22 @@ export function CommunityBackground() {
         />
 
         {/* Git Commit Solder Vias */}
-        <rect x="118" y="298" width="4" height="4" fill="#32c798" />
-        <rect x="178" y="238" width="4" height="4" fill="#32c798" />
-        <rect x="418" y="238" width="4" height="4" fill="#06b6d4" />
-        <rect x="478" y="298" width="4" height="4" fill="#32c798" />
+        <rect x="118" y="298" width="4" height="4" fill="#00f5c8" />
+        <rect x="178" y="238" width="4" height="4" fill="#00f5c8" />
+        <rect x="418" y="238" width="4" height="4" fill="#00d9ff" />
+        <rect x="478" y="298" width="4" height="4" fill="#00f5c8" />
 
-        <rect x="598" y="298" width="4" height="4" fill="#32c798" />
-        <rect x="658" y="358" width="4" height="4" fill="#06b6d4" />
-        <rect x="898" y="358" width="4" height="4" fill="#32c798" />
-        <rect x="958" y="298" width="4" height="4" fill="#32c798" />
+        <rect x="598" y="298" width="4" height="4" fill="#00f5c8" />
+        <rect x="658" y="358" width="4" height="4" fill="#00d9ff" />
+        <rect x="898" y="358" width="4" height="4" fill="#00f5c8" />
+        <rect x="958" y="298" width="4" height="4" fill="#00f5c8" />
       </svg>
 
       {/* ── 2. Radial Emitter behind Submit CTA ── */}
-      <div className="absolute top-[45%] left-[22%] -translate-x-1/2 -translate-y-1/2 w-[540px] h-[340px] bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(50,199,152,0.09)_0%,rgba(6,182,212,0.03)_40%,transparent_70%)] blur-[50px]" />
+      <div className="absolute top-[45%] left-[22%] -translate-x-1/2 -translate-y-1/2 w-[540px] h-[340px] bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(0,245,200,0.09)_0%,rgba(0,217,255,0.03)_40%,transparent_70%)] blur-[50px]" />
 
       {/* ── 3. Branch Meta Label ── */}
-      <div className="hidden lg:block absolute left-12 bottom-8 font-mono text-[9px] text-[#32c798]/30">
+      <div className="hidden lg:block absolute left-12 bottom-8 font-mono text-[9px] text-[#00f5c8]/30">
         ORIGIN // HEAD {"->"} DEVELOP [MERGE_READY]
       </div>
     </div>

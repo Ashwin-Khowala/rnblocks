@@ -21,8 +21,8 @@ export function WorkflowBackground() {
       >
         <defs>
           <linearGradient id="pipelinePulse" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#32c798" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.9" />
+            <stop offset="0%" stopColor="#00f5c8" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#00d9ff" stopOpacity="0.9" />
           </linearGradient>
         </defs>
 
@@ -55,22 +55,22 @@ export function WorkflowBackground() {
         />
 
         {/* Solder Via Nodes at Pipeline Junctions */}
-        <rect x="168" y="198" width="4" height="4" fill="#32c798" />
-        <rect x="168" y="338" width="4" height="4" fill="#32c798" />
-        <rect x="168" y="478" width="4" height="4" fill="#32c798" />
-        <rect x="678" y="358" width="4" height="4" fill="#06b6d4" />
-        <rect x="718" y="318" width="4" height="4" fill="#32c798" />
-        <rect x="1318" y="318" width="4" height="4" fill="#06b6d4" />
+        <rect x="168" y="198" width="4" height="4" fill="#00f5c8" />
+        <rect x="168" y="338" width="4" height="4" fill="#00f5c8" />
+        <rect x="168" y="478" width="4" height="4" fill="#00f5c8" />
+        <rect x="678" y="358" width="4" height="4" fill="#00d9ff" />
+        <rect x="718" y="318" width="4" height="4" fill="#00f5c8" />
+        <rect x="1318" y="318" width="4" height="4" fill="#00d9ff" />
       </svg>
 
       {/* ── 2. Atmospheric Terminal Backlight Emitter ── */}
-      <div className="absolute top-[55%] right-[10%] w-[520px] h-[360px] bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(6,182,212,0.06)_0%,rgba(50,199,152,0.03)_50%,transparent_75%)] blur-[50px]" />
+      <div className="absolute top-[55%] right-[10%] w-[520px] h-[360px] bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(0,217,255,0.06)_0%,rgba(0,245,200,0.03)_50%,transparent_75%)] blur-[50px]" />
 
       {/* ── 3. Pipeline Step Technical Coordinates ── */}
-      <div className="hidden lg:block absolute left-8 top-32 font-mono text-[9px] text-[#32c798]/30">
+      <div className="hidden lg:block absolute left-8 top-32 font-mono text-[9px] text-[#00f5c8]/30">
         DATA.BUS // PIPELINE.03
       </div>
-      <div className="hidden lg:block absolute right-8 top-32 font-mono text-[9px] text-[#06b6d4]/30">
+      <div className="hidden lg:block absolute right-8 top-32 font-mono text-[9px] text-[#00d9ff]/30">
         TERMINAL.SYNC // TTY0
       </div>
     </div>

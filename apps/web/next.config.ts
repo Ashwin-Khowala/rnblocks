@@ -29,6 +29,40 @@ const nextConfig: NextConfig = {
       "@react-native/assets-registry": "./lib/assets-registry-mock.js",
     },
   },
+  async redirects() {
+    return [
+      {
+        source: "/block/:slug",
+        destination: "/blocks/:slug",
+        permanent: true,
+      },
+      {
+        source: "/block",
+        destination: "/blocks",
+        permanent: true,
+      },
+      {
+        source: "/dashboard/:path*",
+        destination: "/contribute",
+        permanent: false,
+      },
+      {
+        source: "/dashboard",
+        destination: "/contribute",
+        permanent: false,
+      },
+      {
+        source: "/submit",
+        destination: "/contribute",
+        permanent: false,
+      },
+      {
+        source: "/screens",
+        destination: "/blocks",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

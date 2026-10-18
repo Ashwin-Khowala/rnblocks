@@ -59,8 +59,8 @@ export function ShowcaseBackground() {
       >
         <defs>
           <linearGradient id="showcaseGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#32c798" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.8" />
+            <stop offset="0%" stopColor="#00f5c8" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#00d9ff" stopOpacity="0.8" />
           </linearGradient>
         </defs>
 
@@ -82,11 +82,11 @@ export function ShowcaseBackground() {
         />
 
         {/* Solder Via Pads (Square Dies) Left */}
-        <rect x="108" y="158" width="4" height="4" fill="#32c798" />
-        <rect x="148" y="198" width="4" height="4" fill="#06b6d4" />
-        <rect x="178" y="198" width="4" height="4" fill="#32c798" />
-        <rect x="78" y="318" width="4" height="4" fill="#32c798" />
-        <rect x="118" y="358" width="4" height="4" fill="#06b6d4" />
+        <rect x="108" y="158" width="4" height="4" fill="#00f5c8" />
+        <rect x="148" y="198" width="4" height="4" fill="#00d9ff" />
+        <rect x="178" y="198" width="4" height="4" fill="#00f5c8" />
+        <rect x="78" y="318" width="4" height="4" fill="#00f5c8" />
+        <rect x="118" y="358" width="4" height="4" fill="#00d9ff" />
 
         {/* Right Peripheral Bus Traces */}
         <g stroke="rgba(255, 255, 255, 0.05)" strokeWidth="1" fill="none">
@@ -106,47 +106,47 @@ export function ShowcaseBackground() {
         />
 
         {/* Solder Via Pads (Square Dies) Right */}
-        <rect x="1328" y="178" width="4" height="4" fill="#32c798" />
-        <rect x="1288" y="218" width="4" height="4" fill="#06b6d4" />
-        <rect x="1248" y="218" width="4" height="4" fill="#32c798" />
-        <rect x="1348" y="378" width="4" height="4" fill="#06b6d4" />
+        <rect x="1328" y="178" width="4" height="4" fill="#00f5c8" />
+        <rect x="1288" y="218" width="4" height="4" fill="#00d9ff" />
+        <rect x="1248" y="218" width="4" height="4" fill="#00f5c8" />
+        <rect x="1348" y="378" width="4" height="4" fill="#00d9ff" />
       </svg>
 
       {/* ── 3. Peripheral Vertical Ruler (Engineering Coordinates) ── */}
-      <div className="hidden 2xl:flex flex-col justify-between absolute left-5 top-28 bottom-28 font-mono text-[8.5px] text-white/20 select-none">
+      <div className="hidden 2xl:flex flex-col justify-between absolute left-5 top-28 bottom-28 font-mono text-[8.5px] text-[#00f5c8]/20 select-none">
         <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-px bg-white/20" /> Y:0100
+          <span className="w-1.5 h-px bg-[#00f5c8]/20" /> Y:0100
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-px bg-white/20" /> Y:0250
+          <span className="w-1.5 h-px bg-[#00f5c8]/20" /> Y:0250
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-px bg-white/20" /> Y:0400
+          <span className="w-1.5 h-px bg-[#00f5c8]/20" /> Y:0400
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-px bg-white/20" /> Y:0550
+          <span className="w-1.5 h-px bg-[#00f5c8]/20" /> Y:0550
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-px bg-white/20" /> Y:0700
+          <span className="w-1.5 h-px bg-[#00f5c8]/20" /> Y:0700
         </span>
       </div>
 
       {/* ── 4. Precision CAD Intersecting Crosshairs ── */}
-      <div className="hidden lg:block absolute left-[12%] top-[35%] font-mono text-[10px] text-white/10">
+      <div className="hidden lg:block absolute left-[12%] top-[35%] font-mono text-[10px] text-[#00f5c8]/15">
         +
       </div>
-      <div className="hidden lg:block absolute right-[12%] top-[35%] font-mono text-[10px] text-white/10">
+      <div className="hidden lg:block absolute right-[12%] top-[35%] font-mono text-[10px] text-[#00f5c8]/15">
         +
       </div>
-      <div className="hidden lg:block absolute left-[8%] bottom-[20%] font-mono text-[10px] text-white/10">
+      <div className="hidden lg:block absolute left-[8%] bottom-[20%] font-mono text-[10px] text-[#00f5c8]/15">
         +
       </div>
-      <div className="hidden lg:block absolute right-[8%] bottom-[20%] font-mono text-[10px] text-white/10">
+      <div className="hidden lg:block absolute right-[8%] bottom-[20%] font-mono text-[10px] text-[#00f5c8]/15">
         +
       </div>
 
       {/* ── 5. Atmospheric Radial Backlight behind Bento Grid ── */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] md:w-[1050px] h-[450px] bg-[radial-gradient(ellipse_70%_50%_at_50%_50%,rgba(50,199,152,0.06)_0%,rgba(6,182,212,0.025)_45%,transparent_75%)] blur-[60px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] md:w-[1050px] h-[450px] bg-[radial-gradient(ellipse_70%_50%_at_50%_50%,rgba(0,245,200,0.06)_0%,rgba(0,217,255,0.025)_45%,transparent_75%)] blur-[60px]" />
     </div>
   );
 }

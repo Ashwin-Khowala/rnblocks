@@ -88,49 +88,40 @@ export function HeroBackground() {
     // Generate precision circuit bus traces routing down toward workbench
     const buildTraces = (w: number, h: number): CircuitTrace[] => {
       const traces: CircuitTrace[] = [];
-      const benchTop = h * 0.52;
+      const isMobile = w < 768;
+      const benchTop = isMobile ? 385 : h * 0.52;
       const cX = w / 2;
 
-      // Mobile: route strictly on outer margins and along horizon
-      if (w < 768) {
+      // Mobile: generous, uncluttered circuit telemetry avoiding the screen corners
+      if (isMobile) {
+        // Trace 1: Upper Horizon Telemetry Bus (runs under navbar with 24px inset, 45° cyber step)
         traces.push({
-          startX: 6,
-          startY: 16,
+          startX: 24,
+          startY: 70,
           segments: [
-            { x: 6, y: 80 },
-            { x: 16, y: 90 },
-            { x: 16, y: benchTop - 12 },
-            { x: 30, y: benchTop },
+            { x: Math.round(w * 0.52), y: 70 },
+            { x: Math.round(w * 0.52) + 12, y: 82 },
+            { x: w - 24, y: 82 },
           ],
-          color: "#32c798",
-          speed: 1.2,
-          dashLength: 18,
-          gapLength: 140,
-        });
-
-        traces.push({
-          startX: w - 6,
-          startY: 16,
-          segments: [
-            { x: w - 6, y: 80 },
-            { x: w - 16, y: 90 },
-            { x: w - 16, y: benchTop - 12 },
-            { x: w - 30, y: benchTop },
-          ],
-          color: "#06b6d4",
+          color: "#00f5c8",
           speed: 1.0,
-          dashLength: 18,
-          gapLength: 150,
+          dashLength: 32,
+          gapLength: 420,
         });
 
+        // Trace 2: Workbench Ingress Bus (runs in open seam between buttons and workbench with 45° step, 20px inset)
         traces.push({
-          startX: 0,
-          startY: benchTop,
-          segments: [{ x: w, y: benchTop }],
-          color: "#32c798",
-          speed: 1.5,
-          dashLength: 26,
-          gapLength: 200,
+          startX: 20,
+          startY: benchTop - 16,
+          segments: [
+            { x: Math.round(w * 0.40), y: benchTop - 16 },
+            { x: Math.round(w * 0.40) + 12, y: benchTop - 4 },
+            { x: w - 20, y: benchTop - 4 },
+          ],
+          color: "#00d9ff",
+          speed: 1.15,
+          dashLength: 34,
+          gapLength: 460,
         });
 
         return traces;
@@ -241,23 +232,25 @@ export function HeroBackground() {
       ctx.fillRect(0, 0, width, height * 0.5);
 
       // ── 2. Precision Architectural Caliper Ruler (Top Edge) ──
+      const isMobile = width < 768;
+      const rulerY = isMobile ? 56 : 0;
       ctx.save();
       ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
-      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
       ctx.font = "8px monospace";
       ctx.lineWidth = 1;
 
-      const tickSpacing = 16;
+      const tickSpacing = isMobile ? 24 : 16;
       for (let x = 0; x < width; x += tickSpacing) {
-        const isMajor = x % (tickSpacing * 5) === 0;
-        const tickH = isMajor ? 8 : 4;
+        const isMajor = x % (tickSpacing * (isMobile ? 4 : 5)) === 0;
+        const tickH = isMajor ? (isMobile ? 6 : 8) : (isMobile ? 3 : 4);
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, tickH);
+        ctx.moveTo(x, rulerY);
+        ctx.lineTo(x, rulerY + tickH);
         ctx.stroke();
 
-        if (isMajor && x > 0 && x < width - 40) {
-          ctx.fillText(`${x}`, x + 2, 16);
+        if (isMajor && x > 20 && x < width - 40) {
+          ctx.fillText(`${x}`, x + 2, rulerY + 12);
         }
       }
       ctx.restore();
@@ -265,7 +258,7 @@ export function HeroBackground() {
       // ── 3. Architectural CAD Grid with Crosshairs (Text Zone Excluded) ──
       const gridSize = 80;
       const startX = (width % gridSize) / 2;
-      const startY = 32;
+      const startY = isMobile ? 64 : 32;
 
       ctx.save();
       ctx.lineWidth = 1;
@@ -273,8 +266,8 @@ export function HeroBackground() {
       for (let x = startX; x < width; x += gridSize) {
         for (let y = startY; y < height; y += gridSize) {
           // Exclude center text area to ensure 100% typography purity
-          const distToCenter = Math.hypot(x - cX, y - height * 0.26);
-          if (distToCenter < 260) continue;
+          const distToCenter = Math.hypot(x - cX, y - (isMobile ? 220 : height * 0.26));
+          if (distToCenter < (isMobile ? 180 : 260)) continue;
 
           const distToMouse = Math.hypot(x - mouse.x, y - mouse.y);
           let alpha = 0.035;
@@ -313,8 +306,8 @@ export function HeroBackground() {
         const offset = -time * trace.speed * 60;
         ctx.strokeStyle = trace.color;
         ctx.shadowColor = trace.color;
-        ctx.shadowBlur = 10;
-        ctx.lineWidth = 1.4;
+        ctx.shadowBlur = isMobile ? 6 : 10;
+        ctx.lineWidth = isMobile ? 1.2 : 1.4;
         ctx.setLineDash([trace.dashLength, trace.gapLength]);
         ctx.lineDashOffset = offset;
         ctx.stroke();
@@ -330,9 +323,9 @@ export function HeroBackground() {
       ctx.restore();
 
       // ── 5. Perspective Ground Grid Behind Workbench ──
-      const horizonY = height * 0.52;
+      const horizonY = isMobile ? Math.min(440, height * 0.34) : height * 0.52;
       const deckBottom = height;
-      const perspectiveSteps = 8;
+      const perspectiveSteps = isMobile ? 5 : 8;
 
       ctx.save();
       const tilt = mouse.isHovering ? (mouse.x - cX) * 0.03 : 0;
@@ -340,13 +333,14 @@ export function HeroBackground() {
       for (let i = 1; i <= perspectiveSteps; i++) {
         const p = Math.pow(i / perspectiveSteps, 2.2);
         const y = horizonY + p * (deckBottom - horizonY);
-        const alpha = Math.min(0.16, 0.03 + p * 0.12);
+        const baseAlpha = isMobile ? 0.07 : 0.16;
+        const alpha = Math.min(baseAlpha, 0.02 + p * (isMobile ? 0.05 : 0.12));
 
         const hGrad = ctx.createLinearGradient(0, y, width, y);
         hGrad.addColorStop(0, "rgba(255, 255, 255, 0)");
-        hGrad.addColorStop(0.3, `rgba(50, 199, 152, ${alpha * 0.4})`);
-        hGrad.addColorStop(0.5, `rgba(50, 199, 152, ${alpha})`);
-        hGrad.addColorStop(0.7, `rgba(6, 182, 212, ${alpha * 0.4})`);
+        hGrad.addColorStop(0.3, `rgba(0, 245, 200, ${alpha * 0.4})`);
+        hGrad.addColorStop(0.5, `rgba(0, 245, 200, ${alpha})`);
+        hGrad.addColorStop(0.7, `rgba(0, 217, 255, ${alpha * 0.4})`);
         hGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
 
         ctx.strokeStyle = hGrad;
@@ -357,24 +351,26 @@ export function HeroBackground() {
         ctx.stroke();
       }
 
-      // Converging perspective lines toward workbench
-      const rayCount = 12;
-      for (let i = -rayCount / 2; i <= rayCount / 2; i++) {
-        if (i === 0) continue;
-        const xBottom = cX + tilt + i * (width / rayCount) * 1.3;
-        const xTop = cX + tilt + i * 24;
+      // Converging perspective lines toward workbench (desktop only to keep mobile background ultra-clean)
+      if (!isMobile) {
+        const rayCount = 12;
+        for (let i = -rayCount / 2; i <= rayCount / 2; i++) {
+          if (i === 0) continue;
+          const xBottom = cX + tilt + i * (width / rayCount) * 1.3;
+          const xTop = cX + tilt + i * 24;
 
-        const rayGrad = ctx.createLinearGradient(xTop, horizonY, xBottom, deckBottom);
-        rayGrad.addColorStop(0, "rgba(50, 199, 152, 0.01)");
-        rayGrad.addColorStop(0.5, "rgba(50, 199, 152, 0.07)");
-        rayGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
+          const rayGrad = ctx.createLinearGradient(xTop, horizonY, xBottom, deckBottom);
+          rayGrad.addColorStop(0, "rgba(0, 245, 200, 0.01)");
+          rayGrad.addColorStop(0.5, "rgba(0, 245, 200, 0.07)");
+          rayGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
 
-        ctx.strokeStyle = rayGrad;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(xTop, horizonY);
-        ctx.lineTo(xBottom, deckBottom);
-        ctx.stroke();
+          ctx.strokeStyle = rayGrad;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(xTop, horizonY);
+          ctx.lineTo(xBottom, deckBottom);
+          ctx.stroke();
+        }
       }
       ctx.restore();
 
@@ -441,8 +437,8 @@ export function HeroBackground() {
       {/* HTML5 Canvas for precision PCB bus traces and interactive reticle */}
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
-      {/* ── Precision Horizon Emitter (Behind Phone Workbench) ── */}
-      <div className="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] md:w-[940px] h-[300px] bg-[radial-gradient(ellipse_60%_40%_at_50%_50%,rgba(50,199,152,0.14)_0%,rgba(6,182,212,0.06)_40%,transparent_75%)] blur-[50px] pointer-events-none" />
+      {/* ── Precision Horizon Emitter (Behind Phone Workbench, desktop only) ── */}
+      <div className="hidden md:block absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] md:w-[940px] h-[220px] md:h-[300px] bg-[radial-gradient(ellipse_60%_40%_at_50%_50%,rgba(0,245,200,0.12)_0%,rgba(0,217,255,0.05)_40%,transparent_75%)] blur-[50px] pointer-events-none" />
 
     </div>
   );
