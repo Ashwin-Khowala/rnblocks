@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Check, X, ShieldAlert, ShieldCheck } from "lucide-react";
-import { CadCornerScale, PhilosophyBackground } from "@/components";
+import { CadCornerScale, PhilosophyBackground, ScrollReveal } from "@/components";
 
 export function Philosophy() {
   const comparison = [
@@ -38,23 +38,26 @@ export function Philosophy() {
       <PhilosophyBackground />
       <div className="container-main max-w-[1200px] mx-auto relative z-10">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-14">
-          <div className="inline-flex items-center gap-2 font-mono text-[11px] text-[#00f5c8] mb-2.5">
-            <span className="w-1.5 h-1.5 rounded-[1px] bg-[#00f5c8] shadow-[0_0_6px_#00f5c8]" />
-            <span>// ARCHITECTURAL SCHEMATIC</span>
+        <ScrollReveal showScanline threshold={0.1}>
+          <div className="text-center max-w-2xl mx-auto mb-12 md:mb-14">
+            <div className="inline-flex items-center gap-2 font-mono text-[11px] text-[#00f5c8] mb-2.5">
+              <span className="w-1.5 h-1.5 rounded-[1px] bg-[#00f5c8] shadow-[0_0_6px_#00f5c8]" />
+              <span>// ARCHITECTURAL SCHEMATIC</span>
+            </div>
+            <h2 className="text-[26px] sm:text-[34px] md:text-[42px] font-extrabold text-[#f3f6f5] tracking-tight">
+              Built for <span className="text-[#00f5c8] font-mono font-black">developer</span> ownership
+            </h2>
+            <p className="mt-2 text-[14px] text-[#929da4] leading-relaxed">
+              Stop fighting npm library version locks. Own your UI code directly with clean, copy-paste React Native components.
+            </p>
           </div>
-          <h2 className="text-[26px] sm:text-[34px] md:text-[42px] font-extrabold text-[#f3f6f5] tracking-tight">
-            Built for <span className="text-[#00f5c8] font-mono font-black">developer</span> ownership
-          </h2>
-          <p className="mt-2 text-[14px] text-[#929da4] leading-relaxed">
-            Stop fighting npm library version locks. Own your UI code directly with clean, copy-paste React Native components.
-          </p>
-        </div>
+        </ScrollReveal>
 
         {/* Side-by-Side Comparison Matrix */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {/* Card 1: Monolithic Library Trap (Warning State) */}
-          <div className="bg-[#0b1012] border border-[#263238] rounded-[8px] p-6 sm:p-7 flex flex-col justify-between">
+          <ScrollReveal delay={100} threshold={0.08} className="h-full">
+            <div className="bg-[#0b1012] border border-[#263238] rounded-[8px] p-6 sm:p-7 flex flex-col justify-between h-full">
             <div>
               <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-[#263238]">
                 <div className="w-8 h-8 rounded-[4px] bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
@@ -85,9 +88,11 @@ export function Philosophy() {
               Result: Bloated bundles, upgrade lock-in, and abandoned repos.
             </div>
           </div>
+        </ScrollReveal>
 
-          {/* Card 2: The RNBlocks Standard (Success State) */}
-          <div className="relative bg-[#0b1012] border border-[#00f5c8]/30 rounded-[8px] p-6 sm:p-7 flex flex-col justify-between shadow-[0_20px_48px_-12px_rgba(0,245,200,0.12)] [background:radial-gradient(circle_at_top,rgba(0,245,200,0.06),#0b1012_70%)] overflow-hidden">
+        {/* Card 2: The RNBlocks Standard (Success State) */}
+        <ScrollReveal delay={200} threshold={0.08} className="h-full">
+          <div className="relative bg-[#0b1012] border border-[#00f5c8]/30 rounded-[8px] p-6 sm:p-7 flex flex-col justify-between shadow-[0_20px_48px_-12px_rgba(0,245,200,0.12)] [background:radial-gradient(circle_at_top,rgba(0,245,200,0.06),#0b1012_70%)] overflow-hidden h-full">
             <CadCornerScale position="top-right" label="MANIFESTO.04" />
             <CadCornerScale position="bottom-left" label="OWNED" />
             <div>
@@ -120,7 +125,8 @@ export function Philosophy() {
               Result: Zero runtime overhead, 60 FPS speed, and infinite longevity.
             </div>
           </div>
-        </div>
+        </ScrollReveal>
+      </div>
       </div>
     </section>
   );

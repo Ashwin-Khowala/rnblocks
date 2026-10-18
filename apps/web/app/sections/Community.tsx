@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Check, GitPullRequest, ExternalLink } from "lucide-react";
 import { GitHubIcon } from "@/components/icons";
-import { CadCornerScale, CommunityBackground } from "@/components";
+import { CadCornerScale, CommunityBackground, ScrollReveal } from "@/components";
 
 export function Community() {
   const perks = [
@@ -17,9 +17,10 @@ export function Community() {
     <section id="community" className="bg-transparent border-t border-[#263238] py-20 md:py-28 relative overflow-hidden">
       <CommunityBackground />
       <div className="container-main max-w-[1200px] mx-auto relative z-10">
-        <div className="relative bg-[#0b1012] border border-[#263238] rounded-[10px] p-7 sm:p-10 md:p-12 overflow-hidden shadow-[0_24px_64px_-16px_rgba(0,0,0,0.9)] [background:radial-gradient(ellipse_70%_60%_at_0%_0%,rgba(0,245,200,0.08)_0%,#0b1012_75%)]">
-          <CadCornerScale position="top-right" label="OPEN.SOURCE" />
-          <CadCornerScale position="bottom-left" label="COMMUNITY.06" />
+        <ScrollReveal showScanline threshold={0.08}>
+          <div className="relative bg-[#0b1012] border border-[#263238] rounded-[10px] p-7 sm:p-10 md:p-12 overflow-hidden shadow-[0_24px_64px_-16px_rgba(0,0,0,0.9)] [background:radial-gradient(ellipse_70%_60%_at_0%_0%,rgba(0,245,200,0.08)_0%,#0b1012_75%)]">
+            <CadCornerScale position="top-right" label="OPEN.SOURCE" />
+            <CadCornerScale position="bottom-left" label="COMMUNITY.06" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left 7 Columns: Pitch & Action */}
@@ -74,7 +75,8 @@ export function Community() {
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
+      </ScrollReveal>
+    </div>
+  </section>
+);
 }

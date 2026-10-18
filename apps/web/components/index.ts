@@ -11,4 +11,5 @@ export * from "./HeroBackground";
 export * from "./HeroWorkbench";
 export * from "./CadCornerScale";
 export * from "./SiteGridBackground";
+export * from "./ScrollReveal";
 export * from "./section-backgrounds";
