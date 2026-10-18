@@ -33,7 +33,7 @@ export function BlockCard({
   const [scale, setScale] = useState<number>(1);
   const [revealKey, setRevealKey] = useState<number>(0);
   const [isReplaying, setIsReplaying] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   // Dynamic responsive auto-fit scaling for natural preview dimensions
   useEffect(() => {
@@ -64,7 +64,22 @@ export function BlockCard({
     const resizeObserver = new ResizeObserver(updateScale);
     resizeObserver.observe(el);
 
-    return () => resizeObserver.disconnect();
+    // Viewport lazy-mounting: only render live component when within 250px of viewport
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          intersectionObserver.disconnect();
+        }
+      },
+      { rootMargin: "250px 0px" }
+    );
+    intersectionObserver.observe(el);
+
+    return () => {
+      resizeObserver.disconnect();
+      intersectionObserver.disconnect();
+    };
   }, []);
 
   const handleReplay = useCallback((e: React.MouseEvent) => {
@@ -146,7 +161,17 @@ export function BlockCard({
               /* @ts-expect-error Component may optionally take revealKey */
               <Component key={revealKey} revealKey={revealKey} />
             ) : (
-              <div className="w-full h-[240px]" aria-hidden="true" />
+              <div className="w-full h-[240px] flex flex-col items-center justify-center p-6 text-center select-none" aria-hidden="true">
+                <div className="w-9 h-9 rounded-[4px] border border-[#263238] bg-[#101719] flex items-center justify-center mb-2.5">
+                  <span className="w-1.5 h-1.5 rounded-[1px] bg-[#00f5c8] shadow-[0_0_8px_#00f5c8] animate-pulse" />
+                </div>
+                <span className="font-mono text-[9.5px] text-[#718087] tracking-widest uppercase">
+                  [SIMULATOR // {slug.toUpperCase()}]
+                </span>
+                <span className="font-mono text-[8.5px] text-[#00f5c8]/50 mt-0.5">
+                  VIEWPORT ENGAGED
+                </span>
+              </div>
             )}
           </div>
         </div>
