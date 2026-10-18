@@ -22,7 +22,6 @@ export function HeroBackground() {
     targetY: -1000,
     isHovering: false,
   });
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -45,6 +44,7 @@ export function HeroBackground() {
     let isVisible = true;
     let width = 0;
     let height = 0;
+    let touchFadeTimer: ReturnType<typeof setTimeout> | null = null;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -66,14 +66,56 @@ export function HeroBackground() {
       traces = buildTraces(width, height);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const updatePosition = (clientX: number, clientY: number) => {
       const rect = container.getBoundingClientRect();
-      const mx = Math.round(e.clientX - rect.left);
-      const my = Math.round(e.clientY - rect.top);
-      mouseRef.current.targetX = mx;
-      mouseRef.current.targetY = my;
-      mouseRef.current.isHovering = true;
-      setCoords({ x: Math.max(0, mx), y: Math.max(0, my) });
+      const mx = Math.round(clientX - rect.left);
+      const my = Math.round(clientY - rect.top);
+
+      if (touchFadeTimer) {
+        clearTimeout(touchFadeTimer);
+        touchFadeTimer = null;
+      }
+
+      // If pointer is within or touching the hero area
+      if (my >= -20 && my <= rect.height + 20 && mx >= 0 && mx <= rect.width) {
+        // Snap immediately if entering or previously off-screen
+        if (!mouseRef.current.isHovering || mouseRef.current.x < 0) {
+          mouseRef.current.x = mx;
+          mouseRef.current.y = my;
+        }
+        mouseRef.current.targetX = mx;
+        mouseRef.current.targetY = my;
+        mouseRef.current.isHovering = true;
+      }
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      updatePosition(e.clientX, e.clientY);
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      updatePosition(e.clientX, e.clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches && e.touches.length > 0) {
+        const touch = e.touches[0];
+        updatePosition(touch.clientX, touch.clientY);
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches && e.touches.length > 0) {
+        const touch = e.touches[0];
+        updatePosition(touch.clientX, touch.clientY);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      if (touchFadeTimer) clearTimeout(touchFadeTimer);
+      touchFadeTimer = setTimeout(() => {
+        mouseRef.current.isHovering = false;
+      }, 1500);
     };
 
     const handleMouseLeave = () => {
@@ -82,7 +124,12 @@ export function HeroBackground() {
       mouseRef.current.targetY = -1000;
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", handleTouchEnd, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
 
     // Generate precision circuit bus traces routing down toward workbench
@@ -216,8 +263,8 @@ export function HeroBackground() {
       time += prefersReducedMotion ? 0.002 : 0.016;
 
       const mouse = mouseRef.current;
-      mouse.x += (mouse.targetX - mouse.x) * 0.08;
-      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+      mouse.x += (mouse.targetX - mouse.x) * 0.22;
+      mouse.y += (mouse.targetY - mouse.y) * 0.22;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -422,8 +469,14 @@ export function HeroBackground() {
     return () => {
       cancelAnimationFrame(animationFrameId);
       observer.disconnect();
+      if (touchFadeTimer) clearTimeout(touchFadeTimer);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchcancel", handleTouchEnd);
       document.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [prefersReducedMotion]);

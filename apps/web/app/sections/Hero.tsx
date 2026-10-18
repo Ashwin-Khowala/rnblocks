@@ -7,7 +7,7 @@ import { HeroBackground, HeroWorkbench } from "@/components";
 
 export function Hero() {
   return (
-    <section id="hero" className="relative overflow-hidden bg-transparent pt-[90px] pb-14 md:pt-[115px] md:pb-20">
+    <section id="hero" className="relative overflow-hidden bg-transparent pt-[90px] md:pt-[115px] ">
       {/* ── Silicon Bus Traces & CAD Reticle Engine ── */}
       <HeroBackground />
 
